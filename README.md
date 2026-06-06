@@ -3,10 +3,15 @@
 Descripción: Sistema web diseñado para la gestión de gimnasios, permitiendo administrar usuarios, clientes y membresías, con el objetivo de optimizar los procesos administrativos y mejorar la organización del servicio. Esto mediante el desarrollo de una plataforma que facilite la gestión de clientes y el control de membresías dentro del gimnasio, mediante un sistema organizado y basado en roles.
 
 + Integrantes del equipo
+  
 BERROCAL SILES SANTIAGO CALEB
+
 BOURROUET OBREGON NEYTAN ANDRY
+
 FUNG RAMIREZ SEBASTIAN
+
 SOLIS MENDEZ GABRIEL GERARDO
+
 
 
 + Módulos principales
