@@ -17,9 +17,13 @@ Administración de membresías
 
 
 main: Versión estable del sistema
+
 develop: Rama de desarrollo
+
 feature-auth: Desarrollo de autenticación (registro, login y roles)
+
 feature-clientes: Gestión de clientes y su información
+
 feature-membresias: Gestión de planes de membresía
 
 
