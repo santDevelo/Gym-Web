@@ -8,15 +8,19 @@ BOURROUET OBREGON NEYTAN ANDRY
 FUNG RAMIREZ SEBASTIAN
 SOLIS MENDEZ GABRIEL GERARDO
 
+
 + Módulos principales
 Autenticación de usuarios
 Gestión de clientes
 Administración de membresías
 + Control de versiones por ramas
+
+
 main: Versión estable del sistema
 develop: Rama de desarrollo
 feature-auth: Desarrollo de autenticación (registro, login y roles)
 feature-clientes: Gestión de clientes y su información
 feature-membresias: Gestión de planes de membresía
+
 
 Estado del proyecto: En desarrollo...
