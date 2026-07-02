@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- Pagina principal de FitSystem -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"/>
+
+    <body>
+
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <section class="p-3">
+            <div class="row p-3">
+                <div class="col-md-4">
+                    <div class="card text-center bg-success text-white mb-3">
+                        <div class="card-body">
+                            <h4>[[#{plantilla.clientesActivos}]]</h4>
+                            <h2 class="fs-2"><i class="fas fa-user"></i> [[${totalClientes}]]</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center bg-info text-white mb-3">
+                        <div class="card-body">
+                            <h4>[[#{plantilla.entrenadoresActivos}]]</h4>
+                            <h2 class="fs-2"><i class="fas fa-person-running"></i> [[${totalEntrenadores}]]</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center bg-warning text-white mb-3">
+                        <div class="card-body">
+                            <h4>[[#{plantilla.planesDisponibles}]]</h4>
+                            <h2 class="fs-2"><i class="fas fa-id-card"></i> [[${planes.size()}]]</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-3">
+                <div class="col-md-12">
+                    <div class="card p-2">
+                        <div class="card-header"><h4>[[#{plantilla.planesDisponibles}]]</h4></div>
+                        <div class="card-body">
+                            <div th:if="${planes != null and !planes.empty}" class="row">
+                                <div class="col-md-4 mb-3" th:each="p : ${planes}">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">[[${p.nombrePlan}]]</h5>
+                                            <p class="card-text">[[${p.descripcion}]]</p>
+                                            <p class="fw-bold">[[${#numbers.formatCurrency(p.precio)}]] &mdash;
+                                                [[${p.duracionDias}]] [[#{plantilla.dias}]]</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center p-2" th:if="${planes == null or planes.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+
+    </body>
+
+</html>

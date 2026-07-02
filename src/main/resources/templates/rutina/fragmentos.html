@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <!-- fragmento 1 para asignar una rutina en ventana modal -->
+        <section th:fragment="agregar">
+            <div class='row py-4 mb-2 bg-light'>
+                <div class='col-md-1'></div>
+                <div class='col-md-3'>
+                    <button type="button" class="btn btn-primary"
+                            data-bs-toggle="modal" data-bs-target="#agregarRutinaModal">
+                        <i class="fa-solid fa-plus"></i> [[#{rutina.agregar}]]</button>
+                </div>
+            </div>
+            <div class="modal fade" id="agregarRutinaModal" tabindex="-1"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                <i class="fa-solid fa-dumbbell"></i> [[#{rutina.agregar}]]</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action='@{/rutina/guardar}' th:object='${rutina}'
+                              class='was-validated' method="post">
+                            <div class="modal-body">
+                                <div class='mb-3'>
+                                    <label>[[#{rutina.nombre}]]</label>
+                                    <input type="text" name='nombre' class='form-control' maxlength="80" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{rutina.descripcion}]]</label>
+                                    <textarea class="form-control" name="descripcion" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{rutina.entrenador}]]</label>
+                                    <select name="entrenador.idUsuario" class="form-select" aria-label="Default select example">
+                                        <option th:each="e : ${entrenadores}" th:value="${e.idUsuario}">
+                                            [[${e.nombre}]] [[${e.apellidos}]]
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{rutina.cliente}]]</label>
+                                    <select name="cliente.idUsuario" class="form-select" aria-label="Default select example">
+                                        <option th:each="c : ${clientes}" th:value="${c.idUsuario}">
+                                            [[${c.nombre}]] [[${c.apellidos}]]
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{rutina.fechaAsignacion}]]</label>
+                                    <input type="date" class="form-control" name="fechaAsignacion" required/>
+                                </div>
+                                <div class='mb-3'>
+                                    <label>[[#{rutina.activo}]]</label>
+                                    <input type="checkbox" name='activo' class='form-check-input'/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- fragmento 2 para el listado de rutinas -->
+        <section th:fragment="listado" class="p-3">
+            <div class="row p-3">
+                <div class="col-md-9">
+                    <div class="card p-2">
+                        <div class="card-header"><h4>[[#{rutina.listado}]]</h4></div>
+                        <div class="card-body">
+                            <div th:if="${rutinas != null and !rutinas.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead><tr><th>#</th>
+                                            <th>[[#{rutina.nombre}]]</th>
+                                            <th>[[#{rutina.entrenador}]]</th>
+                                            <th>[[#{rutina.cliente}]]</th>
+                                            <th>[[#{rutina.fechaAsignacion}]]</th>
+                                            <th>[[#{rutina.activo}]]</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="r : ${rutinas}">
+                                            <td>[[${r.idRutina}]]</td>
+                                            <td>[[${r.nombre}]]</td>
+                                            <td>[[${r.entrenador.nombre}]] [[${r.entrenador.apellidos}]]</td>
+                                            <td>[[${r.cliente.nombre}]] [[${r.cliente.apellidos}]]</td>
+                                            <td>[[${r.fechaAsignacion}]]</td>
+                                            <td th:text="${r.activo} ? 'Activa':'Inactiva'"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger"
+                                                        data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                                        th:data-bs-id="${r.idRutina}"
+                                                        th:data-bs-descripcion="${r.nombre}">
+                                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                                </button>
+                                                <a th:href="@{/rutina/modificar/}+${r.idRutina}" class="btn btn-warning">
+                                                    <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${rutinas == null or rutinas.empty}">
+                                <span>[[#{lista.vacia}]]</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-success text-white mb-3">
+                        <div class="card-body"><h3>[[#{rutina.total}]]</h3>
+                            <h4 class="fs-2"><i class="fas fa-dumbbell"></i> [[${totalRutinas}]]</h4>
+                        </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 fragmento que se utiliza en la pagina modifica.html -->
+        <section th:fragment="editar">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST" th:action="@{/rutina/guardar}"
+                          th:object="${rutina}" class="was-validated">
+                        <input type="hidden" name="idRutina" th:field="*{idRutina}"/>
+                        <div class="row py-4 mb-4 bg-light">
+                            <div class="col-md-4 d-grid">
+                                <a th:href="@{/rutina/listado}" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                            </div>
+                            <div class="col-md-4 d-grid">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> [[#{accion.guardar}]]</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header"><h4>[[#{accion.actualizar}]]</h4></div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label>[[#{rutina.nombre}]]</label>
+                                            <input type="text" class="form-control" name="nombre" maxlength="80"
+                                                   th:field="*{nombre}" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{rutina.descripcion}]]</label>
+                                            <textarea class="form-control" name="descripcion" th:field="*{descripcion}" rows="3"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{rutina.entrenador}]]</label>
+                                            <select name="entrenador.idUsuario" th:field="*{entrenador.idUsuario}"
+                                                    class="form-select" aria-label="Default select example">
+                                                <option th:each="e : ${entrenadores}" th:value="${e.idUsuario}">
+                                                    [[${e.nombre}]] [[${e.apellidos}]]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{rutina.cliente}]]</label>
+                                            <select name="cliente.idUsuario" th:field="*{cliente.idUsuario}"
+                                                    class="form-select" aria-label="Default select example">
+                                                <option th:each="c : ${clientes}" th:value="${c.idUsuario}">
+                                                    [[${c.nombre}]] [[${c.apellidos}]]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{rutina.fechaAsignacion}]]</label>
+                                            <input type="date" class="form-control" name="fechaAsignacion"
+                                                   th:field="*{fechaAsignacion}" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{rutina.activo}]]</label>
+                                            <input class="form-check-input" type="checkbox" name="activo"
+                                                   th:field="*{activo}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 fragmento que se utiliza para confirmar que se desea eliminar una rutina -->
+        <section th:fragment="confirmarEliminar">
+            <div class="modal fade"
+                 id="confirmModal"
+                 tabindex="-1"
+                 aria-labelledby="modalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
+                    <div class="modal-content animate-slide-up">
+                        <form th:action="@{/rutina/eliminar}" th:object="${rutina}" method="post">
+                            <input type="hidden" name="idRutina" id="modalId"/>
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="modalLabel">
+                                    <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
+                                <h6>[[#{accion.confirmar.texto2}]]</h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

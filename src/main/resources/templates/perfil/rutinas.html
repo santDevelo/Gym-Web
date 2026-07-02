@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- Historia 19: el cliente consulta sus rutinas asignadas, sin login (ver README) -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <section class="p-3">
+            <div class="row p-3">
+                <div class="col-md-12">
+                    <div class="card p-2">
+                        <div class="card-header">
+                            <h4><i class="fa-solid fa-dumbbell"></i> [[#{perfil.rutinasDe}]]
+                                [[${usuarioSeleccionado.nombre}]] [[${usuarioSeleccionado.apellidos}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${rutinas != null and !rutinas.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead><tr>
+                                            <th>[[#{rutina.nombre}]]</th>
+                                            <th>[[#{rutina.descripcion}]]</th>
+                                            <th>[[#{rutina.entrenador}]]</th>
+                                            <th>[[#{rutina.fechaAsignacion}]]</th>
+                                            <th>[[#{rutina.activo}]]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="r : ${rutinas}">
+                                            <td>[[${r.nombre}]]</td>
+                                            <td>[[${r.descripcion}]]</td>
+                                            <td>[[${r.entrenador.nombre}]] [[${r.entrenador.apellidos}]]</td>
+                                            <td>[[${r.fechaAsignacion}]]</td>
+                                            <td th:text="${r.activo} ? 'Activa':'Inactiva'"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${rutinas == null or rutinas.empty}">
+                                <span>[[#{lista.vacia}]]</span></div>
+                            <a th:href="@{/usuario/listado}" class="btn btn-primary mt-2">
+                                <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+
+    </body>
+</html>

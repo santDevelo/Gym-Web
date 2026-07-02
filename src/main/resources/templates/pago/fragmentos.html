@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <!-- fragmento 1 para registrar un pago en ventana modal -->
+        <section th:fragment="agregar">
+            <div class='row py-4 mb-2 bg-light'>
+                <div class='col-md-1'></div>
+                <div class='col-md-3'>
+                    <button type="button" class="btn btn-primary"
+                            data-bs-toggle="modal" data-bs-target="#agregarPagoModal">
+                        <i class="fa-solid fa-plus"></i> [[#{pago.agregar}]]</button>
+                </div>
+            </div>
+            <div class="modal fade" id="agregarPagoModal" tabindex="-1"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                <i class="fa-solid fa-money-bill"></i> [[#{pago.agregar}]]</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action='@{/pago/guardar}' th:object='${pago}'
+                              class='was-validated' method="post">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label>[[#{pago.suscripcion}]]</label>
+                                    <select name="clienteMembresia.idClienteMembresia" class="form-select" aria-label="Default select example">
+                                        <option th:each="s : ${suscripciones}" th:value="${s.idClienteMembresia}">
+                                            [[${s.usuario.nombre}]] [[${s.usuario.apellidos}]] - [[${s.membresia.nombrePlan}]]
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{pago.monto}]]</label>
+                                    <input type="number" step="0.01" class="form-control" name="monto" min="0.01" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{pago.fechaPago}]]</label>
+                                    <input type="date" class="form-control" name="fechaPago" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{pago.metodoPago}]]</label>
+                                    <select name="metodoPago" class="form-select" aria-label="Default select example">
+                                        <option th:each="m : ${T(com.fitsystem.domain.MetodoPago).values()}" th:value="${m}">[[${m}]]</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- fragmento extra: consultas por rango de fechas (derivada / JPQL / SQL nativa, semana 8) -->
+        <section th:fragment="consultas" class="p-3">
+            <div class="row p-3">
+                <div class="col-md-9">
+                    <div class="card p-2">
+                        <div class="card-header"><h5>[[#{pago.consultarFechas}]]</h5></div>
+                        <div class="card-body">
+                            <form class="row g-2 align-items-end" method="post" th:action="@{/pago/consultaDerivada}">
+                                <div class="col-md-3">
+                                    <label>[[#{pago.fechaInferior}]]</label>
+                                    <input type="date" class="form-control" name="fechaInf" th:value="${fechaInf}" required/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>[[#{pago.fechaSuperior}]]</label>
+                                    <input type="date" class="form-control" name="fechaSup" th:value="${fechaSup}" required/>
+                                </div>
+                                <div class="col-md-2 d-grid">
+                                    <button type="submit" formaction="@{/pago/consultaDerivada}" class="btn btn-outline-primary">
+                                        [[#{pago.consultaDerivada}]]</button>
+                                </div>
+                                <div class="col-md-2 d-grid">
+                                    <button type="submit" formaction="@{/pago/consultaJPQL}" class="btn btn-outline-primary">
+                                        [[#{pago.consultaJPQL}]]</button>
+                                </div>
+                                <div class="col-md-2 d-grid">
+                                    <button type="submit" formaction="@{/pago/consultaSQL}" class="btn btn-outline-primary">
+                                        [[#{pago.consultaSQL}]]</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- fragmento 2 para el listado de pagos -->
+        <section th:fragment="listado" class="p-3">
+            <div class="row p-3">
+                <div class="col-md-9">
+                    <div class="card p-2">
+                        <div class="card-header"><h4>[[#{pago.listado}]]</h4></div>
+                        <div class="card-body">
+                            <div th:if="${pagos != null and !pagos.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead><tr><th>#</th>
+                                            <th>[[#{pago.cliente}]]</th>
+                                            <th>[[#{pago.plan}]]</th>
+                                            <th>[[#{pago.monto}]]</th>
+                                            <th>[[#{pago.fechaPago}]]</th>
+                                            <th>[[#{pago.metodoPago}]]</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="p : ${pagos}">
+                                            <td>[[${p.idPago}]]</td>
+                                            <td>[[${p.clienteMembresia.usuario.nombre}]] [[${p.clienteMembresia.usuario.apellidos}]]</td>
+                                            <td>[[${p.clienteMembresia.membresia.nombrePlan}]]</td>
+                                            <td class="text-end">[[${#numbers.formatCurrency(p.monto)}]]</td>
+                                            <td>[[${p.fechaPago}]]</td>
+                                            <td>[[${p.metodoPago}]]</td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger"
+                                                        data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                                        th:data-bs-id="${p.idPago}"
+                                                        th:data-bs-descripcion="|${p.clienteMembresia.usuario.nombre} - ${#numbers.formatCurrency(p.monto)}|">
+                                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                                </button>
+                                                <a th:href="@{/pago/modificar/}+${p.idPago}" class="btn btn-warning">
+                                                    <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${pagos == null or pagos.empty}">
+                                <span>[[#{lista.vacia}]]</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-success text-white mb-3">
+                        <div class="card-body"><h3>[[#{pago.total}]]</h3>
+                            <h4 class="fs-2"><i class="fas fa-money-bill"></i> [[${totalPagos}]]</h4>
+                        </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 fragmento que se utiliza en la pagina modifica.html -->
+        <section th:fragment="editar">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST" th:action="@{/pago/guardar}"
+                          th:object="${pago}" class="was-validated">
+                        <input type="hidden" name="idPago" th:field="*{idPago}"/>
+                        <div class="row py-4 mb-4 bg-light">
+                            <div class="col-md-4 d-grid">
+                                <a th:href="@{/pago/listado}" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
+                            </div>
+                            <div class="col-md-4 d-grid">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> [[#{accion.guardar}]]</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header"><h4>[[#{accion.actualizar}]]</h4></div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label>[[#{pago.suscripcion}]]</label>
+                                            <select name="clienteMembresia.idClienteMembresia" th:field="*{clienteMembresia.idClienteMembresia}"
+                                                    class="form-select" aria-label="Default select example">
+                                                <option th:each="s : ${suscripciones}" th:value="${s.idClienteMembresia}">
+                                                    [[${s.usuario.nombre}]] [[${s.usuario.apellidos}]] - [[${s.membresia.nombrePlan}]]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{pago.monto}]]</label>
+                                            <input type="number" step="0.01" class="form-control" name="monto"
+                                                   th:field="*{monto}" min="0.01" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{pago.fechaPago}]]</label>
+                                            <input type="date" class="form-control" name="fechaPago"
+                                                   th:field="*{fechaPago}" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>[[#{pago.metodoPago}]]</label>
+                                            <select name="metodoPago" th:field="*{metodoPago}"
+                                                    class="form-select" aria-label="Default select example">
+                                                <option th:each="m : ${T(com.fitsystem.domain.MetodoPago).values()}" th:value="${m}">[[${m}]]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 fragmento que se utiliza para confirmar que se desea eliminar un pago -->
+        <section th:fragment="confirmarEliminar">
+            <div class="modal fade"
+                 id="confirmModal"
+                 tabindex="-1"
+                 aria-labelledby="modalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
+                    <div class="modal-content animate-slide-up">
+                        <form th:action="@{/pago/eliminar}" th:object="${pago}" method="post">
+                            <input type="hidden" name="idPago" id="modalId"/>
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="modalLabel">
+                                    <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
+                                <h6>[[#{accion.confirmar.texto2}]]</h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
