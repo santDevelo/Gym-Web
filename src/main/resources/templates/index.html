@@ -61,25 +61,6 @@
                     <div class="text-center p-2" th:if="${planes == null or planes.empty}">
                         <span>[[#{lista.vacia}]]</span>
                     </div>
-
-                    <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
-                        <div class="col">
-                            <div class="card text-center bg-brand text-white h-100">
-                                <div class="card-body">
-                                    <h4>[[#{plantilla.clientesActivos}]]</h4>
-                                    <h2 class="fs-2"><i class="fas fa-user"></i> [[${totalClientes}]]</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card text-center bg-info text-white h-100">
-                                <div class="card-body">
-                                    <h4>[[#{plantilla.entrenadoresActivos}]]</h4>
-                                    <h2 class="fs-2"><i class="fas fa-person-running"></i> [[${totalEntrenadores}]]</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
