@@ -122,7 +122,8 @@ INSERT INTO usuario (nombre, apellidos, correo, username, password, telefono, ro
 -- Planes de membresia (nombres tomados del prototipo del Avance 1)
 INSERT INTO membresia (nombre_plan, descripcion, precio, duracion_dias, activo) VALUES
 ('Plan Basico', 'Entrena en una sede, acceso a maquinas basicas, uso de zona premium (spa/recuperacion)', 8000, 30, true),
-('Plan Completo', 'Entrena en todas las sedes, acceso ilimitado a todas las areas, clases grupales ilimitadas, rutinas personalizadas', 25000, 30, true);
+('Plan Completo', 'Entrena en todas las sedes, acceso ilimitado a todas las areas, clases grupales ilimitadas, rutinas personalizadas', 25000, 30, true),
+('Plan Fit', 'Para usuarios constantes', 18000, 30, true);
 
 -- Suscripcion de ejemplo (Sebastian con el Plan Completo)
 INSERT INTO cliente_membresia (id_usuario, id_membresia, fecha_inicio, fecha_vencimiento) VALUES

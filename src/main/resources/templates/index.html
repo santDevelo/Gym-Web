@@ -1,60 +1,82 @@
 <!DOCTYPE html>
-<!-- Pagina principal de FitSystem -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="~{general/fragmentos :: head}"/>
 
     <body>
 
-        <header th:replace="~{general/fragmentos :: header}"/>
-
-        <section class="p-3">
-            <div class="row p-3">
-                <div class="col-md-4">
-                    <div class="card text-center bg-brand text-white mb-3">
-                        <div class="card-body">
-                            <h4>[[#{plantilla.clientesActivos}]]</h4>
-                            <h2 class="fs-2"><i class="fas fa-user"></i> [[${totalClientes}]]</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center bg-info text-white mb-3">
-                        <div class="card-body">
-                            <h4>[[#{plantilla.entrenadoresActivos}]]</h4>
-                            <h2 class="fs-2"><i class="fas fa-person-running"></i> [[${totalEntrenadores}]]</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center bg-warning text-white mb-3">
-                        <div class="card-body">
-                            <h4>[[#{plantilla.planesDisponibles}]]</h4>
-                            <h2 class="fs-2"><i class="fas fa-id-card"></i> [[${planes.size()}]]</h2>
-                        </div>
-                    </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-2" th:href="@{/}">
+                    <span class="text-dark">Fit</span><span class="text-purple">System</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link fw-semibold" th:href="@{/}">Nosotros</a></li>
+                        <li class="nav-item"><a class="nav-link fw-semibold" th:href="@{/}">Promociones</a></li>
+                        <li class="nav-item ms-lg-3"><a class="btn btn-dark px-4" th:href="@{/registro}">¡Inscríbete ya!</a></li>
+                    </ul>
                 </div>
             </div>
+        </nav>
 
-            <div class="row p-3">
-                <div class="col-md-12">
-                    <div class="card p-2">
-                        <div class="card-header"><h4>[[#{plantilla.planesDisponibles}]]</h4></div>
-                        <div class="card-body">
-                            <div th:if="${planes != null and !planes.empty}" class="row">
-                                <div class="col-md-4 mb-3" th:each="p : ${planes}">
-                                    <div class="card h-100 shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title">[[${p.nombrePlan}]]</h5>
-                                            <p class="card-text">[[${p.descripcion}]]</p>
-                                            <p class="fw-bold">[[${#numbers.formatCurrency(p.precio)}]] &mdash;
-                                                [[${p.duracionDias}]] [[#{plantilla.dias}]]</p>
-                                        </div>
-                                    </div>
+        <section class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-5 d-flex">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&amp;q=80"
+                         alt="Imagen del gimnasio" class="img-fluid rounded shadow w-100"
+                         style="height:100%; min-height:560px; object-fit:cover;"/>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="banner-plan text-center mb-4">
+                        <h2 class="fw-bold text-uppercase mb-0">Elegí tu plan</h2>
+                    </div>
+
+                    <div class="row row-cols-1 row-cols-md-3 g-4" th:if="${planes != null and !planes.empty}">
+                        <div class="col" th:each="p : ${planes}">
+                            <div class="card h-100 shadow"
+                                 th:classappend="${p.nombrePlan == 'Plan Completo'} ? 'bg-dark text-white'">
+                                <div class="card-body text-center">
+                                    <h5 class="fw-bold">[[${p.nombrePlan}]]</h5>
+                                    <p>[[${p.descripcion}]]</p>
+                                    <p class="fw-bold">[[${#numbers.formatCurrency(p.precio)}]] / [[${p.duracionDias}]] días</p>
+                                    <a th:href="@{/registro}" class="btn btn-purple w-100 mb-3">¡Inscribite ya!</a>
+                                    <ul class="list-unstyled text-start">
+                                        <li><span class="check-purple">✓</span> Entrena en todas las sedes disponibles</li>
+                                        <li><span class="check-purple">✓</span>
+                                            <span th:text="${p.nombrePlan == 'Plan Basico'} ? 'Acceso limitado a todas las áreas' : 'Acceso ilimitado a todas las áreas'"></span>
+                                        </li>
+                                        <li><span class="check-purple">✓</span> Zona premium (spa / recuperación)</li>
+                                        <li><span class="check-purple">✓</span> Clases grupales diferenciadas</li>
+                                        <li><span class="check-purple">✓</span> Rutinas personalizadas</li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="text-center p-2" th:if="${planes == null or planes.empty}">
-                                <span>[[#{lista.vacia}]]</span>
+                        </div>
+                    </div>
+                    <div class="text-center p-2" th:if="${planes == null or planes.empty}">
+                        <span>[[#{lista.vacia}]]</span>
+                    </div>
+
+                    <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
+                        <div class="col">
+                            <div class="card text-center bg-brand text-white h-100">
+                                <div class="card-body">
+                                    <h4>[[#{plantilla.clientesActivos}]]</h4>
+                                    <h2 class="fs-2"><i class="fas fa-user"></i> [[${totalClientes}]]</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card text-center bg-info text-white h-100">
+                                <div class="card-body">
+                                    <h4>[[#{plantilla.entrenadoresActivos}]]</h4>
+                                    <h2 class="fs-2"><i class="fas fa-person-running"></i> [[${totalEntrenadores}]]</h2>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -62,7 +84,11 @@
             </div>
         </section>
 
-        <footer th:replace="~{general/fragmentos :: footer}"/>
+        <footer class="bg-dark text-white py-3 mt-5">
+            <div class="container text-center">
+                <small>[[#{plantilla.derechos}]] &COPY;</small>
+            </div>
+        </footer>
 
     </body>
 

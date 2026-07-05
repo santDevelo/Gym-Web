@@ -3,6 +3,7 @@ package com.fitsystem.controller;
 import com.fitsystem.domain.RolUsuario;
 import com.fitsystem.service.MembresiaService;
 import com.fitsystem.service.UsuarioService;
+import java.util.Comparator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,9 @@ public class IndexController {
     public String cargarPaginaInicio(Model model) {
         model.addAttribute("totalClientes", usuarioService.getUsuariosActivosPorRol(RolUsuario.CLIENTE).size());
         model.addAttribute("totalEntrenadores", usuarioService.getUsuariosActivosPorRol(RolUsuario.ENTRENADOR).size());
-        model.addAttribute("planes", membresiaService.getMembresias(true));
+        var planes = membresiaService.getMembresias(true);
+        planes.sort(Comparator.comparing(com.fitsystem.domain.Membresia::getPrecio).reversed());
+        model.addAttribute("planes", planes);
         return "/index";
     }
 }
