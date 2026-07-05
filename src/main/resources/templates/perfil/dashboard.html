@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- Dashboard "Inicio" del sidebar (historias 11, 17, 19), sin login (ver README) -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <div class="row g-0">
+            <div th:replace="~{general/fragmentos :: sidebar(${usuarioSeleccionado})}"/>
+            <div class="col-md-9 col-lg-10">
+                <div th:replace="~{general/fragmentos :: topbarSaludo(${usuarioSeleccionado})}"/>
+
+                <section class="p-3" th:switch="${usuarioSeleccionado.rol.name()}">
+
+                    <!-- Dashboard del cliente: su membresia y su rutina actual -->
+                    <div th:case="'CLIENTE'" class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header"><h5><i class="fa-solid fa-id-card"></i> [[#{dashboard.miMembresia}]]</h5></div>
+                                <div class="card-body" th:if="${suscripciones != null and !suscripciones.empty}">
+                                    <div th:each="s : ${suscripciones}" class="mb-2">
+                                        <strong>[[${s.membresia.nombrePlan}]]</strong>
+                                        <span th:text="${estados.get(s.idClienteMembresia)}"
+                                              th:classappend="${estados.get(s.idClienteMembresia) == 'ACTIVA'} ? 'badge text-bg-success ms-2' : (${estados.get(s.idClienteMembresia) == 'VENCIDA'} ? 'badge text-bg-danger ms-2' : 'badge text-bg-secondary ms-2')">
+                                        </span>
+                                        <div class="text-muted">[[#{suscripcion.fechaVencimiento}]]: [[${s.fechaVencimiento}]]</div>
+                                    </div>
+                                </div>
+                                <div class="card-body" th:if="${suscripciones == null or suscripciones.empty}">
+                                    <p class="text-muted">[[#{dashboard.sinMembresia}]]</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header"><h5><i class="fa-solid fa-dumbbell"></i> [[#{dashboard.miRutinaActual}]]</h5></div>
+                                <div class="card-body" th:if="${rutinaActual != null}">
+                                    <strong>[[${rutinaActual.nombre}]]</strong>
+                                    <p>[[${rutinaActual.descripcion}]]</p>
+                                    <div class="text-muted">[[#{rutina.entrenador}]]: [[${rutinaActual.entrenador.nombre}]] [[${rutinaActual.entrenador.apellidos}]]</div>
+                                </div>
+                                <div class="card-body" th:if="${rutinaActual == null}">
+                                    <p class="text-muted">[[#{dashboard.sinRutina}]]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard del entrenador: sus clientes y sus rutinas asignadas -->
+                    <div th:case="'ENTRENADOR'" class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card text-center bg-brand text-white h-100">
+                                <div class="card-body">
+                                    <h5>[[#{dashboard.totalClientes}]]</h5>
+                                    <h2 class="fs-2"><i class="fas fa-users"></i> [[${clientesAsignados.size()}]]</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card text-center bg-info text-white h-100">
+                                <div class="card-body">
+                                    <h5>[[#{dashboard.totalRutinasAsignadas}]]</h5>
+                                    <h2 class="fs-2"><i class="fas fa-dumbbell"></i> [[${totalRutinasAsignadas}]]</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard del administrador: resumen general -->
+                    <div th:case="'ADMINISTRADOR'">
+                        <p class="text-muted">[[#{dashboard.bienvenidaAdmin}]]</p>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card text-center bg-brand text-white h-100">
+                                    <div class="card-body">
+                                        <h5>[[#{plantilla.clientesActivos}]]</h5>
+                                        <h2 class="fs-2"><i class="fas fa-user"></i> [[${totalClientes}]]</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card text-center bg-info text-white h-100">
+                                    <div class="card-body">
+                                        <h5>[[#{plantilla.entrenadoresActivos}]]</h5>
+                                        <h2 class="fs-2"><i class="fas fa-person-running"></i> [[${totalEntrenadores}]]</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card text-center bg-warning text-white h-100">
+                                    <div class="card-body">
+                                        <h5>[[#{plantilla.planesDisponibles}]]</h5>
+                                        <h2 class="fs-2"><i class="fas fa-id-card"></i> [[${planes.size()}]]</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+        </div>
+
+        <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+    </body>
+</html>

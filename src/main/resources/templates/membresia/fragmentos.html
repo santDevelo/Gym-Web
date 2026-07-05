@@ -59,6 +59,26 @@
 
         <!-- fragmento 2 para el listado de membresias -->
         <section th:fragment="listado" class="p-3">
+
+            <!-- Planes activos lado a lado, como en el prototipo del Avance 1 -->
+            <div class="row p-3" th:if="${membresias != null and !membresias.empty}">
+                <div class="col-md-9">
+                    <h4 class="mb-3">[[#{membresia.comparar}]]</h4>
+                    <div class="row">
+                        <div class="col-md-4 mb-3" th:each="m : ${membresias}" th:if="${m.activo}">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header text-center"><h5 class="mb-0">[[${m.nombrePlan}]]</h5></div>
+                                <div class="card-body d-flex flex-column">
+                                    <p class="flex-grow-1">[[${m.descripcion}]]</p>
+                                    <p class="fs-4 fw-bold text-center mb-0">[[${#numbers.formatCurrency(m.precio)}]]</p>
+                                    <p class="text-muted text-center">[[${m.duracionDias}]] [[#{plantilla.dias}]]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row p-3">
                 <div class="col-md-9">
                     <div class="card p-2">
@@ -104,7 +124,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card text-center bg-success text-white mb-3">
+                    <div class="card text-center bg-brand text-white mb-3">
                         <div class="card-body"><h3>[[#{membresia.total}]]</h3>
                             <h4 class="fs-2"><i class="fas fa-id-card"></i> [[${totalMembresias}]]</h4>
                         </div></div>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!-- Login del entrenador, replica del prototipo de Figma (fondo blanco, tarjeta morada centrada) -->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"></head>
+    <body class="bg-white">
+        <div class="container" style="min-height:100vh;">
+            <div class="row justify-content-center align-items-center" style="min-height:100vh;">
+                <div class="col-md-5">
+                    <div class="text-center mb-4">
+                        <h1 class="fw-bold text-purple"><i class="fas fa-dumbbell"></i> FitSystem</h1>
+                        <p class="text-purple">Inicio de sesión entrenador</p>
+                    </div>
+                    <div class="card login-card-purple p-4">
+                        <form method="POST" th:action="@{/login/entrenador}">
+                            <div class="mb-3">
+                                <label class="form-label">Usuario</label>
+                                <input type="text" name="username" class="form-control" placeholder="entrenador.usuario" required autofocus/>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" name="password" class="form-control" placeholder="•••••" required/>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-light fw-bold">Iniciar sesión</button>
+                            </div>
+                            <hr/>
+                            <p class="text-center mb-0">
+                                ¿No tienes cuenta? <a th:href="@{/registro}" class="text-white fw-bold">Crear</a>
+                                &middot; <a th:href="@{/}" class="text-white fw-bold">Volver</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section th:replace="~{general/fragmentos :: mostrarToast}"></section>
+    </body>
+</html>

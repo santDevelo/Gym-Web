@@ -1,62 +1,63 @@
 <!DOCTYPE html>
-<!-- Historia 16: registro publico de clientes (sin login/sesion, ver README) -->
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{general/fragmentos :: head}"/>
+<!-- Registro publico de clientes, replica del prototipo de Figma (formulario + imagen) -->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"></head>
     <body>
-        <header th:replace="~{general/fragmentos :: header}"/>
+        <header th:replace="~{general/fragmentos :: header}"></header>
 
         <section class="p-3">
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
+            <div class="row justify-content-center align-items-center g-4">
+                <div class="col-md-5">
+                    <h1 class="fw-bold text-purple"><i class="fas fa-dumbbell"></i> FitSystem</h1>
+                    <p class="text-muted mb-4">Crea un usuario para continuar</p>
                     <form method="POST" th:action="@{/registro/guardar}" class="was-validated" enctype="multipart/form-data">
-                        <div class="card">
-                            <div class="card-header"><h4><i class="fa-solid fa-user-plus"></i> [[#{registro.titulo}]]</h4></div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label>[[#{usuario.nombre}]]</label>
-                                    <input type="text" class="form-control" name="nombre" maxlength="50" required/>
-                                </div>
-                                <div class="mb-3">
-                                    <label>[[#{usuario.apellidos}]]</label>
-                                    <input type="text" class="form-control" name="apellidos" maxlength="80" required/>
-                                </div>
-                                <div class="mb-3">
-                                    <label>[[#{usuario.correo}]]</label>
-                                    <input type="email" class="form-control" name="correo" maxlength="100" required/>
-                                </div>
-                                <div class="mb-3">
-                                    <label>[[#{usuario.username}]]</label>
-                                    <input type="text" class="form-control" name="username" maxlength="30" required/>
-                                </div>
-                                <div class="mb-3">
-                                    <label>[[#{usuario.password}]]</label>
-                                    <input type="password" class="form-control" name="password" maxlength="100" required/>
-                                </div>
-                                <div class="mb-3">
-                                    <label>[[#{usuario.telefono}]]</label>
-                                    <input type="text" class="form-control" name="telefono" maxlength="20"/>
-                                </div>
-                                <div class="mb-3">
-                                    <label>[[#{usuario.imagen}]]</label>
-                                    <input type="file" name="imagenFile" onchange="mostrarImagen(this);"
-                                           class="form-control"/>
-                                    <img id="blah" src="#" alt="foto de perfil" height="200"/>
-                                </div>
+                        <div class="login-card-purple p-4">
+                            <div class="mb-3">
+                                <label>Nombre</label>
+                                <input type="text" class="form-control" name="nombre" maxlength="50" required/>
                             </div>
-                            <div class="card-footer d-grid">
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-check"></i> [[#{accion.registrar}]]</button>
+                            <div class="mb-3">
+                                <label>Apellidos</label>
+                                <input type="text" class="form-control" name="apellidos" maxlength="80" required/>
                             </div>
+                            <div class="mb-3">
+                                <label>Teléfono</label>
+                                <input type="text" class="form-control" name="telefono" maxlength="20"/>
+                            </div>
+                            <div class="mb-3">
+                                <label>Correo electrónico</label>
+                                <input type="email" class="form-control" name="correo" maxlength="100" required/>
+                            </div>
+                            <div class="mb-3">
+                                <label>Usuario</label>
+                                <input type="text" class="form-control" name="username" maxlength="30" required/>
+                            </div>
+                            <div class="mb-3">
+                                <label>Crear Contraseña</label>
+                                <input type="password" class="form-control" name="password" maxlength="100" required/>
+                            </div>
+                            <div class="mb-3">
+                                <label>Foto de Perfil</label>
+                                <input type="file" name="imagenFile" onchange="mostrarImagen(this);" class="form-control"/>
+                                <img id="blah" src="#" alt="foto de perfil" height="120" class="mt-2 rounded"/>
+                            </div>
+                            <div class="d-grid mb-2">
+                                <button type="submit" class="btn btn-light fw-bold">
+                                    <i class="fas fa-check"></i> Crear Cuenta</button>
+                            </div>
+                            <p class="text-center mb-0"><a th:href="@{/}" class="text-white">Volver</a></p>
                         </div>
                     </form>
+                </div>
+                <div class="col-md-5 d-none d-md-block">
+                    <div class="login-split-img" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=900&amp;q=80');"></div>
+                    <h4 class="text-center mt-3">Comienza el cambio hoy</h4>
                 </div>
             </div>
         </section>
 
-        <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+        <section th:replace="~{general/fragmentos :: mostrarToast}"></section>
 
-        <footer th:replace="~{general/fragmentos :: footer}"/>
-
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
     </body>
 </html>

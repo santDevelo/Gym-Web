@@ -3,15 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{general/fragmentos :: head}"/>
     <body>
-        <header th:replace="~{general/fragmentos :: header}"/>
+        <div class="row g-0">
+            <div th:replace="~{general/fragmentos :: sidebar(${usuarioSeleccionado})}"/>
+            <div class="col-md-9 col-lg-10">
+                <div th:replace="~{general/fragmentos :: topbarSaludo(${usuarioSeleccionado})}"/>
 
-        <section class="p-3">
-            <div class="row p-3">
-                <div class="col-md-12">
-                    <div class="card p-2">
+                <section class="p-3">
+                    <div class="card">
                         <div class="card-header">
-                            <h4><i class="fa-solid fa-id-card"></i> [[#{perfil.membresiaDe}]]
-                                [[${usuarioSeleccionado.nombre}]] [[${usuarioSeleccionado.apellidos}]]</h4>
+                            <h4><i class="fa-solid fa-id-card"></i> [[#{plantilla.membresias}]]</h4>
                         </div>
                         <div class="card-body">
                             <div th:if="${suscripciones != null and !suscripciones.empty}">
@@ -39,15 +39,12 @@
                             </div>
                             <div class="text-center p-2" th:if="${suscripciones == null or suscripciones.empty}">
                                 <span>[[#{lista.vacia}]]</span></div>
-                            <a th:href="@{/usuario/listado}" class="btn btn-primary mt-2">
-                                <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]</a>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
-        </section>
+        </div>
 
-        <footer th:replace="~{general/fragmentos :: footer}"/>
-
+        <section th:replace="~{general/fragmentos :: mostrarToast}"/>
     </body>
 </html>
