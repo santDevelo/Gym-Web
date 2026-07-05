@@ -46,6 +46,11 @@ public class UsuarioService {
         return usuarioRepository.findById(idUsuario);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Usuario> login(String username, String password, RolUsuario rol) {
+        return usuarioRepository.findByUsernameAndPasswordAndRol(username, password, rol);
+    }
+
     @Transactional
     public void save(Usuario usuario, MultipartFile imagenFile) {
         usuario = usuarioRepository.save(usuario);

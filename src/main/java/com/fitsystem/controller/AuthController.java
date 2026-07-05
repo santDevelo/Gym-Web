@@ -1,23 +1,24 @@
-package com.ProyectoFinal.controller;
+package com.fitsystem.controller;
 
-import com.ProyectoFinal.domain.RolUsuario;
-import com.ProyectoFinal.service.UsuarioService;
+import com.fitsystem.domain.RolUsuario;
+import com.fitsystem.service.UsuarioService;
+import java.util.Locale;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// Pantallas de login del prototipo de Figma (cliente/entrenador/administrador), separadas por rol.
-// Se valida username/password/rol directamente contra la tabla usuario, y al validar se
-// redirige al dashboard de autoservicio de /perfil/{idUsuario}.
 @Controller
 public class AuthController {
 
     private final UsuarioService usuarioService;
+    private final MessageSource messageSource;
 
-    public AuthController(UsuarioService usuarioService) {
+    public AuthController(UsuarioService usuarioService, MessageSource messageSource) {
         this.usuarioService = usuarioService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/login/cliente")
@@ -53,7 +54,7 @@ public class AuthController {
     private String procesar(String username, String password, RolUsuario rol, String rutaError, RedirectAttributes redirectAttributes) {
         var usuarioOpt = usuarioService.login(username, password, rol);
         if (usuarioOpt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Usuario o contraseña incorrectos.");
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("login.error01", null, Locale.getDefault()));
             return "redirect:" + rutaError;
         }
         return "redirect:/perfil/" + usuarioOpt.get().getIdUsuario();

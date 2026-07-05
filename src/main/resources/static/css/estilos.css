@@ -1,159 +1,70 @@
-/* Botón morado con bordes circulares */
-.btn-purple {
-    background-color: #6f42c1; /* morado Bootstrap */
-    color: #fff;
-    border: none;
-    border-radius: 25px; /* bordes redondeados */
-    padding: 10px 20px;
-    font-weight: bold;
-}
-.btn-purple:hover {
-    background-color: #5a32a3;
-    color: #fff;
-}
-
-/* Check con recuadro morado relleno */
-.check-purple {
-    display: inline-block;
-    background-color: #6f42c1; /* fondo morado */
-    color: #fff;               /* texto blanco */
-    border-radius: 4px;
-    padding: 2px 8px;
-    margin-right: 8px;
-    font-weight: bold;
-}
-
-.banner-plan {
-    background-color: #6f42c1; /* morado */
-    color: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-
-.banner-plan h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
-}
-
-
-
-/* Ajustes del header */
-.navbar {
-    border-bottom: 1px solid #ddd; /* línea sutil abajo */
-}
-
-.navbar-brand {
-    font-size: 1.5rem;
-    letter-spacing: 1px;
-}
-
-.nav-link {
-    font-weight: 500;
-    margin-right: 15px;
-}
-
-.btn-dark {
-    border-radius: 25px; /* botón circular */
-    font-weight: bold;
-}
-
-/* Color morado para la palabra System */
-.text-purple {
-    color: #6f42c1; /* morado */
-}
-
-/* Ajustes generales del logo */
-.navbar-brand {
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-}
-
-/* ===================================================================
-   Reglas nuevas para las pantallas del prototipo de Figma (login y
-   dashboards). Se agregan al final sin tocar nada de lo anterior.
-   =================================================================== */
-
 :root {
     --gym-purple: #6f42c1;
-    --gym-purple-dark: #5a32a3;
-    --gym-navy: #14142b;
-    --gym-navy-light: #1e1e3f;
+    --gym-purple-dark: #4c2889;
+    --gym-purple-light: #f3edfb;
 }
 
-/* Sidebar oscuro de los dashboards (cliente/entrenador/administrador) */
+/* Marca del sitio (barra superior, franja de bienvenida, footer) */
+.navbar-brand {
+    color: var(--gym-purple) !important;
+    font-weight: bold;
+}
+
+.bg-brand {
+    background-color: var(--gym-purple) !important;
+}
+
+footer.bg-info,
+.modal-header.bg-info {
+    background-color: var(--gym-purple) !important;
+}
+
+/* Botones principales (Guardar, Agregar, Regresar) */
+.btn-primary {
+    background-color: var(--gym-purple);
+    border-color: var(--gym-purple);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--gym-purple-dark) !important;
+    border-color: var(--gym-purple-dark) !important;
+}
+
+.btn-outline-primary {
+    color: var(--gym-purple);
+    border-color: var(--gym-purple);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--gym-purple);
+    border-color: var(--gym-purple);
+}
+
+/* Encabezados de tarjeta con un tinte suave morado */
+.card-header {
+    background-color: var(--gym-purple-light);
+}
+
+/* Sidebar del dashboard por rol (perfil/*.html) */
 .sidebar-brand {
-    background-color: var(--gym-navy);
+    background-color: var(--gym-purple-dark);
     min-height: 100vh;
 }
 
 .sidebar-brand .list-group-item {
     background-color: transparent;
-    color: #c9c9e0;
-    border: none;
-    border-radius: .5rem;
-    margin: 0 .6rem .2rem .6rem;
-    width: auto;
+    color: #f3edfb;
+    border-color: rgba(255, 255, 255, 0.15);
+    border-radius: 0;
 }
 
 .sidebar-brand .list-group-item:hover,
 .sidebar-brand .list-group-item:focus {
-    background-color: var(--gym-navy-light);
-    color: #fff;
-}
-
-.sidebar-brand .list-group-item.active {
     background-color: var(--gym-purple);
     color: #fff;
 }
-
-.sidebar-brand .sidebar-footer a {
-    color: #9d9dbd;
-    text-decoration: none;
-    font-size: .9rem;
-}
-
-.sidebar-brand .sidebar-footer a:hover {
-    color: #fff;
-}
-
-.dashboard-content {
-    background-color: #f4f4f9;
-    min-height: 100vh;
-}
-
-.topbar-admin {
-    background-color: #fff;
-    border-bottom: 1px solid #e5e5f0;
-}
-
-.topbar-admin .form-control {
-    background-color: #f4f4f9;
-    border: none;
-}
-
-.stat-card {
-    border: none;
-    border-radius: .75rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
-}
-
-.stat-card .stat-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: .6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    color: #fff;
-}
-
-.stat-icon.bg-purple { background-color: var(--gym-purple); }
-.stat-icon.bg-blue { background-color: #2563eb; }
-.stat-icon.bg-green { background-color: #16a34a; }
-.stat-icon.bg-orange { background-color: #ea580c; }
 
 /* Pantallas de login (fondo morado a pantalla completa / tarjeta morada) */
 .login-purple-bg {
@@ -186,20 +97,19 @@
     border-radius: .75rem;
 }
 
-.chart-box {
-    position: relative;
-    height: 240px;
+.btn-purple {
+    background-color: var(--gym-purple);
+    border-color: var(--gym-purple);
+    color: #fff;
 }
 
-.avatar-circle {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background-color: var(--gym-purple);
+.btn-purple:hover,
+.btn-purple:focus {
+    background-color: var(--gym-purple-dark);
+    border-color: var(--gym-purple-dark);
     color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    flex-shrink: 0;
+}
+
+.text-purple {
+    color: var(--gym-purple) !important;
 }
