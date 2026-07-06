@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+        <aside th:fragment="sidebar"
+               class="sidebar d-flex flex-column justify-content-between">
+
+            <div>
+
+                <!-- Logo -->
+                <a th:href="@{/admin}"
+                   class="text-decoration-none">
+
+                    <h2 class="logo">
+
+                        <span th:text="#{admin.logo.fit}">
+                            FIT
+                        </span>
+
+                        <span th:text="#{admin.logo.system}">
+                            System
+                        </span>
+
+                    </h2>
+
+                </a>
+
+                <!-- Navegación -->
+                <nav class="nav flex-column mt-4"
+                     aria-label="Menú de administración">
+
+                    <a th:href="@{/admin}"
+                       class="nav-link active">
+
+                        <i class="fa-solid fa-house me-2"></i>
+
+                        <span th:text="#{admin.sidebar.dashboard}">
+                            Dashboard
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-users me-2"></i>
+
+                        <span th:text="#{admin.sidebar.usuarios}">
+                            Usuarios
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-user-group me-2"></i>
+
+                        <span th:text="#{admin.sidebar.clientes}">
+                            Clientes
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-user-tie me-2"></i>
+
+                        <span th:text="#{admin.sidebar.empleados}">
+                            Empleados
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-credit-card me-2"></i>
+
+                        <span th:text="#{admin.sidebar.membresias}">
+                            Membresías
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-money-bill me-2"></i>
+
+                        <span th:text="#{admin.sidebar.pagos}">
+                            Pagos
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-chart-column me-2"></i>
+
+                        <span th:text="#{admin.sidebar.reportes}">
+                            Reportes
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-gear me-2"></i>
+
+                        <span th:text="#{admin.sidebar.configuracion}">
+                            Configuración
+                        </span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <!-- Cerrar sesión -->
+            <a th:href="@{/logout}"
+               class="nav-link">
+
+                <i class="fa-solid fa-right-from-bracket me-2"></i>
+
+                <span th:text="#{admin.sidebar.cerrarSesion}">
+                    Cerrar sesión
+                </span>
+
+            </a>
+
+        </aside>
+
+        <header th:fragment="header"
+                class="header-cliente">
+
+            <div>
+
+                <h4 class="mb-0">
+
+                    <span th:text="#{admin.header.saludo}">
+                        Hola
+                    </span>
+
+                    <span th:text="${usuario.nombre}">
+                        Administrador
+                    </span>
+
+                    <span aria-hidden="true">
+                        
+                    </span>
+
+                </h4>
+
+                <small class="text-muted"
+                       th:text="#{admin.header.bienvenida}">
+
+                    Bienvenido al panel de administración
+
+                </small>
+
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <!-- Imagen registrada -->
+                <img th:if="${usuario.rutaImagen != null
+                             and !#strings.isEmpty(usuario.rutaImagen)}"
+                     th:src="${usuario.rutaImagen}"
+                     th:alt="#{admin.header.imagenUsuario}"
+                     class="rounded-circle"
+                     style="width: 42px;
+                            height: 42px;
+                            object-fit: cover;">
+
+                <!-- Icono cuando no hay imagen -->
+                <i th:unless="${usuario.rutaImagen != null
+                               and !#strings.isEmpty(usuario.rutaImagen)}"
+                   class="fa-solid fa-circle-user fs-3 text-purple">
+                </i>
+
+                <div>
+
+                    <strong th:text="|${usuario.nombre} ${usuario.apellidos}|">
+                        Nombre completo
+                    </strong>
+
+                    <small class="d-block text-muted"
+                           th:text="#{admin.header.rol}">
+
+                        Administrador
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section th:fragment="cards">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3">
+
+                <!-- Clientes activos -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{admin.cards.clientesActivos.titulo}">
+
+                                    Clientes activos
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{admin.cards.clientesActivos.valor}">
+
+                                    150
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-user-group fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Entrenadores -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{admin.cards.entrenadores.titulo}">
+
+                                    Entrenadores
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{admin.cards.entrenadores.valor}">
+
+                                    18
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-user-tie fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Ingresos -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{admin.cards.ingresos.titulo}">
+
+                                    Ingresos del mes
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{admin.cards.ingresos.valor}">
+
+                                    ₡1.5 M
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-money-bill-trend-up fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Pagos pendientes -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{admin.cards.pagosPendientes.titulo}">
+
+                                    Pagos pendientes
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{admin.cards.pagosPendientes.valor}">
+
+                                    12
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-clock fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="ingresos">
+
+            <div class="card card-dashboard h-100 p-3">
+
+                <div class="d-flex flex-wrap justify-content-between
+                            align-items-center gap-2 mb-3">
+
+                    <h5 class="mb-0"
+                        th:text="#{admin.ingresos.titulo}">
+
+                        Ingresos
+
+                    </h5>
+
+                    <select class="form-select w-auto"
+                            aria-label="Periodo de ingresos">
+
+                        <option th:text="#{admin.filtro.esteMes}">
+                            Este mes
+                        </option>
+
+                        <option th:text="#{admin.filtro.mesPasado}">
+                            Mes pasado
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="bg-light rounded d-flex
+                            justify-content-center align-items-center"
+                     style="height: 300px;">
+
+                    <div class="text-center text-secondary">
+
+                        <i class="fa-solid fa-chart-line fs-1 mb-3"></i>
+
+                        <h4 th:text="#{admin.ingresos.grafico}">
+                            Gráfico de ingresos
+                        </h4>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="asistencias">
+
+            <div class="card card-dashboard h-100 p-3">
+
+                <div class="d-flex flex-wrap justify-content-between
+                            align-items-center gap-2 mb-3">
+
+                    <h5 class="mb-0"
+                        th:text="#{admin.asistencias.titulo}">
+
+                        Asistencias del mes
+
+                    </h5>
+
+                    <select class="form-select w-auto"
+                            aria-label="Periodo de asistencias">
+
+                        <option th:text="#{admin.filtro.esteMes}">
+                            Este mes
+                        </option>
+
+                        <option th:text="#{admin.filtro.mesPasado}">
+                            Mes pasado
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="bg-light rounded d-flex
+                            justify-content-center align-items-center"
+                     style="height: 300px;">
+
+                    <div class="text-center text-secondary">
+
+                        <i class="fa-solid fa-chart-column fs-1 mb-3"></i>
+
+                        <h4 th:text="#{admin.asistencias.grafico}">
+                            Gráfico de asistencias
+                        </h4>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </body>
+
+</html>

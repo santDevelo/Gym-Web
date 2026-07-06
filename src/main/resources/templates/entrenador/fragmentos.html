@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+
+  
+        <aside th:fragment="sidebar"
+               class="sidebar d-flex flex-column justify-content-between">
+
+            <div>
+
+                <!-- Logo -->
+                <a th:href="@{/entrenador}"
+                   class="text-decoration-none">
+
+                    <h2 class="logo">
+
+                        <span th:text="#{entrenador.logo.fit}">
+                            FIT
+                        </span>
+
+                        <span th:text="#{entrenador.logo.system}">
+                            System
+                        </span>
+
+                    </h2>
+
+                </a>
+
+                <!-- Navegación -->
+                <nav class="nav flex-column mt-4"
+                     aria-label="Menú del entrenador">
+
+                    <a th:href="@{/entrenador}"
+                       class="nav-link active">
+
+                        <i class="fa-solid fa-house me-2"></i>
+
+                        <span th:text="#{entrenador.sidebar.inicio}">
+                            Inicio
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-users me-2"></i>
+
+                        <span th:text="#{entrenador.sidebar.clientes}">
+                            Clientes
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-dumbbell me-2"></i>
+
+                        <span th:text="#{entrenador.sidebar.rutinas}">
+                            Rutinas
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-calendar-days me-2"></i>
+
+                        <span th:text="#{entrenador.sidebar.citas}">
+                            Citas
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-chart-line me-2"></i>
+
+                        <span th:text="#{entrenador.sidebar.progreso}">
+                            Progreso
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-user me-2"></i>
+
+                        <span th:text="#{entrenador.sidebar.perfil}">
+                            Perfil
+                        </span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <!-- Cerrar sesión -->
+            <a th:href="@{/logout}"
+               class="nav-link">
+
+                <i class="fa-solid fa-right-from-bracket me-2"></i>
+
+                <span th:text="#{entrenador.sidebar.cerrarSesion}">
+                    Cerrar sesión
+                </span>
+
+            </a>
+
+        </aside>
+
+
+        <header th:fragment="header"
+                class="header-cliente">
+
+            <div>
+
+                <h4 class="mb-0">
+
+                    <span th:text="#{entrenador.header.saludo}">
+                        Hola
+                    </span>
+
+                    <span th:text="${usuario.nombre}">
+                        Entrenador
+                    </span>
+
+                    <span aria-hidden="true">
+                        
+                    </span>
+
+                </h4>
+
+                <small class="text-muted"
+                       th:text="#{entrenador.header.bienvenida}">
+
+                    Gestiona el progreso de tus clientes
+
+                </small>
+
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <!-- Imagen del entrenador -->
+                <img th:if="${usuario.rutaImagen != null
+                             and !#strings.isEmpty(usuario.rutaImagen)}"
+                     th:src="${usuario.rutaImagen}"
+                     th:alt="#{entrenador.header.imagenUsuario}"
+                     class="rounded-circle"
+                     style="width: 42px;
+                            height: 42px;
+                            object-fit: cover;">
+
+                <!-- Icono cuando no tiene imagen -->
+                <i th:unless="${usuario.rutaImagen != null
+                               and !#strings.isEmpty(usuario.rutaImagen)}"
+                   class="fa-solid fa-circle-user fs-3 text-purple">
+                </i>
+
+                <div>
+
+                    <strong th:text="|${usuario.nombre} ${usuario.apellidos}|">
+                        Nombre completo
+                    </strong>
+
+                    <small class="d-block text-muted"
+                           th:text="#{entrenador.header.rol}">
+
+                        Entrenador
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section th:fragment="cards">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3">
+
+                <!-- Clientes activos -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{entrenador.cards.clientesActivos.titulo}">
+
+                                    Clientes activos
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{entrenador.cards.clientesActivos.valor}">
+
+                                    48
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-users fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Citas de hoy -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{entrenador.cards.citasHoy.titulo}">
+
+                                    Citas hoy
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{entrenador.cards.citasHoy.valor}">
+
+                                    8
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-calendar-check fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Rutinas activas -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{entrenador.cards.rutinasActivas.titulo}">
+
+                                    Rutinas activas
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{entrenador.cards.rutinasActivas.valor}">
+
+                                    35
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-dumbbell fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Evaluaciones -->
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{entrenador.cards.evaluaciones.titulo}">
+
+                                    Evaluaciones
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{entrenador.cards.evaluaciones.valor}">
+
+                                    12
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-chart-line fs-3 text-purple">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="clientes">
+
+            <div class="card card-dashboard p-3">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0"
+                        th:text="#{entrenador.clientes.titulo}">
+
+                        Clientes recientes
+
+                    </h5>
+
+                    <i class="fa-solid fa-user-group text-purple">
+                    </i>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mt-3 mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th scope="col"
+                                    th:text="#{entrenador.clientes.columna.cliente}">
+
+                                    Cliente
+
+                                </th>
+
+                                <th scope="col"
+                                    th:text="#{entrenador.clientes.columna.objetivo}">
+
+                                    Objetivo
+
+                                </th>
+
+                                <th scope="col"
+                                    th:text="#{entrenador.clientes.columna.estado}">
+
+                                    Estado
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td th:text="#{entrenador.clientes.cliente1.nombre}">
+                                    Sebastián Rojas
+                                </td>
+
+                                <td th:text="#{entrenador.clientes.cliente1.objetivo}">
+                                    Hipertrofia
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-success"
+                                          th:text="#{entrenador.clientes.estado.activo}">
+
+                                        Activo
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td th:text="#{entrenador.clientes.cliente2.nombre}">
+                                    Ana Gómez
+                                </td>
+
+                                <td th:text="#{entrenador.clientes.cliente2.objetivo}">
+                                    Pérdida de grasa
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-success"
+                                          th:text="#{entrenador.clientes.estado.activo}">
+
+                                        Activo
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td th:text="#{entrenador.clientes.cliente3.nombre}">
+                                    Luis Mora
+                                </td>
+
+                                <td th:text="#{entrenador.clientes.cliente3.objetivo}">
+                                    Fuerza
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-success"
+                                          th:text="#{entrenador.clientes.estado.activo}">
+
+                                        Activo
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="text-end mt-3">
+
+                    <a href="#"
+                       class="btn btn-outline-purple btn-sm"
+                       th:text="#{entrenador.clientes.verTodos}">
+
+                        Ver todos los clientes
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="citas">
+
+            <div class="card card-dashboard p-3">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0"
+                        th:text="#{entrenador.citas.titulo}">
+
+                        Próximas citas
+
+                    </h5>
+
+                    <i class="fa-solid fa-calendar-days text-purple">
+                    </i>
+
+                </div>
+
+                <hr>
+
+                <div>
+
+                    <p class="mb-1 fw-semibold"
+                       th:text="#{entrenador.citas.cita1.cliente}">
+
+                        Sebastián Rojas
+
+                    </p>
+
+                    <small class="text-muted">
+
+                        <i class="fa-regular fa-clock me-1"></i>
+
+                        <span th:text="#{entrenador.citas.cita1.hora}">
+                            10:00 a. m.
+                        </span>
+
+                    </small>
+
+                </div>
+
+                <hr>
+
+                <div>
+
+                    <p class="mb-1 fw-semibold"
+                       th:text="#{entrenador.citas.cita2.cliente}">
+
+                        Ana Gómez
+
+                    </p>
+
+                    <small class="text-muted">
+
+                        <i class="fa-regular fa-clock me-1"></i>
+
+                        <span th:text="#{entrenador.citas.cita2.hora}">
+                            11:00 a. m.
+                        </span>
+
+                    </small>
+
+                </div>
+
+                <hr>
+
+                <div>
+
+                    <p class="mb-1 fw-semibold"
+                       th:text="#{entrenador.citas.cita3.cliente}">
+
+                        Luis Mora
+
+                    </p>
+
+                    <small class="text-muted">
+
+                        <i class="fa-regular fa-clock me-1"></i>
+
+                        <span th:text="#{entrenador.citas.cita3.hora}">
+                            12:00 p. m.
+                        </span>
+
+                    </small>
+
+                </div>
+
+                <div class="d-grid mt-3">
+
+                    <a href="#"
+                       class="btn btn-outline-purple btn-sm"
+                       th:text="#{entrenador.citas.administrar}">
+
+                        Administrar citas
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="actividad">
+
+            <div class="card card-dashboard p-3">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0"
+                        th:text="#{entrenador.actividad.titulo}">
+
+                        Actividad reciente
+
+                    </h5>
+
+                    <i class="fa-solid fa-clock-rotate-left text-purple">
+                    </i>
+
+                </div>
+
+                <hr>
+
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item px-0 d-flex align-items-center">
+
+                        <i class="fa-solid fa-dumbbell text-success me-3">
+                        </i>
+
+                        <span th:text="#{entrenador.actividad.rutina}">
+                            Sebastián registró su rutina.
+                        </span>
+
+                    </li>
+
+                    <li class="list-group-item px-0 d-flex align-items-center">
+
+                        <i class="fa-solid fa-calendar-check text-primary me-3">
+                        </i>
+
+                        <span th:text="#{entrenador.actividad.cita}">
+                            Ana reservó una cita.
+                        </span>
+
+                    </li>
+
+                    <li class="list-group-item px-0 d-flex align-items-center">
+
+                        <i class="fa-solid fa-chart-line text-purple me-3">
+                        </i>
+
+                        <span th:text="#{entrenador.actividad.progreso}">
+                            Luis actualizó su progreso.
+                        </span>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </section>
+
+    </body>
+
+</html>

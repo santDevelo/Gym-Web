@@ -1,0 +1,226 @@
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>FitSystem - Membresías</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.7/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/7.0.0/css/all.css}" />
+    <link rel="stylesheet" th:href="@{/css/estilos.css}" />
+
+    <!-- Scripts -->
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js}"></script>
+
+    <script th:src="@{/js/rutinas.js}"></script>
+</head>
+
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold fs-2" th:href="@{/}">
+                <span class="text-dark">Fit</span>
+                <span class="text-purple">System</span>
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav ms-auto align-items-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="#">
+                            Nosotros
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" href="#">
+                            Promociones
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-dark px-4" th:href="@{/acceso}">
+                            ¡Inscríbete ya!
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+</header>
+
+<div th:fragment="planes" class="container py-5">
+
+    <div class="row g-4">
+
+        <div class="col-lg-5 d-flex">
+
+            <img th:src="${imagenGimnasio}"
+                 alt="Imagen del gimnasio"
+                 class="img-fluid rounded shadow w-100"
+                 style="height:100%; min-height:560px; object-fit:cover;">
+
+        </div>
+
+        <div class="col-lg-7">
+
+            <div class="banner-plan text-center mb-4">
+
+                <h2 class="fw-bold text-uppercase mb-0">
+                    ELEGÍ TU PLAN
+                </h2>
+
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+
+                
+                <div class="col">
+
+                    <div class="card h-100 bg-dark text-white shadow">
+
+                        <div class="card-body text-center">
+
+                            <h5 class="fw-bold">
+                                Plan Completo
+                            </h5>
+
+                            <p>
+                                El más completo de FitSystem
+                            </p>
+
+                            <p class="fw-bold">
+                                ₡28,000 / mes + IVA
+                            </p>
+
+                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3">
+                                ¡Inscribite ya!
+                            </a>
+
+                            <ul class="list-unstyled text-start">
+
+                                <li><span class="check-purple">✓</span> Entrena en todas las sedes disponibles</li>
+                                <li><span class="check-purple">✓</span> Acceso ilimitado a todas las áreas</li>
+                                <li><span class="check-purple">✓</span> Zona premium (spa / recuperación)</li>
+                                <li><span class="check-purple">✓</span> Clases grupales diferenciadas</li>
+                                <li><span class="check-purple">✓</span> Rutinas personalizadas</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+                <div class="col">
+
+                    <div class="card h-100 shadow">
+
+                        <div class="card-body text-center">
+
+                            <h5 class="fw-bold">
+                                Plan Fit
+                            </h5>
+
+                            <p>
+                                Para usuarios constantes
+                            </p>
+
+                            <p class="fw-bold">
+                                ₡18,000 / mes + IVA
+                            </p>
+
+                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3">
+                                ¡Inscribite ya!
+                            </a>
+
+                            <ul class="list-unstyled text-start">
+
+                                <li><span class="check-purple">✓</span> Entrena en todas las sedes disponibles</li>
+                                <li><span class="check-purple">✓</span> Acceso ilimitado a todas las áreas</li>
+                                <li><span class="check-purple">✓</span> Zona premium (spa / recuperación)</li>
+                                <li><span class="check-purple">✓</span> Clases grupales diferenciadas</li>
+                                <li><span class="check-purple">✓</span> Rutinas personalizadas</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+                <div class="col">
+
+                    <div class="card h-100 shadow">
+
+                        <div class="card-body text-center">
+
+                            <h5 class="fw-bold">
+                                Plan Básico
+                            </h5>
+
+                            <p>
+                                El más económico de FitSystem
+                            </p>
+
+                            <p class="fw-bold">
+                                ₡12,000 / mes + IVA
+                            </p>
+
+                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3">
+                                ¡Inscribite ya!
+                            </a>
+
+                            <ul class="list-unstyled text-start">
+
+                                <li><span class="check-purple">✓</span> Entrena en todas las sedes disponibles</li>
+                                <li><span class="check-purple">✓</span> Acceso limitado a todas las áreas</li>
+                                <li><span class="check-purple">✓</span> Zona premium (spa / recuperación)</li>
+                                <li><span class="check-purple">✓</span> Clases grupales diferenciadas</li>
+                                <li><span class="check-purple">✓</span> Rutinas personalizadas</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer th:fragment="footer" class="bg-dark text-white py-3 mt-5">
+
+    <div class="container text-center">
+
+        <small>
+            &copy; 2026 FitSystem - Todos los derechos reservados
+        </small>
+
+    </div>
+
+</footer>

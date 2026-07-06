@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Login Cliente</title>
+</head>
+
+<body class="login-bg">
+
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+
+    <div class="login-card">
+
+        <div class="text-center mb-4">
+
+            <i class="fa-solid fa-user fa-3x text-purple mb-3"></i>
+
+            <h1 class="fw-bold text-purple">
+                FitSystem
+            </h1>
+
+            <p class="text-muted mb-0">
+                Inicio de sesión para clientes
+            </p>
+
+        </div>
+
+        <form th:action="@{/login/cliente}" method="post">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Usuario
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       name="username"
+                       required>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Contraseña
+                </label>
+
+                <input type="password"
+                       class="form-control"
+                       name="password"
+                       required>
+
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger text-center">
+                <span th:text="${error}"></span>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-purple w-100">
+
+                Iniciar sesión
+
+            </button>
+
+        </form>
+
+        <hr>
+
+        <div class="text-center">
+
+            <p class="mb-2">
+                ¿No tienes una cuenta?
+            </p>
+
+            <a href="#"
+               class="text-decoration-none fw-bold text-purple">
+
+                Regístrate aquí
+
+            </a>
+
+        </div>
+
+        <div class="text-center mt-3">
+
+            <a th:href="@{/login}"
+               class="text-decoration-none">
+
+                ← Cambiar tipo de usuario
+
+            </a>
+
+        </div>
+
+        <div class="text-center mt-2">
+
+            <a th:href="@{/}"
+               class="text-decoration-none">
+
+                ← Volver al inicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

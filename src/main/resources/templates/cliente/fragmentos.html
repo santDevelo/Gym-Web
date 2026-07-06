@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+
+        <aside th:fragment="sidebar"
+               class="sidebar d-flex flex-column justify-content-between">
+
+            <div>
+
+                <a th:href="@{/cliente}"
+                   class="text-decoration-none">
+
+                    <h2 class="logo">
+
+                        <span th:text="#{cliente.logo.fit}">
+                            FIT
+                        </span>
+
+                        <span th:text="#{cliente.logo.system}">
+                            System
+                        </span>
+
+                    </h2>
+
+                </a>
+
+                <nav class="nav flex-column mt-4"
+                     aria-label="Menú del cliente">
+
+                    <a th:href="@{/cliente}"
+                       class="nav-link active">
+
+                        <i class="fa-solid fa-house me-2"></i>
+
+                        <span th:text="#{cliente.sidebar.inicio}">
+                            Inicio
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-credit-card me-2"></i>
+
+                        <span th:text="#{cliente.sidebar.membresias}">
+                            Membresías
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-dumbbell me-2"></i>
+
+                        <span th:text="#{cliente.sidebar.rutinas}">
+                            Rutinas
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-calendar-days me-2"></i>
+
+                        <span th:text="#{cliente.sidebar.citas}">
+                            Citas
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-chart-column me-2"></i>
+
+                        <span th:text="#{cliente.sidebar.asistencia}">
+                            Asistencia
+                        </span>
+
+                    </a>
+
+                    <a href="#"
+                       class="nav-link">
+
+                        <i class="fa-solid fa-user me-2"></i>
+
+                        <span th:text="#{cliente.sidebar.perfil}">
+                            Perfil
+                        </span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <a th:href="@{/logout}"
+               class="nav-link">
+
+                <i class="fa-solid fa-right-from-bracket me-2"></i>
+
+                <span th:text="#{cliente.sidebar.cerrarSesion}">
+                    Cerrar sesión
+                </span>
+
+            </a>
+
+        </aside>
+
+
+        <header th:fragment="header"
+                class="header-cliente">
+
+            <div>
+
+                <h4 class="mb-0">
+
+                    <span th:text="#{cliente.header.saludo}">
+                        Hola
+                    </span>
+
+                    <span th:text="${usuario.nombre}">
+                        Usuario
+                    </span>
+
+                    <span aria-hidden="true">
+                       
+                    </span>
+
+                </h4>
+
+                <small class="text-muted"
+                       th:text="#{cliente.header.bienvenida}">
+
+                    Bienvenido nuevamente
+
+                </small>
+
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <img th:if="${usuario.rutaImagen != null
+                             and !#strings.isEmpty(usuario.rutaImagen)}"
+                     th:src="${usuario.rutaImagen}"
+                     th:alt="#{cliente.header.imagenUsuario}"
+                     class="rounded-circle"
+                     style="width: 42px;
+                            height: 42px;
+                            object-fit: cover;">
+
+                <i th:unless="${usuario.rutaImagen != null
+                               and !#strings.isEmpty(usuario.rutaImagen)}"
+                   class="fa-solid fa-circle-user fs-3 text-purple">
+                </i>
+
+                <strong th:text="|${usuario.nombre} ${usuario.apellidos}|">
+                    Nombre completo
+                </strong>
+
+            </div>
+
+        </header>
+
+
+
+        <section th:fragment="cards">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3">
+
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{cliente.cards.membresia.titulo}">
+
+                                    Membresía
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{cliente.cards.membresia.valor}">
+
+                                    Premium
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-id-card fs-3 text-purple"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{cliente.cards.proximaCita.titulo}">
+
+                                    Próxima cita
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{cliente.cards.proximaCita.valor}">
+
+                                    08 Jul
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-calendar-check fs-3 text-purple"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{cliente.cards.asistencias.titulo}">
+
+                                    Asistencias
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{cliente.cards.asistencias.valor}">
+
+                                    18
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-clipboard-check fs-3 text-purple"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <div class="card card-dashboard h-100 p-3">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <h6 class="text-muted"
+                                    th:text="#{cliente.cards.progreso.titulo}">
+
+                                    Progreso
+
+                                </h6>
+
+                                <h4 class="mb-0"
+                                    th:text="#{cliente.cards.progreso.valor}">
+
+                                    82%
+
+                                </h4>
+
+                            </div>
+
+                            <i class="fa-solid fa-chart-line fs-3 text-purple"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="rutina">
+
+            <div class="card card-dashboard h-100 p-3">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h5 class="mb-0"
+                        th:text="#{cliente.rutina.titulo}">
+
+                        Mi rutina
+
+                    </h5>
+
+                    <span class="badge bg-primary"
+                          th:text="#{cliente.rutina.dia}">
+
+                        Día 1
+
+                    </span>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th scope="col"
+                                    th:text="#{cliente.rutina.columna.ejercicio}">
+
+                                    Ejercicio
+
+                                </th>
+
+                                <th scope="col"
+                                    class="text-center"
+                                    th:text="#{cliente.rutina.columna.series}">
+
+                                    Series
+
+                                </th>
+
+                                <th scope="col"
+                                    class="text-center"
+                                    th:text="#{cliente.rutina.columna.repeticiones}">
+
+                                    Repeticiones
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td th:text="#{cliente.rutina.ejercicio.pressBanca}">
+                                    Press banca
+                                </td>
+
+                                <td class="text-center">
+                                    4
+                                </td>
+
+                                <td class="text-center">
+                                    12
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td th:text="#{cliente.rutina.ejercicio.fondos}">
+                                    Fondos
+                                </td>
+
+                                <td class="text-center">
+                                    3
+                                </td>
+
+                                <td class="text-center">
+                                    10
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td th:text="#{cliente.rutina.ejercicio.aperturas}">
+                                    Aperturas
+                                </td>
+
+                                <td class="text-center">
+                                    3
+                                </td>
+
+                                <td class="text-center">
+                                    15
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="text-end mt-3">
+
+                    <a href="#"
+                       class="btn btn-outline-purple btn-sm"
+                       th:text="#{cliente.rutina.verCompleta}">
+
+                        Ver rutina completa
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="citas">
+
+            <div class="card card-dashboard p-3">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0"
+                        th:text="#{cliente.citas.titulo}">
+
+                        Próximas citas
+
+                    </h5>
+
+                    <i class="fa-solid fa-calendar-days text-purple"></i>
+
+                </div>
+
+                <hr>
+
+                <p class="mb-1 fw-semibold"
+                   th:text="#{cliente.citas.entrenamiento.nombre}">
+
+                    Entrenamiento personal
+
+                </p>
+
+                <small class="text-muted"
+                       th:text="#{cliente.citas.entrenamiento.fecha}">
+
+                    08 de julio - 10:00 a. m.
+
+                </small>
+
+                <hr>
+
+                <p class="mb-1 fw-semibold"
+                   th:text="#{cliente.citas.evaluacion.nombre}">
+
+                    Evaluación física
+
+                </p>
+
+                <small class="text-muted"
+                       th:text="#{cliente.citas.evaluacion.fecha}">
+
+                    12 de julio - 3:30 p. m.
+
+                </small>
+
+                <div class="d-grid mt-3">
+
+                    <a href="#"
+                       class="btn btn-outline-purple btn-sm"
+                       th:text="#{cliente.citas.administrar}">
+
+                        Administrar citas
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="membresia">
+
+            <div class="card card-dashboard p-3">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0"
+                        th:text="#{cliente.membresia.titulo}">
+
+                        Membresía
+
+                    </h5>
+
+                    <i class="fa-solid fa-credit-card text-purple"></i>
+
+                </div>
+
+                <hr>
+
+                <p class="mb-1 text-muted"
+                   th:text="#{cliente.membresia.planActual}">
+
+                    Plan actual
+
+                </p>
+
+                <h6 class="fw-bold"
+                    th:text="#{cliente.membresia.plan}">
+
+                    Plan Premium
+
+                </h6>
+
+                <div>
+
+                    <span class="badge bg-success"
+                          th:text="#{cliente.membresia.estado}">
+
+                        Activa
+
+                    </span>
+
+                </div>
+
+                <button type="button"
+                        class="btn btn-purple w-100 mt-3">
+
+                    <i class="fa-solid fa-money-bill me-2"></i>
+
+                    <span th:text="#{cliente.membresia.pagar}">
+                        Pagar membresía
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section th:fragment="actividad">
+
+            <div class="card card-dashboard p-3">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0"
+                        th:text="#{cliente.actividad.titulo}">
+
+                        Actividad reciente
+
+                    </h5>
+
+                    <i class="fa-solid fa-clock-rotate-left text-purple"></i>
+
+                </div>
+
+                <hr>
+
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item px-0 d-flex align-items-center">
+
+                        <i class="fa-solid fa-circle-check text-success me-3"></i>
+
+                        <div>
+
+                            <p class="mb-0 fw-semibold"
+                               th:text="#{cliente.actividad.rutina.titulo}">
+
+                                Rutina completada
+
+                            </p>
+
+                            <small class="text-muted"
+                                   th:text="#{cliente.actividad.rutina.descripcion}">
+
+                                Completaste tu rutina del día
+
+                            </small>
+
+                        </div>
+
+                    </li>
+
+                    <li class="list-group-item px-0 d-flex align-items-center">
+
+                        <i class="fa-solid fa-calendar-check text-primary me-3"></i>
+
+                        <div>
+
+                            <p class="mb-0 fw-semibold"
+                               th:text="#{cliente.actividad.cita.titulo}">
+
+                                Cita reservada
+
+                            </p>
+
+                            <small class="text-muted"
+                                   th:text="#{cliente.actividad.cita.descripcion}">
+
+                                Entrenamiento personal
+
+                            </small>
+
+                        </div>
+
+                    </li>
+
+                    <li class="list-group-item px-0 d-flex align-items-center">
+
+                        <i class="fa-solid fa-credit-card text-purple me-3"></i>
+
+                        <div>
+
+                            <p class="mb-0 fw-semibold"
+                               th:text="#{cliente.actividad.pago.titulo}">
+
+                                Pago realizado
+
+                            </p>
+
+                            <small class="text-muted"
+                                   th:text="#{cliente.actividad.pago.descripcion}">
+
+                                Pago de la membresía registrado
+
+                            </small>
+
+                        </div>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </section>
+
+    </body>
+
+</html>

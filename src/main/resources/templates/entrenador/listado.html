@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}">
+    </head>
+
+    <body>
+
+        <aside th:replace="~{entrenador/fragmentos :: sidebar}">
+        </aside>
+
+        <header th:replace="~{entrenador/fragmentos :: header}">
+        </header>
+
+
+        <main class="contenido-cliente">
+
+            <div class="container-fluid py-4">
+
+
+                <section th:replace="~{entrenador/fragmentos :: cards}">
+                </section>
+
+        
+                <section class="row g-4 mt-1">
+
+             
+                    <div class="col-12 col-lg-8">
+
+                        <section th:replace="~{entrenador/fragmentos :: clientes}">
+                        </section>
+
+                        <div class="mt-4">
+
+                            <section th:replace="~{entrenador/fragmentos :: actividad}">
+                            </section>
+
+                        </div>
+
+                    </div>
+
+              
+                    <div class="col-12 col-lg-4">
+
+                        <section th:replace="~{entrenador/fragmentos :: citas}">
+                        </section>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </body>
+
+</html>
