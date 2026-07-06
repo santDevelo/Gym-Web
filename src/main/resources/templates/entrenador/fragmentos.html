@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside th:fragment="sidebar" class="sidebar">
+
+    <div>
+
+        <h2 class="logo">
+            FIT<span>System</span>
+        </h2>
+
+        <nav class="nav flex-column mt-4">
+
+            <a href="#" class="nav-link active">
+                <i class="fa-solid fa-house me-2"></i>Inicio
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Clientes
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-dumbbell me-2"></i>Rutinas
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-calendar-days me-2"></i>Citas
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-chart-line me-2"></i>Progreso
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-user me-2"></i>Perfil
+            </a>
+
+        </nav>
+
+    </div>
+
+    <a th:href="@{/}" class="nav-link">
+        <i class="fa-solid fa-right-from-bracket me-2"></i>
+        Cerrar sesión
+    </a>
+
+</aside>
+
+<!-- ================= HEADER ================= -->
+
+<header th:fragment="header" class="header-cliente">
+
+    <div>
+
+        <h4 class="mb-0">Hola Carlos 👋</h4>
+
+        <small class="text-muted">
+            Gestiona el progreso de tus clientes
+        </small>
+
+    </div>
+
+    <strong>Carlos Ruiz</strong>
+
+</header>
+
+<!-- ================= CARDS ================= -->
+
+<section th:fragment="cards">
+
+    <div class="row g-3">
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Clientes activos</h6>
+
+                <h4>48</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Citas hoy</h6>
+
+                <h4>8</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Rutinas activas</h6>
+
+                <h4>35</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Evaluaciones</h6>
+
+                <h4>12</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= CLIENTES ================= -->
+
+<section th:fragment="clientes">
+
+    <div class="card card-dashboard p-3">
+
+        <h5>Clientes recientes</h5>
+
+        <table class="table table-hover mt-3">
+
+            <thead>
+
+                <tr>
+
+                    <th>Cliente</th>
+                    <th>Objetivo</th>
+                    <th>Estado</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>Sebastián Rojas</td>
+                    <td>Hipertrofia</td>
+                    <td>Activo</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Ana Gómez</td>
+                    <td>Pérdida de grasa</td>
+                    <td>Activo</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Luis Mora</td>
+                    <td>Fuerza</td>
+                    <td>Activo</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ================= CITAS ================= -->
+
+<section th:fragment="citas">
+
+    <div class="card card-dashboard p-3">
+
+        <h5>Próximas citas</h5>
+
+        <hr>
+
+        <p class="mb-1"><strong>Sebastián Rojas</strong></p>
+        <small class="text-muted">10:00 AM</small>
+
+        <hr>
+
+        <p class="mb-1"><strong>Ana Gómez</strong></p>
+        <small class="text-muted">11:00 AM</small>
+
+        <hr>
+
+        <p class="mb-1"><strong>Luis Mora</strong></p>
+        <small class="text-muted">12:00 PM</small>
+
+    </div>
+
+</section>
+
+<!-- ================= ACTIVIDAD ================= -->
+
+<section th:fragment="actividad">
+
+    <div class="card card-dashboard p-3">
+
+        <h5>Actividad reciente</h5>
+
+        <hr>
+
+        <ul class="list-group list-group-flush">
+
+            <li class="list-group-item">
+                Sebastián registró su rutina.
+            </li>
+
+            <li class="list-group-item">
+                Ana reservó una cita.
+            </li>
+
+            <li class="list-group-item">
+                Luis actualizó su progreso.
+            </li>
+
+        </ul>
+
+    </div>
+
+</section>
+
+</html>

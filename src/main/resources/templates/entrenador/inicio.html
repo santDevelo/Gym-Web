@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Entrenador</title>
+</head>
+
+<body>
+
+<div th:replace="~{entrenador/fragmentos :: sidebar}"></div>
+
+<div th:replace="~{entrenador/fragmentos :: header}"></div>
+
+<main class="contenido-cliente">
+
+    <div th:replace="~{entrenador/fragmentos :: cards}"></div>
+
+    <div class="row mt-4">
+
+        <div class="col-lg-8">
+
+            <div th:replace="~{entrenador/fragmentos :: clientes}"></div>
+
+            <div class="mt-4"></div>
+
+            <div th:replace="~{entrenador/fragmentos :: actividad}"></div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div th:replace="~{entrenador/fragmentos :: citas}"></div>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

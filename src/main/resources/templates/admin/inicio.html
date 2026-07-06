@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Administrador</title>
+</head>
+
+<body>
+
+<div th:replace="~{admin/fragmentos :: sidebar}"></div>
+
+<div th:replace="~{admin/fragmentos :: header}"></div>
+
+<main class="contenido-cliente">
+
+    <div th:replace="~{admin/fragmentos :: cards}"></div>
+
+    <div class="row mt-4">
+
+        <div class="col-lg-6">
+
+            <div th:replace="~{admin/fragmentos :: ingresos}"></div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div th:replace="~{admin/fragmentos :: asistencias}"></div>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

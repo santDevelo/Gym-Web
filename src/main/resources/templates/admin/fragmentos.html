@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside th:fragment="sidebar" class="sidebar">
+
+    <div>
+
+        <h2 class="logo">
+            FIT<span>System</span>
+        </h2>
+
+        <nav class="nav flex-column mt-4">
+
+            <a href="#" class="nav-link active">
+                <i class="fa-solid fa-house me-2"></i>Dashboard
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-users me-2"></i>Usuarios
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-user-group me-2"></i>Clientes
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-user-tie me-2"></i>Empleados
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-credit-card me-2"></i>Membresías
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-money-bill me-2"></i>Pagos
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-chart-column me-2"></i>Reportes
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-gear me-2"></i>Configuración
+            </a>
+
+        </nav>
+
+    </div>
+
+    <a th:href="@{/}" class="nav-link">
+        <i class="fa-solid fa-right-from-bracket me-2"></i>
+        Cerrar sesión
+    </a>
+
+</aside>
+
+<!-- ================= HEADER ================= -->
+
+<header th:fragment="header" class="header-cliente">
+
+    <div>
+
+        <h4 class="mb-0">Hola Thiago 👋</h4>
+
+        <small class="text-muted">
+            Bienvenido al panel de administración
+        </small>
+
+    </div>
+
+    <strong>Administrador</strong>
+
+</header>
+
+<!-- ================= CARDS ================= -->
+
+<section th:fragment="cards">
+
+    <div class="row g-3">
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Clientes activos</h6>
+
+                <h4>150</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Entrenadores</h6>
+
+                <h4>18</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Ingresos del mes</h6>
+
+                <h4>₡1.5 M</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card card-dashboard p-3">
+
+                <h6>Pagos pendientes</h6>
+
+                <h4>12</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ================= INGRESOS ================= -->
+
+<section th:fragment="ingresos">
+
+    <div class="card card-dashboard p-3">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="mb-0">Ingresos</h5>
+
+            <select class="form-select w-auto">
+
+                <option>Este mes</option>
+                <option>Mes pasado</option>
+
+            </select>
+
+        </div>
+
+        <div class="bg-light rounded d-flex justify-content-center align-items-center"
+             style="height:300px;">
+
+            <h4 class="text-secondary">
+                Gráfico de ingresos
+            </h4>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= ASISTENCIAS ================= -->
+
+<section th:fragment="asistencias">
+
+    <div class="card card-dashboard p-3">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="mb-0">Asistencias del mes</h5>
+
+            <select class="form-select w-auto">
+
+                <option>Este mes</option>
+                <option>Mes pasado</option>
+
+            </select>
+
+        </div>
+
+        <div class="bg-light rounded d-flex justify-content-center align-items-center"
+             style="height:300px;">
+
+            <h4 class="text-secondary">
+                 Gráfico de asistencias
+            </h4>
+
+        </div>
+
+    </div>
+
+</section>
+
+</html>

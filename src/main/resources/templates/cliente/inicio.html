@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Inicio Cliente</title>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div th:replace="~{cliente/fragmentos :: sidebar}"></div>
+
+    <!-- Header -->
+    <div th:replace="~{cliente/fragmentos :: header}"></div>
+
+    <!-- Contenido -->
+    <main class="contenido-cliente">
+
+        <!-- Tarjetas -->
+        <div th:replace="~{cliente/fragmentos :: cards}"></div>
+
+        <div class="row mt-4">
+
+            <div class="col-lg-8">
+
+                <div th:replace="~{cliente/fragmentos :: rutina}"></div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div th:replace="~{cliente/fragmentos :: citas}"></div>
+
+                <div class="mt-3"></div>
+
+                <div th:replace="~{cliente/fragmentos :: membresia}"></div>
+
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+
+            <div th:replace="~{cliente/fragmentos :: actividad}"></div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
