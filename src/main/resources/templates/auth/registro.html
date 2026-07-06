@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Registro - FitSystem</title>
+</head>
+
+<body class="login-bg">
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+
+    <div class="login-card">
+
+        <div class="text-center mb-4">
+
+            <i class="fa-solid fa-user-plus fa-3x text-purple mb-3"></i>
+
+            <h2 class="fw-bold text-purple">
+                Crear una cuenta
+            </h2>
+
+            <p class="text-muted">
+                Completa la siguiente información
+            </p>
+
+        </div>
+
+        <form th:action="@{/registro}" method="post">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input
+                    type="text"
+                    name="nombre"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Apellidos
+                </label>
+
+                <input
+                    type="text"
+                    name="apellidos"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    name="correo"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Teléfono
+                </label>
+
+                <input
+                    type="text"
+                    name="telefono"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Usuario
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Contraseña
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-purple w-100">
+
+                Crear cuenta
+
+            </button>
+
+        </form>
+
+        <hr>
+
+        <div class="text-center">
+
+            <a th:href="@{/login/cliente}" class="text-decoration-none">
+                Ya tengo una cuenta
+            </a>
+
+        </div>
+
+        <div class="text-center mt-2">
+
+            <a th:href="@{/acceso}" class="text-decoration-none">
+                ← Volver
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
