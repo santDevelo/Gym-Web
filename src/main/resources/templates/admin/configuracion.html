@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}">
+    </head>
+
+    <body>
+
+        <aside th:replace="~{admin/fragmentos :: sidebar}">
+        </aside>
+
+        <header th:replace="~{admin/fragmentos :: header}">
+        </header>
+
+        <main class="contenido-cliente">
+
+            <div class="container-fluid py-4">
+
+                <section th:replace="~{admin/fragmentos :: configuracion}">
+                </section>
+
+            </div>
+
+        </main>
+
+    </body>
+
+</html>
+

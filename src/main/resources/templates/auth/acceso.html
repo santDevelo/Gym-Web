@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Acceso - FitSystem</title>
+</head>
+
+<body class="login-bg">
+
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+
+        <div class="login-card">
+
+            <div class="text-center mb-4">
+
+                <i class="fas fa-dumbbell login-icon"></i>
+
+                <h2 class="fw-bold text-purple">
+                    FitSystem
+                </h2>
+
+                <p class="text-muted">
+                    ¿Qué deseas hacer?
+                </p>
+
+            </div>
+
+            <div class="d-grid gap-3">
+
+                <a th:href="@{/login}"
+                   class="btn btn-purple">
+
+                    Iniciar sesión
+
+                </a>
+
+                <a th:href="@{/registro}"
+                   class="btn btn-outline-secondary">
+
+                    Crear una cuenta
+
+                </a>
+
+            </div>
+
+            <hr class="my-4">
+
+            <div class="text-center">
+
+                <a th:href="@{/}"
+                   class="text-decoration-none">
+
+                    ← Volver al inicio
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

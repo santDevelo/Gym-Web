@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}">
+    </head>
+
+    <body>
+
+        <aside th:replace="~{admin/fragmentos :: sidebar}">
+        </aside>
+
+        <header th:replace="~{admin/fragmentos :: header}">
+        </header>
+
+        <main class="contenido-cliente">
+
+            <div class="container-fluid py-4">
+
+                <section th:replace="~{admin/fragmentos :: cards}">
+                </section>
+
+                <section class="row g-4 mt-1">
+
+                    <div class="col-12 col-lg-6">
+
+                        <section th:replace="~{admin/fragmentos :: ingresos}">
+                        </section>
+
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+
+                        <section th:replace="~{admin/fragmentos :: asistencias}">
+                        </section>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </body>
+
+</html>
