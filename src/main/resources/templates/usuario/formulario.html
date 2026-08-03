@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <section th:fragment="editar">
+
+        <div class="container-fluid py-4">
+
+            <div class="row justify-content-center">
+
+                <div class="col-xl-8">
+
+                    <div class="card card-dashboard">
+
+                        <div class="card-header bg-white py-3">
+
+                            <h4 class="mb-0">
+
+                                <i class="fa-solid
+                                          fa-user-pen
+                                          text-purple me-2"></i>
+
+                                Modificar usuario
+
+                            </h4>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <form th:action="@{/usuario/guardar}"
+                                  th:object="${usuarioFormulario}"
+                                  method="post"
+                                  enctype="multipart/form-data">
+
+                                <input type="hidden"
+                                       th:field="*{idUsuario}">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+
+                                        <label for="username"
+                                               class="form-label">
+                                            Nombre de usuario
+                                        </label>
+
+                                        <input type="text"
+                                               id="username"
+                                               th:field="*{username}"
+                                               class="form-control"
+                                               maxlength="30"
+                                               required>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label for="password"
+                                               class="form-label">
+                                            Nueva contraseña
+                                        </label>
+
+                                        <input type="password"
+                                               id="password"
+                                               name="password"
+                                               class="form-control"
+                                               maxlength="100"
+                                               autocomplete="new-password">
+
+                                        <small class="text-muted">
+                                            Déjala vacía para conservar
+                                            la contraseña actual.
+                                        </small>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label for="nombre"
+                                               class="form-label">
+                                            Nombre
+                                        </label>
+
+                                        <input type="text"
+                                               id="nombre"
+                                               th:field="*{nombre}"
+                                               class="form-control"
+                                               maxlength="50"
+                                               required>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label for="apellidos"
+                                               class="form-label">
+                                            Apellidos
+                                        </label>
+
+                                        <input type="text"
+                                               id="apellidos"
+                                               th:field="*{apellidos}"
+                                               class="form-control"
+                                               maxlength="80"
+                                               required>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label for="correo"
+                                               class="form-label">
+                                            Correo
+                                        </label>
+
+                                        <input type="email"
+                                               id="correo"
+                                               th:field="*{correo}"
+                                               class="form-control"
+                                               maxlength="100">
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label for="telefono"
+                                               class="form-label">
+                                            Teléfono
+                                        </label>
+
+                                        <input type="text"
+                                               id="telefono"
+                                               th:field="*{telefono}"
+                                               class="form-control"
+                                               maxlength="25">
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label for="idRol"
+                                               class="form-label">
+                                            Rol
+                                        </label>
+
+                                        <select id="idRol"
+                                                name="idRol"
+                                                class="form-select"
+                                                required>
+
+                                            <option th:each="rol : ${roles}"
+                                                    th:value="${rol.idRol}"
+                                                    th:text="${rol.rol}"
+                                                    th:selected="${rol.idRol
+                                                                   == idRolActual}">
+                                                Rol
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label for="imagenFile"
+                                               class="form-label">
+                                            Nueva imagen
+                                        </label>
+
+                                        <input type="file"
+                                               id="imagenFile"
+                                               name="imagenFile"
+                                               class="form-control"
+                                               accept="image/*">
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <div class="form-check mt-3">
+
+                                            <input type="checkbox"
+                                                   id="activo"
+                                                   th:field="*{activo}"
+                                                   class="form-check-input">
+
+                                            <label for="activo"
+                                                   class="form-check-label">
+                                                Usuario activo
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6 text-center"
+                                         th:if="${usuarioFormulario.rutaImagen
+                                                  != null
+                                                  and !#strings.isEmpty(
+                                                  usuarioFormulario.rutaImagen)}">
+
+                                        <p class="text-muted mb-2">
+                                            Imagen actual
+                                        </p>
+
+                                        <img th:src="${usuarioFormulario.rutaImagen}"
+                                             alt="Imagen actual"
+                                             class="rounded-circle"
+                                             style="width: 90px;
+                                                    height: 90px;
+                                                    object-fit: cover;">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="d-flex justify-content-end
+                                            gap-2 mt-4">
+
+                                    <a th:href="@{/usuario/listado}"
+                                       class="btn btn-secondary">
+
+                                        <i class="fa-solid
+                                                  fa-arrow-left me-2"></i>
+
+                                        Regresar
+
+                                    </a>
+
+                                    <button type="submit"
+                                            class="btn btn-purple">
+
+                                        <i class="fa-solid
+                                                  fa-floppy-disk me-2"></i>
+
+                                        Guardar cambios
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>

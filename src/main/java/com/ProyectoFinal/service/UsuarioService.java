@@ -7,6 +7,7 @@ import com.ProyectoFinal.repository.UsuarioRepository;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,10 +34,6 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /*
-     * Consultas de usuarios
-     */
-
     @Transactional(readOnly = true)
     public List<Usuario> listarTodosConRoles() {
         return usuarioRepository.findAll();
@@ -51,16 +48,14 @@ public class UsuarioService {
     public Optional<Usuario> buscarPorId(
             Integer idUsuario) {
 
-        return usuarioRepository.findById(
-                idUsuario);
+        return usuarioRepository.findById(idUsuario);
     }
 
     @Transactional(readOnly = true)
     public Optional<Usuario> buscarPorUsername(
             String username) {
 
-        return usuarioRepository.findByUsername(
-                username);
+        return usuarioRepository.findByUsername(username);
     }
 
     @Transactional(readOnly = true)
@@ -68,8 +63,7 @@ public class UsuarioService {
             String username) {
 
         return usuarioRepository
-                .findByUsernameAndActivoTrue(
-                        username);
+                .findByUsernameAndActivoTrue(username);
     }
 
     @Transactional(readOnly = true)
@@ -83,117 +77,17 @@ public class UsuarioService {
                         correo);
     }
 
-    /*
-     * Método utilizado por DashboardController
-     */
-
     @Transactional(readOnly = true)
-    public long contarPorRolActivo(
-            String rol) {
+    public long contarPorRolActivo(String rol) {
 
         return usuarioRepository
-                .countByRoles_RolAndActivoTrue(
-                        rol);
+                .countByRoles_RolAndActivoTrue(rol);
     }
-
-    /*
-     * Consultas de roles
-     */
 
     @Transactional(readOnly = true)
     public List<Rol> listarRoles() {
         return rolRepository.findAll();
     }
-
-    /*
-     * Registro público de clientes
-     */
-
-    @Transactional
-    public boolean registrarCliente(
-            Usuario usuario) {
-
-        if (usuario == null) {
-            return false;
-        }
-
-        if (usuario.getUsername() == null
-                || usuario.getUsername().isBlank()) {
-
-            return false;
-        }
-
-        if (usuario.getPassword() == null
-                || usuario.getPassword().isBlank()) {
-
-            return false;
-        }
-
-        Optional<Usuario> usuarioExistente
-                = usuarioRepository.findByUsername(
-                        usuario.getUsername().trim());
-
-        if (usuarioExistente.isPresent()) {
-            return false;
-        }
-
-        if (usuario.getCorreo() != null
-                && !usuario.getCorreo().isBlank()) {
-
-            Optional<Usuario> correoExistente
-                    = usuarioRepository.findByCorreo(
-                            usuario.getCorreo().trim());
-
-            if (correoExistente.isPresent()) {
-                return false;
-            }
-        }
-
-        Rol rolCliente = rolRepository
-                .findByRol("CLIENTE")
-                .orElseThrow(() ->
-                new IllegalStateException(
-                        "El rol CLIENTE no existe."));
-
-        usuario.setIdUsuario(null);
-
-        usuario.setUsername(
-                usuario.getUsername().trim());
-
-        usuario.setPassword(
-                passwordEncoder.encode(
-                        usuario.getPassword()));
-
-        usuario.setNombre(
-                usuario.getNombre().trim());
-
-        usuario.setApellidos(
-                usuario.getApellidos().trim());
-
-        usuario.setCorreo(
-                limpiarTextoOpcional(
-                        usuario.getCorreo()));
-
-        usuario.setTelefono(
-                limpiarTextoOpcional(
-                        usuario.getTelefono()));
-
-        usuario.setRutaImagen(null);
-        usuario.setActivo(true);
-
-        var roles = new HashSet<Rol>();
-        roles.add(rolCliente);
-
-        usuario.setRoles(roles);
-
-        usuarioRepository.save(usuario);
-
-        return true;
-    }
-
-    /*
-     * Guardar desde administración
-     */
 
     @Transactional
     public Usuario guardarDesdeAdministracion(
@@ -210,16 +104,8 @@ public class UsuarioService {
                 new IllegalArgumentException(
                         "El rol seleccionado no existe."));
 
-        Usuario usuario;
-
-        if (formulario.getIdUsuario() == null) {
-
-            usuario = crearUsuario(formulario);
-
-        } else {
-
-            usuario = actualizarUsuario(formulario);
-        }
+        Usuario usuario
+                = obtenerUsuarioParaGuardar(formulario);
 
         copiarDatosEditables(
                 formulario,
@@ -239,27 +125,14 @@ public class UsuarioService {
         return usuario;
     }
 
-    private Usuario crearUsuario(
+    private Usuario obtenerUsuarioParaGuardar(
             Usuario formulario) {
 
-        if (formulario.getPassword() == null
-                || formulario.getPassword().isBlank()) {
+        if (formulario.getIdUsuario() == null) {
 
-            throw new IllegalArgumentException(
-                    "La contraseña es obligatoria.");
+            return crearUsuario(
+                    formulario.getPassword());
         }
-
-        Usuario usuario = new Usuario();
-
-        usuario.setPassword(
-                passwordEncoder.encode(
-                        formulario.getPassword()));
-
-        return usuario;
-    }
-
-    private Usuario actualizarUsuario(
-            Usuario formulario) {
 
         Usuario usuario = usuarioRepository
                 .findById(formulario.getIdUsuario())
@@ -267,8 +140,7 @@ public class UsuarioService {
                 new IllegalArgumentException(
                         "El usuario no existe."));
 
-        if (formulario.getPassword() != null
-                && !formulario.getPassword().isBlank()) {
+        if (tieneTexto(formulario.getPassword())) {
 
             usuario.setPassword(
                     passwordEncoder.encode(
@@ -278,54 +150,55 @@ public class UsuarioService {
         return usuario;
     }
 
-    private void copiarDatosEditables(
-            Usuario formulario,
-            Usuario usuario) {
+    private Usuario crearUsuario(String password) {
 
+        if (!tieneTexto(password)) {
+
+            throw new IllegalArgumentException(
+                    "La contraseña es obligatoria.");
+        }
+
+        Usuario usuario = new Usuario();
+
+        usuario.setPassword(
+                passwordEncoder.encode(password));
+
+        return usuario;
+    }
+
+    private void copiarDatosEditables(
+            Usuario formulario,Usuario usuario) {
         usuario.setUsername(
                 formulario.getUsername().trim());
-
         usuario.setNombre(
                 formulario.getNombre().trim());
-
         usuario.setApellidos(
                 formulario.getApellidos().trim());
-
         usuario.setCorreo(
                 limpiarTextoOpcional(
                         formulario.getCorreo()));
-
         usuario.setTelefono(
                 limpiarTextoOpcional(
                         formulario.getTelefono()));
-
         usuario.setActivo(
                 formulario.isActivo());
     }
-
-    /*
-     * Validaciones
-     */
-
     private void validarCamposObligatorios(
             Usuario formulario) {
 
-        if (formulario.getUsername() == null
-                || formulario.getUsername().isBlank()) {
+        if (!tieneTexto(formulario.getUsername())) {
 
             throw new IllegalArgumentException(
                     "El nombre de usuario es obligatorio.");
         }
 
-        if (formulario.getNombre() == null
-                || formulario.getNombre().isBlank()) {
+        if (!tieneTexto(formulario.getNombre())) {
 
             throw new IllegalArgumentException(
                     "El nombre es obligatorio.");
         }
 
-        if (formulario.getApellidos() == null
-                || formulario.getApellidos().isBlank()) {
+        if (!tieneTexto(formulario.getApellidos())) {
 
             throw new IllegalArgumentException(
                     "Los apellidos son obligatorios.");
@@ -337,47 +210,62 @@ public class UsuarioService {
 
         Integer idActual = formulario.getIdUsuario();
 
-        usuarioRepository
-                .findByUsername(
-                        formulario.getUsername().trim())
-                .filter(encontrado ->
-                !encontrado.getIdUsuario()
-                        .equals(idActual))
-                .ifPresent(encontrado -> {
-                    throw new IllegalArgumentException(
-                            "El nombre de usuario ya está registrado.");
-                });
+        Optional<Usuario> mismoUsername
+                = usuarioRepository.findByUsername(
+                        formulario
+                                .getUsername()
+                                .trim());
+
+        if (perteneceAOtroUsuario(
+                mismoUsername,
+                idActual)) {
+
+            throw new IllegalArgumentException(
+                    "El nombre de usuario ya está registrado.");
+        }
 
         String correo = limpiarTextoOpcional(
                 formulario.getCorreo());
 
-        if (correo != null) {
-
-            usuarioRepository
-                    .findByCorreo(correo)
-                    .filter(encontrado ->
-                    !encontrado.getIdUsuario()
-                            .equals(idActual))
-                    .ifPresent(encontrado -> {
-                        throw new IllegalArgumentException(
-                                "El correo ya está registrado.");
-                    });
+        if (correo == null) {
+            return;
         }
+
+        Optional<Usuario> mismoCorreo
+                = usuarioRepository.findByCorreo(correo);
+
+        if (perteneceAOtroUsuario(
+                mismoCorreo,
+                idActual)) {
+
+            throw new IllegalArgumentException(
+                    "El correo ya está registrado.");
+        }
+    }
+
+    private boolean perteneceAOtroUsuario(
+            Optional<Usuario> encontrado,
+            Integer idActual) {
+
+        return encontrado.isPresent()
+                && !Objects.equals(
+                        encontrado.get().getIdUsuario(),
+                        idActual);
+    }
+
+    private boolean tieneTexto(String texto) {
+
+        return texto != null
+                && !texto.isBlank();
     }
 
     private String limpiarTextoOpcional(
             String texto) {
 
-        if (texto == null || texto.isBlank()) {
-            return null;
-        }
-
-        return texto.trim();
+        return tieneTexto(texto)
+                ? texto.trim()
+                : null;
     }
-
-    /*
-     * Imagen del usuario
-     */
 
     private void guardarImagen(
             Usuario usuario,
@@ -408,10 +296,6 @@ public class UsuarioService {
                     ex);
         }
     }
-
-    /*
-     * Activar o desactivar
-     */
 
     @Transactional
     public void cambiarEstado(

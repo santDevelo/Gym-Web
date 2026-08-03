@@ -5,11 +5,60 @@
 
 <body>
 
-    <section th:fragment="listado">
+    <!-- Mensajes del sistema -->
+    <section th:fragment="mensajes">
 
-        <div class="container-fluid py-4">
+        <div class="container-fluid pt-4">
 
-            <!-- Encabezado -->
+            <div th:if="${todoOk != null}"
+                 class="alert alert-success
+                        alert-dismissible fade show"
+                 role="alert">
+
+                <i class="fa-solid fa-circle-check me-2"></i>
+
+                <span th:text="${todoOk}">
+                    Operación realizada correctamente.
+                </span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+
+            </div>
+
+            <div th:if="${error != null}"
+                 class="alert alert-danger
+                        alert-dismissible fade show"
+                 role="alert">
+
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                <span th:text="${error}">
+                    Ocurrió un error.
+                </span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Botón y modal para agregar -->
+    <section th:fragment="agregar"
+             sec:authorize="hasRole('ADMINISTRADOR')">
+
+        <div class="container-fluid pt-3">
+
             <div class="d-flex justify-content-between
                         align-items-center mb-4">
 
@@ -20,28 +69,279 @@
                     </h3>
 
                     <p class="text-muted mb-0">
-                        Usuarios registrados en FitSystem
+                        Gestiona los usuarios registrados en FitSystem.
                     </p>
 
                 </div>
 
-                <div class="card card-dashboard px-4 py-2">
+                <button type="button"
+                        class="btn btn-purple"
+                        data-bs-toggle="modal"
+                        data-bs-target="#agregarUsuarioModal">
 
-                    <span class="text-muted">
-                        Total:
-                    </span>
+                    <i class="fa-solid fa-user-plus me-2"></i>
+                    Agregar usuario
 
-                    <strong class="text-purple"
-                            th:text="${totalUsuarios}">
-                        0
-                    </strong>
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade"
+             id="agregarUsuarioModal"
+             tabindex="-1"
+             aria-labelledby="agregarUsuarioTitulo"
+             aria-hidden="true">
+
+            <div class="modal-dialog modal-lg
+                        modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title"
+                            id="agregarUsuarioTitulo">
+
+                            <i class="fa-solid fa-user-plus
+                                      text-purple me-2"></i>
+
+                            Nuevo usuario
+
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Cerrar">
+                        </button>
+
+                    </div>
+
+                    <form th:action="@{/usuario/guardar}"
+                          th:object="${usuarioFormulario}"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        <div class="modal-body">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <label for="usernameNuevo"
+                                           class="form-label">
+                                        Nombre de usuario
+                                    </label>
+
+                                    <input type="text"
+                                           id="usernameNuevo"
+                                           th:field="*{username}"
+                                           class="form-control"
+                                           maxlength="30"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label for="passwordNuevo"
+                                           class="form-label">
+                                        Contraseña
+                                    </label>
+
+                                    <input type="password"
+                                           id="passwordNuevo"
+                                           th:field="*{password}"
+                                           class="form-control"
+                                           maxlength="100"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label for="nombreNuevo"
+                                           class="form-label">
+                                        Nombre
+                                    </label>
+
+                                    <input type="text"
+                                           id="nombreNuevo"
+                                           th:field="*{nombre}"
+                                           class="form-control"
+                                           maxlength="50"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label for="apellidosNuevo"
+                                           class="form-label">
+                                        Apellidos
+                                    </label>
+
+                                    <input type="text"
+                                           id="apellidosNuevo"
+                                           th:field="*{apellidos}"
+                                           class="form-control"
+                                           maxlength="80"
+                                           required>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label for="correoNuevo"
+                                           class="form-label">
+                                        Correo
+                                    </label>
+
+                                    <input type="email"
+                                           id="correoNuevo"
+                                           th:field="*{correo}"
+                                           class="form-control"
+                                           maxlength="100">
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label for="telefonoNuevo"
+                                           class="form-label">
+                                        Teléfono
+                                    </label>
+
+                                    <input type="text"
+                                           id="telefonoNuevo"
+                                           th:field="*{telefono}"
+                                           class="form-control"
+                                           maxlength="25">
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label for="rolNuevo"
+                                           class="form-label">
+                                        Rol
+                                    </label>
+
+                                    <select id="rolNuevo"
+                                            name="idRol"
+                                            class="form-select"
+                                            required>
+
+                                        <option value="">
+                                            Seleccione un rol
+                                        </option>
+
+                                        <option th:each="rol : ${roles}"
+                                                th:value="${rol.idRol}"
+                                                th:text="${rol.rol}">
+                                            Rol
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label for="imagenNueva"
+                                           class="form-label">
+                                        Imagen
+                                    </label>
+
+                                    <input type="file"
+                                           id="imagenNueva"
+                                           name="imagenFile"
+                                           class="form-control"
+                                           accept="image/*">
+
+                                </div>
+
+                                <div class="col-12">
+
+                                    <div class="form-check">
+
+                                        <input type="checkbox"
+                                               id="activoNuevo"
+                                               name="activo"
+                                               value="true"
+                                               class="form-check-input"
+                                               checked>
+
+                                        <label for="activoNuevo"
+                                               class="form-check-label">
+                                            Usuario activo
+                                        </label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+
+                                Cancelar
+
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-purple">
+
+                                <i class="fa-solid
+                                          fa-floppy-disk me-2"></i>
+
+                                Guardar usuario
+
+                            </button>
+
+                        </div>
+
+                    </form>
 
                 </div>
 
             </div>
 
-            <!-- Tabla -->
+        </div>
+
+    </section>
+
+
+    <!-- Listado -->
+    <section th:fragment="listado">
+
+        <div class="container-fluid pb-4">
+
             <div class="card card-dashboard">
+
+                <div class="card-header bg-white
+                            d-flex justify-content-between
+                            align-items-center py-3">
+
+                    <h5 class="mb-0">
+                        Usuarios registrados
+                    </h5>
+
+                    <span class="badge bg-primary"
+                          th:text="|Total: ${totalUsuarios}|">
+                        Total: 0
+                    </span>
+
+                </div>
 
                 <div class="card-body">
 
@@ -54,12 +354,12 @@
                             <thead>
 
                                 <tr>
-                                    <th>ID</th>
                                     <th>Usuario</th>
                                     <th>Nombre</th>
                                     <th>Correo</th>
                                     <th>Rol</th>
                                     <th>Estado</th>
+                                    <th class="text-end">Acciones</th>
                                 </tr>
 
                             </thead>
@@ -68,15 +368,10 @@
 
                                 <tr th:each="persona : ${usuarios}">
 
-                                    <td th:text="${persona.idUsuario}">
-                                        1
-                                    </td>
-
                                     <td>
 
                                         <div class="d-flex
-                                                    align-items-center
-                                                    gap-2">
+                                                    align-items-center gap-2">
 
                                             <img th:if="${persona.rutaImagen
                                                          != null
@@ -95,8 +390,7 @@
                                                            persona.rutaImagen)}"
                                                class="fa-solid
                                                       fa-circle-user
-                                                      fs-3
-                                                      text-purple">
+                                                      fs-3 text-purple">
                                             </i>
 
                                             <span th:text="${persona.username}">
@@ -112,7 +406,9 @@
                                         Nombre completo
                                     </td>
 
-                                    <td th:text="${persona.correo}">
+                                    <td th:text="${persona.correo != null
+                                                  ? persona.correo
+                                                  : 'Sin correo'}">
                                         correo@ejemplo.com
                                     </td>
 
@@ -140,6 +436,47 @@
 
                                     </td>
 
+                                    <td class="text-end">
+
+                                        <a th:href="@{/usuario/modificar/{id}
+                                                   (id=${persona.idUsuario})}"
+                                           class="btn btn-sm btn-warning">
+
+                                            <i class="fa-solid
+                                                      fa-pen-to-square"></i>
+
+                                            Modificar
+
+                                        </a>
+
+                                        <form th:action="@{/usuario/cambiar-estado/{id}
+                                                        (id=${persona.idUsuario})}"
+                                              method="post"
+                                              class="d-inline">
+
+                                            <button type="submit"
+                                                    class="btn btn-sm"
+                                                    th:classappend="${persona.activo}
+                                                                    ? ' btn-danger'
+                                                                    : ' btn-success'"
+                                                    th:disabled="${persona.username
+                                                                   == #authentication.name}">
+
+                                                <i class="fa-solid
+                                                          fa-power-off"></i>
+
+                                                <span th:text="${persona.activo
+                                                               ? 'Desactivar'
+                                                               : 'Activar'}">
+                                                    Estado
+                                                </span>
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
                                 </tr>
 
                             </tbody>
@@ -148,7 +485,6 @@
 
                     </div>
 
-                    <!-- Lista vacía -->
                     <div th:if="${usuarios == null
                                 or usuarios.empty}"
                          class="text-center text-muted py-5">
