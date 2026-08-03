@@ -20,7 +20,7 @@ public class Membresia implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario")
-    private Login usuario;
+    private Usuario usuario;
 
     private String plan;
 

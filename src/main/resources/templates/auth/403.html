@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+</head>
+
+<body class="bg-light">
+
+<div class="container min-vh-100 d-flex
+            justify-content-center align-items-center">
+
+    <div class="card shadow text-center p-5">
+
+        <i class="fa-solid fa-lock fa-4x
+                  text-danger mb-4"></i>
+
+        <h1>Acceso denegado</h1>
+
+        <p>
+            No tienes autorización para acceder
+            a esta funcionalidad.
+        </p>
+
+        <a th:href="@{/dashboard}"
+           class="btn btn-purple">
+            Regresar al dashboard
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

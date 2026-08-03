@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Dashboard - FitSystem</title>
+</head>
+
+<body class="bg-light">
+
+<div class="d-flex min-vh-100">
+
+    <aside th:replace="~{dashboard/fragmentos :: sidebar}">
+    </aside>
+
+    <div class="flex-grow-1 bg-light">
+
+        <header th:replace="~{dashboard/fragmentos :: header}">
+        </header>
+
+        <main th:replace="~{dashboard/fragmentos :: contenido}">
+        </main>
+
+    </div>
+
+</div>
+
+</body>
+</html>
