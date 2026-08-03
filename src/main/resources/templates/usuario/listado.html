@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Usuarios - FitSystem</title>
+</head>
+
+<body>
+
+    <aside th:replace="~{dashboard/fragmentos :: sidebar}">
+    </aside>
+
+    <header th:replace="~{dashboard/fragmentos :: header}">
+    </header>
+
+    <main class="contenido-cliente">
+
+        <section th:replace="~{usuario/fragmentos :: listado}">
+        </section>
+
+    </main>
+
+</body>
+</html>

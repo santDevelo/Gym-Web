@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+    <!-- =====================================================
+         CONTENIDO DEL ADMINISTRADOR
+         ===================================================== -->
+
+    <section th:fragment="administrador"
+             sec:authorize="hasRole('ADMINISTRADOR')">
+
+        <div class="mb-4">
+
+            <h3 class="mb-1">
+                Panel administrativo
+            </h3>
+
+            <p class="text-muted">
+                Resumen general de la actividad del gimnasio.
+            </p>
+
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3">
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100 p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <h6 class="text-muted">Clientes activos</h6>
+                            <h3 th:text="${clientesActivos}">0</h3>
+                        </div>
+
+                        <i class="fa-solid fa-user-group fs-3 text-purple"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100 p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <h6 class="text-muted">Entrenadores</h6>
+                            <h3 th:text="${entrenadoresActivos}">0</h3>
+                        </div>
+
+                        <i class="fa-solid fa-user-tie fs-3 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100 p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <h6 class="text-muted">Ingresos del mes</h6>
+                            <h3 th:text="${ingresosMes}">0</h3>
+                        </div>
+
+                        <i class="fa-solid fa-dollar-sign fs-3 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100 p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <h6 class="text-muted">Pagos pendientes</h6>
+                            <h3 th:text="${pagosPendientes}">0</h3>
+                        </div>
+
+                        <i class="fa-solid fa-credit-card fs-3 text-warning"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENIDO DEL ENTRENADOR
+         ===================================================== -->
+
+    <section th:fragment="entrenador"
+             sec:authorize="hasRole('ENTRENADOR')">
+
+        <div class="mb-4">
+
+            <h3 class="mb-1">
+                Panel del entrenador
+            </h3>
+
+            <p class="text-muted">
+                Consulta la información relacionada con tus clientes.
+            </p>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6 col-xl-4">
+
+                <div class="card card-dashboard p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <h6 class="text-muted">Clientes asignados</h6>
+
+                            <h3 th:text="${clientesAsignados}">
+                                0
+                            </h3>
+                        </div>
+
+                        <i class="fa-solid fa-users fs-3 text-purple"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENIDO DEL CLIENTE
+         ===================================================== -->
+
+    <section th:fragment="cliente"
+             sec:authorize="hasRole('CLIENTE')">
+
+        <div class="mb-4">
+
+            <h3 class="mb-1">
+                Mi membresía
+            </h3>
+
+            <p class="text-muted">
+                Consulta el estado de tu membresía.
+            </p>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-8 col-xl-5">
+
+                <div class="card card-dashboard">
+
+                    <!-- Cliente con membresía -->
+                    <div class="card-body"
+                         th:if="${membresia != null}">
+
+                        <div class="d-flex justify-content-between">
+
+                            <div>
+
+                                <h5 class="text-purple"
+                                    th:text="${membresia.plan}">
+                                    Plan
+                                </h5>
+
+                                <p class="mb-0">
+
+                                    Estado:
+
+                                    <strong th:text="${membresia.estado}">
+                                        Estado
+                                    </strong>
+
+                                </p>
+
+                            </div>
+
+                            <i class="fa-solid fa-crown fs-3 text-purple"></i>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Cliente sin membresía -->
+                    <div class="card-body text-center text-muted"
+                         th:if="${membresia == null}">
+
+                        <i class="fa-solid fa-credit-card fs-2 mb-3"></i>
+
+                        <p class="mb-0">
+                            No tienes una membresía registrada.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>

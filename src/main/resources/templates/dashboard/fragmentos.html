@@ -5,585 +5,260 @@
 
 <body>
 
-
-<!-- Menú lateral -->
-<aside th:fragment="sidebar"
-       class="bg-dark text-white p-4 min-vh-100"
-       style="width: 260px; flex-shrink: 0;">
-
-    <h2 class="mb-4">
-
-        <span class="text-white">
-            Fit
-        </span>
-
-        <span class="text-purple">
-            System
-        </span>
-
-    </h2>
-
-    <nav class="nav flex-column gap-2">
-
-        <a th:href="@{/dashboard}"
-           class="nav-link text-white">
-
-            <i class="fa-solid fa-house me-2"></i>
-
-            Dashboard
-
-        </a>
-
-
-        <!-- Opciones del administrador -->
-        <div sec:authorize="hasRole('ADMINISTRADOR')">
-
-            <hr>
-
-            <p class="text-secondary mb-2">
-                Administración
-            </p>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-users me-2"></i>
-
-                Usuarios
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-id-card me-2"></i>
-
-                Clientes
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-user-tie me-2"></i>
-
-                Entrenadores
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-credit-card me-2"></i>
-
-                Membresías
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-money-bill me-2"></i>
-
-                Pagos
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-chart-column me-2"></i>
-
-                Reportes
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-gear me-2"></i>
-
-                Configuración
-
-            </span>
-
-        </div>
-
-
-        <!-- Opciones del entrenador -->
-        <div sec:authorize="hasRole('ENTRENADOR')">
-
-            <hr>
-
-            <p class="text-secondary mb-2">
-                Entrenador
-            </p>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-dumbbell me-2"></i>
-
-                Rutinas
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-calendar me-2"></i>
-
-                Citas
-
-            </span>
-
-        </div>
-
-
-        <!-- Opciones del cliente -->
-        <div sec:authorize="hasRole('CLIENTE')">
-
-            <hr>
-
-            <p class="text-secondary mb-2">
-                Cliente
-            </p>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-dumbbell me-2"></i>
-
-                Mi rutina
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-calendar-plus me-2"></i>
-
-                Reservar cita
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-clipboard-check me-2"></i>
-
-                Asistencia
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-bell me-2"></i>
-
-                Notificaciones
-
-            </span>
-
-            <span class="nav-link text-white">
-
-                <i class="fa-solid fa-user me-2"></i>
-
-                Mi perfil
-
-            </span>
-
-        </div>
-
-    </nav>
-
-
-    <!-- Cerrar sesión -->
-    <form th:action="@{/logout}"
-          method="post"
-          class="mt-5">
-
-        <button type="submit"
-                class="btn btn-outline-light w-100">
-
-            <i class="fa-solid fa-right-from-bracket me-2"></i>
-
-            Cerrar sesión
-
-        </button>
-
-    </form>
-
-</aside>
-
-
-<!-- Encabezado -->
-<header th:fragment="header"
-        class="bg-white shadow-sm p-4">
-
-    <div class="d-flex justify-content-between
-                align-items-center">
+    <!-- =====================================================
+         BARRA LATERAL COMPARTIDA
+         ===================================================== -->
+
+    <aside th:fragment="sidebar"
+           class="sidebar d-flex flex-column justify-content-between">
 
         <div>
 
-            <h4 class="mb-1">
+            <!-- Logo -->
+            <a th:href="@{/dashboard}"
+               class="text-decoration-none">
 
-                Bienvenido,
+                <h2 class="logo">
+                    FIT <span>SYSTEM</span>
+                </h2>
+
+                <small class="text-secondary">
+                    Tu gimnasio, tu mejor versión
+                </small>
+
+            </a>
+
+            <!-- Navegación -->
+            <nav class="nav flex-column mt-4"
+                 aria-label="Menú principal">
+
+                <!-- Dashboard -->
+                <a th:href="@{/dashboard}"
+                   class="nav-link"
+                   th:classappend="${seccionActiva == null
+                                    or seccionActiva == 'dashboard'}
+                                    ? ' active'
+                                    : ''">
+
+                    <i class="fa-solid fa-house me-2"></i>
+                    Dashboard
+
+                </a>
+
+                <!-- =========================================
+                     OPCIONES DEL ADMINISTRADOR
+                     ========================================= -->
+
+                <div sec:authorize="hasRole('ADMINISTRADOR')">
+
+                    <!-- Enlace funcional -->
+                    <a th:href="@{/usuario/listado}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'usuarios'}
+                                       ? ' active'
+                                       : ''">
+
+                        <i class="fa-solid fa-users me-2"></i>
+                        Usuarios
+
+                    </a>
+
+                    <!-- Módulos pendientes -->
+                    <span class="nav-link">
+                        <i class="fa-solid fa-user-group me-2"></i>
+                        Clientes
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-user-tie me-2"></i>
+                        Empleados
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-credit-card me-2"></i>
+                        Membresías
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-money-bill me-2"></i>
+                        Pagos
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-chart-column me-2"></i>
+                        Reportes
+                    </span>
+
+                </div>
+
+                <!-- =========================================
+                     OPCIONES DEL ENTRENADOR
+                     ========================================= -->
+
+                <div sec:authorize="hasRole('ENTRENADOR')">
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-users me-2"></i>
+                        Clientes
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-dumbbell me-2"></i>
+                        Rutinas
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-calendar me-2"></i>
+                        Citas
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-chart-line me-2"></i>
+                        Progreso
+                    </span>
+
+                </div>
+
+                <!-- =========================================
+                     OPCIONES DEL CLIENTE
+                     ========================================= -->
+
+                <div sec:authorize="hasRole('CLIENTE')">
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-credit-card me-2"></i>
+                        Mi membresía
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-dumbbell me-2"></i>
+                        Mi rutina
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-calendar-plus me-2"></i>
+                        Reservar cita
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-clipboard-check me-2"></i>
+                        Mi asistencia
+                    </span>
+
+                    <span class="nav-link">
+                        <i class="fa-solid fa-user me-2"></i>
+                        Mi perfil
+                    </span>
+
+                </div>
+
+            </nav>
+
+        </div>
+
+        <!-- Cierre de sesión -->
+        <form th:action="@{/logout}"
+              method="post">
+
+            <button type="submit"
+                    class="nav-link border-0
+                           bg-transparent w-100 text-start">
+
+                <i class="fa-solid fa-right-from-bracket me-2"></i>
+                Cerrar sesión
+
+            </button>
+
+        </form>
+
+    </aside>
+
+
+    <!-- =====================================================
+         ENCABEZADO COMPARTIDO
+         ===================================================== -->
+
+    <header th:fragment="header"
+            class="header-cliente">
+
+        <div>
+
+            <h4 class="mb-0">
+
+                ¡Hola,
 
                 <span class="text-purple"
-                      sec:authentication="name">
+                      th:text="${usuario != null
+                               ? usuario.nombre
+                               : #authentication.name}">
                     Usuario
-                </span>
+                </span>!
 
             </h4>
 
             <small class="text-muted">
-                Panel principal de FitSystem
+                Bienvenido de nuevo a FitSystem
             </small>
 
         </div>
 
-        <div>
+        <div class="d-flex align-items-center gap-2">
 
-            <i class="fa-solid fa-circle-user
-                      fa-2x text-purple">
+            <!-- Imagen registrada -->
+            <img th:if="${usuario != null
+                         and usuario.rutaImagen != null
+                         and !#strings.isEmpty(usuario.rutaImagen)}"
+                 th:src="${usuario.rutaImagen}"
+                 alt="Imagen del usuario"
+                 class="rounded-circle"
+                 style="width: 42px;
+                        height: 42px;
+                        object-fit: cover;">
+
+            <!-- Imagen predeterminada -->
+            <i th:unless="${usuario != null
+                           and usuario.rutaImagen != null
+                           and !#strings.isEmpty(usuario.rutaImagen)}"
+               class="fa-solid fa-circle-user
+                      fs-3 text-purple">
             </i>
 
-        </div>
+            <div>
 
-    </div>
+                <!-- Nombre completo -->
+                <strong th:if="${usuario != null}"
+                        th:text="|${usuario.nombre}
+                                  ${usuario.apellidos}|">
+                    Nombre del usuario
+                </strong>
 
-</header>
+                <!-- Nombre de autenticación alternativo -->
+                <strong th:unless="${usuario != null}"
+                        sec:authentication="name">
+                    Usuario
+                </strong>
 
+                <!-- Rol actual -->
+                <small class="d-block text-muted"
+                       sec:authorize="hasRole('ADMINISTRADOR')">
+                    Administrador
+                </small>
 
-<!-- Contenido principal -->
-<main th:fragment="contenido"
-      class="container-fluid p-4">
+                <small class="d-block text-muted"
+                       sec:authorize="hasRole('ENTRENADOR')">
+                    Entrenador
+                </small>
 
-
-    <!-- Panel del administrador -->
-    <section sec:authorize="hasRole('ADMINISTRADOR')">
-
-        <h3 class="mb-4">
-            Panel administrativo
-        </h3>
-
-        <div class="row g-4">
-
-            <div class="col-md-6 col-lg-3">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <div class="d-flex
-                                    justify-content-between
-                                    align-items-center">
-
-                            <div>
-
-                                <h6 class="text-muted">
-                                    Clientes activos
-                                </h6>
-
-                                <h2 class="mb-0"
-                                    th:text="${clientesActivos}">
-                                    0
-                                </h2>
-
-                            </div>
-
-                            <i class="fa-solid fa-users
-                                      fa-2x text-purple">
-                            </i>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-6 col-lg-3">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <div class="d-flex
-                                    justify-content-between
-                                    align-items-center">
-
-                            <div>
-
-                                <h6 class="text-muted">
-                                    Entrenadores
-                                </h6>
-
-                                <h2 class="mb-0"
-                                    th:text="${entrenadoresActivos}">
-                                    0
-                                </h2>
-
-                            </div>
-
-                            <i class="fa-solid fa-user-tie
-                                      fa-2x text-purple">
-                            </i>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-6 col-lg-3">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <div class="d-flex
-                                    justify-content-between
-                                    align-items-center">
-
-                            <div>
-
-                                <h6 class="text-muted">
-                                    Ingresos del mes
-                                </h6>
-
-                                <h2 class="mb-0"
-                                    th:text="${ingresosMes}">
-                                    0
-                                </h2>
-
-                            </div>
-
-                            <i class="fa-solid fa-money-bill-trend-up
-                                      fa-2x text-purple">
-                            </i>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-6 col-lg-3">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <div class="d-flex
-                                    justify-content-between
-                                    align-items-center">
-
-                            <div>
-
-                                <h6 class="text-muted">
-                                    Pagos pendientes
-                                </h6>
-
-                                <h2 class="mb-0"
-                                    th:text="${pagosPendientes}">
-                                    0
-                                </h2>
-
-                            </div>
-
-                            <i class="fa-solid fa-clock
-                                      fa-2x text-warning">
-                            </i>
-
-                        </div>
-
-                    </div>
-
-                </div>
+                <small class="d-block text-muted"
+                       sec:authorize="hasRole('CLIENTE')">
+                    Cliente
+                </small>
 
             </div>
 
         </div>
 
-    </section>
-
-
-    <!-- Panel del entrenador -->
-    <section sec:authorize="hasRole('ENTRENADOR')">
-
-        <h3 class="mb-4">
-            Panel del entrenador
-        </h3>
-
-        <div class="row g-4">
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <div class="d-flex
-                                    justify-content-between
-                                    align-items-center">
-
-                            <div>
-
-                                <h6 class="text-muted">
-                                    Clientes activos
-                                </h6>
-
-                                <h2 class="mb-0"
-                                    th:text="${clientesAsignados}">
-                                    0
-                                </h2>
-
-                            </div>
-
-                            <i class="fa-solid fa-users
-                                      fa-2x text-purple">
-                            </i>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <h6 class="text-muted">
-                            Gestión de rutinas
-                        </h6>
-
-                        <p class="mb-0">
-                            Consulta y administra las rutinas
-                            de los clientes.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <h6 class="text-muted">
-                            Gestión de citas
-                        </h6>
-
-                        <p class="mb-0">
-                            Revisa las citas programadas
-                            con los clientes.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- Panel del cliente -->
-    <section sec:authorize="hasRole('CLIENTE')">
-
-        <h3 class="mb-4">
-            Mi membresía
-        </h3>
-
-        <div class="row g-4">
-
-            <div class="col-md-6">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body"
-                         th:if="${membresia != null}">
-
-                        <h5 class="text-purple"
-                            th:text="${membresia.plan}">
-                            Nombre del plan
-                        </h5>
-
-                        <p class="mb-2">
-
-                            Estado:
-
-                            <span class="fw-bold"
-                                  th:text="${membresia.estado}">
-                                Estado
-                            </span>
-
-                        </p>
-
-                        <p class="mb-2">
-
-                            Monto:
-
-                            <span th:text="${membresia.monto}">
-                                0
-                            </span>
-
-                        </p>
-
-                        <p class="mb-0">
-
-                            Fecha de pago:
-
-                            <span th:text="${membresia.fechaPago}">
-                                Sin fecha
-                            </span>
-
-                        </p>
-
-                    </div>
-
-                    <div class="card-body"
-                         th:if="${membresia == null}">
-
-                        <i class="fa-solid fa-circle-info
-                                  text-purple me-2">
-                        </i>
-
-                        No tienes una membresía registrada.
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- Usuario autenticado sin roles -->
-    <section sec:authorize="isAuthenticated()"
-             th:if="${#lists.isEmpty(usuario.roles)}">
-
-        <div class="alert alert-warning">
-
-            <i class="fa-solid fa-triangle-exclamation me-2">
-            </i>
-
-            Tu usuario no tiene un rol asignado.
-            Comunícate con el administrador.
-
-        </div>
-
-    </section>
-
-</main>
+    </header>
 
 </body>
 </html>

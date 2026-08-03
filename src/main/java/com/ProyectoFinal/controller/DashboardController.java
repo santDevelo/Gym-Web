@@ -33,7 +33,7 @@ public class DashboardController {
     ) {
 
         Usuario usuario = usuarioService
-                .getUsuarioPorUsername(
+                .buscarPorUsername(
                         principal.getName()
                 )
                 .orElseThrow(() ->

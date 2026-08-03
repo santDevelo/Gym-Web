@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+    <section th:fragment="listado">
+
+        <div class="container-fluid py-4">
+
+            <!-- Encabezado -->
+            <div class="d-flex justify-content-between
+                        align-items-center mb-4">
+
+                <div>
+
+                    <h3 class="mb-1">
+                        Administración de usuarios
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Usuarios registrados en FitSystem
+                    </p>
+
+                </div>
+
+                <div class="card card-dashboard px-4 py-2">
+
+                    <span class="text-muted">
+                        Total:
+                    </span>
+
+                    <strong class="text-purple"
+                            th:text="${totalUsuarios}">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <!-- Tabla -->
+            <div class="card card-dashboard">
+
+                <div class="card-body">
+
+                    <div class="table-responsive"
+                         th:if="${usuarios != null
+                                  and !usuarios.empty}">
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <tr th:each="persona : ${usuarios}">
+
+                                    <td th:text="${persona.idUsuario}">
+                                        1
+                                    </td>
+
+                                    <td>
+
+                                        <div class="d-flex
+                                                    align-items-center
+                                                    gap-2">
+
+                                            <img th:if="${persona.rutaImagen
+                                                         != null
+                                                         and !#strings.isEmpty(
+                                                         persona.rutaImagen)}"
+                                                 th:src="${persona.rutaImagen}"
+                                                 alt="Usuario"
+                                                 class="rounded-circle"
+                                                 style="width: 38px;
+                                                        height: 38px;
+                                                        object-fit: cover;">
+
+                                            <i th:unless="${persona.rutaImagen
+                                                           != null
+                                                           and !#strings.isEmpty(
+                                                           persona.rutaImagen)}"
+                                               class="fa-solid
+                                                      fa-circle-user
+                                                      fs-3
+                                                      text-purple">
+                                            </i>
+
+                                            <span th:text="${persona.username}">
+                                                username
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td th:text="|${persona.nombre}
+                                                  ${persona.apellidos}|">
+                                        Nombre completo
+                                    </td>
+
+                                    <td th:text="${persona.correo}">
+                                        correo@ejemplo.com
+                                    </td>
+
+                                    <td>
+
+                                        <span th:each="rol : ${persona.roles}"
+                                              th:text="${rol.rol}"
+                                              class="badge bg-primary me-1">
+                                            Rol
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span th:if="${persona.activo}"
+                                              class="badge bg-success">
+                                            Activo
+                                        </span>
+
+                                        <span th:unless="${persona.activo}"
+                                              class="badge bg-secondary">
+                                            Inactivo
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <!-- Lista vacía -->
+                    <div th:if="${usuarios == null
+                                or usuarios.empty}"
+                         class="text-center text-muted py-5">
+
+                        <i class="fa-solid fa-users fs-1 mb-3"></i>
+
+                        <p class="mb-0">
+                            No hay usuarios registrados.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>
