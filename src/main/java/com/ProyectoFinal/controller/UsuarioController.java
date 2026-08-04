@@ -4,6 +4,7 @@ import com.ProyectoFinal.domain.Rol;
 import com.ProyectoFinal.domain.Usuario;
 import com.ProyectoFinal.service.UsuarioService;
 import java.security.Principal;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,21 +28,25 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    /*
-     * Mostrar listado
-     */
-
     @GetMapping("/listado")
     public String listado(
+            @RequestParam(
+                    name = "rol",
+                    required = false)
+            String filtroRol,
             Principal principal,
             Model model) {
 
+        String seccionActiva
+                = determinarSeccionActiva(filtroRol);
+
         cargarDatosComunes(
                 principal,
-                model);
+                model,
+                seccionActiva);
 
-        var usuarios
-                = usuarioService.listarTodosConRoles();
+        List<Usuario> usuarios
+                = obtenerUsuarios(filtroRol);
 
         model.addAttribute(
                 "usuarios",
@@ -57,10 +62,6 @@ public class UsuarioController {
 
         return "usuario/listado";
     }
-
-    /*
-     * Guardar usuario nuevo o modificado
-     */
 
     @PostMapping("/guardar")
     public String guardar(
@@ -96,10 +97,6 @@ public class UsuarioController {
         return "redirect:/usuario/listado";
     }
 
-    /*
-     * Mostrar formulario de modificación
-     */
-
     @GetMapping("/modificar/{idUsuario}")
     public String modificar(
             @PathVariable Integer idUsuario,
@@ -133,7 +130,8 @@ public class UsuarioController {
 
         cargarDatosComunes(
                 principal,
-                model);
+                model,
+                "usuarios");
 
         model.addAttribute(
                 "usuarioFormulario",
@@ -145,10 +143,6 @@ public class UsuarioController {
 
         return "usuario/modifica";
     }
-
-    /*
-     * Activar o desactivar
-     */
 
     @PostMapping(
             "/cambiar-estado/{idUsuario}")
@@ -177,13 +171,48 @@ public class UsuarioController {
         return "redirect:/usuario/listado";
     }
 
-    /*
-     * Datos compartidos por las vistas
-     */
+    private List<Usuario> obtenerUsuarios(
+            String filtroRol) {
+
+        if ("CLIENTE".equalsIgnoreCase(
+                filtroRol)) {
+
+            return usuarioService.listarPorRol(
+                    "CLIENTE");
+        }
+
+        if ("ENTRENADOR".equalsIgnoreCase(
+                filtroRol)) {
+
+            return usuarioService.listarPorRol(
+                    "ENTRENADOR");
+        }
+
+        return usuarioService.listarTodosConRoles();
+    }
+
+    private String determinarSeccionActiva(
+            String filtroRol) {
+
+        if ("CLIENTE".equalsIgnoreCase(
+                filtroRol)) {
+
+            return "clientes";
+        }
+
+        if ("ENTRENADOR".equalsIgnoreCase(
+                filtroRol)) {
+
+            return "empleados";
+        }
+
+        return "usuarios";
+    }
 
     private void cargarDatosComunes(
             Principal principal,
-            Model model) {
+            Model model,
+            String seccionActiva) {
 
         Usuario usuarioAutenticado
                 = usuarioService
@@ -203,6 +232,6 @@ public class UsuarioController {
 
         model.addAttribute(
                 "seccionActiva",
-                "usuarios");
+                seccionActiva);
     }
 }

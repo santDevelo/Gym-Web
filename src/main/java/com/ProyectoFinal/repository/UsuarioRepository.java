@@ -29,6 +29,9 @@ public interface UsuarioRepository
 
     List<Usuario> findByActivoTrue();
 
+    List<Usuario> findDistinctByRoles_Rol(
+            String rol);
+
     long countByRoles_RolAndActivoTrue(
             String rol);
 }

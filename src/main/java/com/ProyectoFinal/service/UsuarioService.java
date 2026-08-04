@@ -40,7 +40,15 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
+    public List<Usuario> listarPorRol(String rol) {
+
+        return usuarioRepository
+                .findDistinctByRoles_Rol(rol);
+    }
+
+    @Transactional(readOnly = true)
     public List<Usuario> listarActivos() {
+
         return usuarioRepository.findByActivoTrue();
     }
 
@@ -86,6 +94,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public List<Rol> listarRoles() {
+
         return rolRepository.findAll();
     }
 
@@ -112,8 +121,8 @@ public class UsuarioService {
                 usuario);
 
         var roles = new HashSet<Rol>();
-        roles.add(rol);
 
+        roles.add(rol);
         usuario.setRoles(roles);
 
         usuario = usuarioRepository.save(usuario);
@@ -167,22 +176,30 @@ public class UsuarioService {
     }
 
     private void copiarDatosEditables(
-            Usuario formulario,Usuario usuario) {
+            Usuario formulario,
+            Usuario usuario) {
+
         usuario.setUsername(
                 formulario.getUsername().trim());
+
         usuario.setNombre(
                 formulario.getNombre().trim());
+
         usuario.setApellidos(
                 formulario.getApellidos().trim());
+
         usuario.setCorreo(
                 limpiarTextoOpcional(
                         formulario.getCorreo()));
+
         usuario.setTelefono(
                 limpiarTextoOpcional(
                         formulario.getTelefono()));
+
         usuario.setActivo(
                 formulario.isActivo());
     }
+
     private void validarCamposObligatorios(
             Usuario formulario) {
 
