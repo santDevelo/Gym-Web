@@ -1,9 +1,16 @@
 package com.ProyectoFinal.controller;
 
+import com.ProyectoFinal.domain.EstadoMembresia;
+import com.ProyectoFinal.domain.Membresia;
 import com.ProyectoFinal.domain.Rol;
 import com.ProyectoFinal.domain.Usuario;
+import com.ProyectoFinal.service.MembresiaService;
+import com.ProyectoFinal.service.PlanMembresiaService;
 import com.ProyectoFinal.service.UsuarioService;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +27,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final MembresiaService membresiaService;
+    private final PlanMembresiaService planMembresiaService;
 
     public UsuarioController(
-            UsuarioService usuarioService) {
+            UsuarioService usuarioService,
+            MembresiaService membresiaService,
+            PlanMembresiaService planMembresiaService) {
 
         this.usuarioService = usuarioService;
+        this.membresiaService = membresiaService;
+        this.planMembresiaService = planMembresiaService;
     }
 
     /*
@@ -33,15 +46,23 @@ public class UsuarioController {
 
     @GetMapping("/listado")
     public String listado(
+            @RequestParam(
+                    name = "rol",
+                    required = false)
+            String filtroRol,
             Principal principal,
             Model model) {
 
+        String seccionActiva
+                = determinarSeccionActiva(filtroRol);
+
         cargarDatosComunes(
                 principal,
-                model);
+                model,
+                seccionActiva);
 
-        var usuarios
-                = usuarioService.listarTodosConRoles();
+        List<Usuario> usuarios
+                = obtenerUsuarios(filtroRol);
 
         model.addAttribute(
                 "usuarios",
@@ -133,7 +154,8 @@ public class UsuarioController {
 
         cargarDatosComunes(
                 principal,
-                model);
+                model,
+                "usuarios");
 
         model.addAttribute(
                 "usuarioFormulario",
@@ -143,7 +165,70 @@ public class UsuarioController {
                 "idRolActual",
                 idRolActual);
 
+        if (usuarioFormulario.tieneRol("CLIENTE")) {
+
+            Membresia membresiaFormulario
+                    = membresiaService
+                            .buscarUltimaPorUsuario(idUsuario)
+                            .orElseGet(() ->
+                            crearMembresiaInicial(usuarioFormulario));
+
+            model.addAttribute(
+                    "membresiaFormulario",
+                    membresiaFormulario);
+
+            model.addAttribute(
+                    "planes",
+                    planMembresiaService.listarActivos());
+
+            model.addAttribute(
+                    "estadosMembresia",
+                    EstadoMembresia.values());
+        }
+
         return "usuario/modifica";
+    }
+
+    /*
+     * Guardar o modificar la membresía de un cliente.
+     */
+    @PostMapping("/membresia/guardar")
+    public String guardarMembresia(
+            @RequestParam Integer idUsuario,
+            @RequestParam Integer idPlan,
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaInicio,
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaVencimiento,
+            @RequestParam EstadoMembresia estado,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+
+            membresiaService.guardarMembresiaCliente(
+                    idUsuario,
+                    idPlan,
+                    fechaInicio,
+                    fechaVencimiento,
+                    estado);
+
+            redirectAttributes.addFlashAttribute(
+                    "todoOk",
+                    "La membresía del cliente fue guardada correctamente.");
+
+            return "redirect:/usuario/listado?rol=CLIENTE";
+
+        } catch (IllegalArgumentException ex) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    ex.getMessage());
+
+            return "redirect:/usuario/modificar/"
+                    + idUsuario;
+        }
     }
 
     /*
@@ -183,7 +268,8 @@ public class UsuarioController {
 
     private void cargarDatosComunes(
             Principal principal,
-            Model model) {
+            Model model,
+            String seccionActiva) {
 
         Usuario usuarioAutenticado
                 = usuarioService
@@ -203,6 +289,61 @@ public class UsuarioController {
 
         model.addAttribute(
                 "seccionActiva",
-                "usuarios");
+                seccionActiva);
+    }
+
+    private Membresia crearMembresiaInicial(
+            Usuario cliente) {
+
+        LocalDate fechaInicio = LocalDate.now();
+
+        Membresia membresia = new Membresia();
+
+        membresia.setUsuario(cliente);
+        membresia.setFechaInicio(fechaInicio);
+        membresia.setFechaVencimiento(
+                fechaInicio.plusMonths(1));
+        membresia.setEstado(
+                EstadoMembresia.ACTIVA);
+
+        return membresia;
+    }
+
+    private List<Usuario> obtenerUsuarios(
+            String filtroRol) {
+
+        if ("CLIENTE".equalsIgnoreCase(
+                filtroRol)) {
+
+            return usuarioService.listarPorRol(
+                    "CLIENTE");
+        }
+
+        if ("ENTRENADOR".equalsIgnoreCase(
+                filtroRol)) {
+
+            return usuarioService.listarPorRol(
+                    "ENTRENADOR");
+        }
+
+        return usuarioService.listarTodosConRoles();
+    }
+
+    private String determinarSeccionActiva(
+            String filtroRol) {
+
+        if ("CLIENTE".equalsIgnoreCase(
+                filtroRol)) {
+
+            return "clientes";
+        }
+
+        if ("ENTRENADOR".equalsIgnoreCase(
+                filtroRol)) {
+
+            return "empleados";
+        }
+
+        return "usuarios";
     }
 }

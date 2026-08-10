@@ -1,30 +1,308 @@
 <!DOCTYPE html>
 <html lang="es"
-      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
-    <head th:replace="~{general/fragmentos :: head}">
-    </head>
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Pagos - FitSystem</title>
+</head>
 
-    <body>
+<body>
 
-        <aside th:replace="~{admin/fragmentos :: sidebar}">
-        </aside>
+    <aside th:replace="~{dashboard/fragmentos :: sidebar}">
+    </aside>
 
-        <header th:replace="~{admin/fragmentos :: header}">
-        </header>
+    <header th:replace="~{dashboard/fragmentos :: header}">
+    </header>
 
-        <main class="contenido-cliente">
+    <main class="contenido-cliente">
 
-            <div class="container-fluid py-4">
+        <section th:replace="~{usuario/fragmentos :: mensajes}">
+        </section>
 
-                <section th:replace="~{admin/fragmentos :: pagos}">
-                </section>
+        <div class="container-fluid py-4">
+
+            <div class="d-flex justify-content-between
+                        align-items-center mb-4">
+
+                <div>
+                    <h3 class="mb-1">Historial de Pagos</h3>
+                    <p class="text-muted mb-0">
+                        Registro manual de los pagos realizados por los clientes.
+                    </p>
+                </div>
+
+                <button type="button"
+                        class="btn btn-purple"
+                        data-bs-toggle="modal"
+                        data-bs-target="#agregarPagoModal"
+                        th:disabled="${membresiasClientes == null
+                                      or membresiasClientes.empty}">
+
+                    <i class="fa-solid fa-plus me-2"></i>
+                    Agregar pago
+
+                </button>
 
             </div>
 
-        </main>
+            <div class="card card-dashboard">
 
-    </body>
+                <div class="card-body">
 
+                    <div class="table-responsive"
+                         th:if="${pagos != null and !pagos.empty}">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Tipo de membresía</th>
+                                    <th>Próximo pago</th>
+                                    <th>Monto</th>
+                                    <th>Forma de pago</th>
+                                    <th class="text-end">Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr th:each="pago : ${pagos}">
+
+                                    <td th:text="|${pago.usuario.nombre}
+                                                  ${pago.usuario.apellidos}|">
+                                        Cliente
+                                    </td>
+
+                                    <td th:text="${pago.planMembresia.nombre}">
+                                        Plan
+                                    </td>
+
+                                    <td th:text="${pago.fechaProximoPago}">
+                                        2027-01-01
+                                    </td>
+
+                                    <td th:text="|₡${#numbers.formatDecimal(
+                                                  pago.monto,
+                                                  1,
+                                                  'COMMA',
+                                                  2,
+                                                  'POINT')}|">
+                                        ₡0.00
+                                    </td>
+
+                                    <td>
+                                        <span class="badge bg-primary"
+                                              th:text="${#strings.replace(
+                                                       pago.metodoPago.name(),
+                                                       '_',
+                                                       ' ')}">
+                                            Método
+                                        </span>
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <form th:action="@{/admin/pagos/eliminar/{id}
+                                                         (id=${pago.idPago})}"
+                                              method="post"
+                                              class="d-inline">
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-danger">
+
+                                                <i class="fa-solid fa-trash me-1"></i>
+                                                Eliminar
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div th:if="${pagos == null or pagos.empty}"
+                         class="text-center text-muted py-5">
+
+                        <i class="fa-solid fa-receipt fs-1 mb-3"></i>
+
+                        <p class="mb-0">
+                            No hay pagos registrados todavía.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal fade"
+             id="agregarPagoModal"
+             tabindex="-1"
+             aria-labelledby="agregarPagoTitulo"
+             aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title"
+                            id="agregarPagoTitulo">
+                            Agregar pago
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Cerrar">
+                        </button>
+
+                    </div>
+
+                    <form th:action="@{/admin/pagos/guardar}"
+                          method="post">
+
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+
+                                <label for="idMembresia"
+                                       class="form-label">
+                                    Cliente y membresía
+                                </label>
+
+                                <select id="idMembresia"
+                                        name="idMembresia"
+                                        class="form-select"
+                                        required>
+
+                                    <option value="">
+                                        Seleccione un cliente
+                                    </option>
+
+                                    <option th:each="membresia : ${membresiasClientes}"
+                                            th:value="${membresia.idMembresia}"
+                                            th:text="|${membresia.usuario.nombre}
+                                                     ${membresia.usuario.apellidos}
+                                                     - ${membresia.planMembresia != null
+                                                         ? membresia.planMembresia.nombre
+                                                         : membresia.plan}|">
+                                        Cliente - Plan
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label for="fechaProximoPago"
+                                       class="form-label">
+                                    Fecha del próximo pago
+                                </label>
+
+                                <input type="date"
+                                       id="fechaProximoPago"
+                                       name="fechaProximoPago"
+                                       class="form-control"
+                                       th:min="${fechaMinima}"
+                                       th:value="${fechaProximoPagoInicial}"
+                                       required>
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label for="montoPago"
+                                       class="form-label">
+                                    Monto pagado
+                                </label>
+
+                                <div class="input-group">
+
+                                    <span class="input-group-text">₡</span>
+
+                                    <input type="number"
+                                           id="montoPago"
+                                           name="monto"
+                                           class="form-control"
+                                           min="0.01"
+                                           step="0.01"
+                                           required>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label for="metodoPago"
+                                       class="form-label">
+                                    Forma de pago
+                                </label>
+
+                                <select id="metodoPago"
+                                        name="metodoPago"
+                                        class="form-select"
+                                        required>
+
+                                    <option value="">
+                                        Seleccione una forma de pago
+                                    </option>
+
+                                    <option th:each="metodo : ${metodosPago}"
+                                            th:value="${metodo}"
+                                            th:text="${#strings.replace(
+                                                     metodo.name(),
+                                                     '_',
+                                                     ' ')}">
+                                        Método
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-purple">
+
+                                <i class="fa-solid fa-floppy-disk me-2"></i>
+                                Registrar pago
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
 </html>

@@ -189,7 +189,9 @@
                             <div>
 
                                 <h5 class="text-purple"
-                                    th:text="${membresia.plan}">
+                                    th:text="${membresia.planMembresia != null
+                                             ? membresia.planMembresia.nombre
+                                             : membresia.plan}">
                                     Plan
                                 </h5>
 

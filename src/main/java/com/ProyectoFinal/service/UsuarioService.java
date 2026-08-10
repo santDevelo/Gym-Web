@@ -45,6 +45,13 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
+    public List<Usuario> listarPorRol(String rol) {
+
+        return usuarioRepository
+                .findDistinctByRoles_Rol(rol);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<Usuario> buscarPorId(
             Integer idUsuario) {
 

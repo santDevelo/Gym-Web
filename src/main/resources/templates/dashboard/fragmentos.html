@@ -63,31 +63,41 @@
 
                     </a>
 
-                    <!-- Módulos pendientes -->
-                    <span class="nav-link">
+                    <a th:href="@{/usuario/listado(rol='CLIENTE')}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'clientes'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-user-group me-2"></i>
                         Clientes
-                    </span>
+                    </a>
 
-                    <span class="nav-link">
+                    <a th:href="@{/usuario/listado(rol='ENTRENADOR')}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'empleados'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-user-tie me-2"></i>
                         Empleados
-                    </span>
+                    </a>
 
-                    <span class="nav-link">
+                    <a th:href="@{/admin/membresias}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'membresias'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-credit-card me-2"></i>
                         Membresías
-                    </span>
+                    </a>
 
-                    <span class="nav-link">
+                    <a th:href="@{/admin/pagos}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'pagos'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-money-bill me-2"></i>
                         Pagos
-                    </span>
-
-                    <span class="nav-link">
-                        <i class="fa-solid fa-chart-column me-2"></i>
-                        Reportes
-                    </span>
+                    </a>
 
                 </div>
 

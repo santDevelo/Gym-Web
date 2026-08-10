@@ -1,30 +1,247 @@
 <!DOCTYPE html>
 <html lang="es"
-      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
-    <head th:replace="~{general/fragmentos :: head}">
-    </head>
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Membresías - FitSystem</title>
+</head>
 
-    <body>
+<body>
 
-        <aside th:replace="~{admin/fragmentos :: sidebar}">
-        </aside>
+    <aside th:replace="~{dashboard/fragmentos :: sidebar}">
+    </aside>
 
-        <header th:replace="~{admin/fragmentos :: header}">
-        </header>
+    <header th:replace="~{dashboard/fragmentos :: header}">
+    </header>
 
-        <main class="contenido-cliente">
+    <main class="contenido-cliente">
 
-            <div class="container-fluid py-4">
+        <section th:replace="~{usuario/fragmentos :: mensajes}">
+        </section>
 
-                <section th:replace="~{admin/fragmentos :: membresiasCatalogo}">
-                </section>
+        <div class="container-fluid py-4">
+
+            <div class="mb-4">
+                <h3 class="mb-1">Membresías</h3>
+                <p class="text-muted mb-0">
+                    Consulta y modifica los planes disponibles en FitSystem.
+                </p>
+            </div>
+
+            <div class="row g-4"
+                 th:if="${planes != null and !planes.empty}">
+
+                <div class="col-12 col-md-6 col-xl-4"
+                     th:each="plan : ${planes}">
+
+                    <div class="card card-dashboard h-100"
+                         th:classappend="${plan.nombre == 'Plan Completo'}
+                                         ? ' bg-dark text-white'
+                                         : ''">
+
+                        <div class="card-body d-flex flex-column p-4">
+
+                            <div class="d-flex justify-content-between
+                                        align-items-start gap-3 mb-3">
+
+                                <h4 class="fw-bold mb-0"
+                                    th:text="${plan.nombre}">
+                                    Nombre del plan
+                                </h4>
+
+                                <span class="badge"
+                                      th:classappend="${plan.activo}
+                                                      ? ' bg-success'
+                                                      : ' bg-secondary'"
+                                      th:text="${plan.activo
+                                                ? 'Activo'
+                                                : 'Inactivo'}">
+                                    Estado
+                                </span>
+
+                            </div>
+
+                            <p th:if="${plan.descripcion != null
+                                      and !#strings.isEmpty(plan.descripcion)}"
+                               th:class="${plan.nombre == 'Plan Completo'}
+                                         ? 'text-white-50'
+                                         : 'text-muted'"
+                               th:text="${plan.descripcion}">
+                                Descripción del plan
+                            </p>
+
+                            <p class="fs-4 fw-bold mt-auto mb-4"
+                               th:text="|₡${#numbers.formatDecimal(
+                                        plan.precio,
+                                        1,
+                                        'COMMA',
+                                        0,
+                                        'POINT')} / mes + IVA|">
+                                ₡0 / mes + IVA
+                            </p>
+
+                            <button type="button"
+                                    class="btn btn-purple w-100"
+                                    data-bs-toggle="modal"
+                                    th:data-bs-target="|#editarPlan${plan.idPlan}|">
+
+                                <i class="fa-solid fa-pen-to-square me-2"></i>
+                                Editar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal fade"
+                         th:id="|editarPlan${plan.idPlan}|"
+                         tabindex="-1"
+                         aria-hidden="true">
+
+                        <div class="modal-dialog modal-dialog-centered">
+
+                            <div class="modal-content text-dark">
+
+                                <div class="modal-header">
+
+                                    <h5 class="modal-title">
+                                        Editar membresía
+                                    </h5>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Cerrar">
+                                    </button>
+
+                                </div>
+
+                                <form th:action="@{/admin/membresias/guardar}"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="idPlan"
+                                           th:value="${plan.idPlan}">
+
+                                    <div class="modal-body">
+
+                                        <div class="mb-3">
+
+                                            <label th:for="|nombrePlan${plan.idPlan}|"
+                                                   class="form-label">
+                                                Nombre
+                                            </label>
+
+                                            <input type="text"
+                                                   th:id="|nombrePlan${plan.idPlan}|"
+                                                   name="nombre"
+                                                   class="form-control"
+                                                   th:value="${plan.nombre}"
+                                                   maxlength="50"
+                                                   required>
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label th:for="|descripcionPlan${plan.idPlan}|"
+                                                   class="form-label">
+                                                Descripción
+                                            </label>
+
+                                            <textarea th:id="|descripcionPlan${plan.idPlan}|"
+                                                      name="descripcion"
+                                                      class="form-control"
+                                                      rows="4"
+                                                      maxlength="1000"
+                                                      th:text="${plan.descripcion}">
+                                            </textarea>
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label th:for="|precioPlan${plan.idPlan}|"
+                                                   class="form-label">
+                                                Precio mensual
+                                            </label>
+
+                                            <div class="input-group">
+
+                                                <span class="input-group-text">₡</span>
+
+                                                <input type="number"
+                                                       th:id="|precioPlan${plan.idPlan}|"
+                                                       name="precio"
+                                                       class="form-control"
+                                                       th:value="${plan.precio}"
+                                                       min="0.01"
+                                                       step="0.01"
+                                                       required>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-check">
+
+                                            <input type="checkbox"
+                                                   th:id="|activoPlan${plan.idPlan}|"
+                                                   name="activo"
+                                                   value="true"
+                                                   class="form-check-input"
+                                                   th:checked="${plan.activo}">
+
+                                            <label th:for="|activoPlan${plan.idPlan}|"
+                                                   class="form-check-label">
+                                                Plan activo
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button type="button"
+                                                class="btn btn-secondary"
+                                                data-bs-dismiss="modal">
+                                            Cancelar
+                                        </button>
+
+                                        <button type="submit"
+                                                class="btn btn-purple">
+
+                                            <i class="fa-solid
+                                                      fa-floppy-disk me-2"></i>
+
+                                            Guardar cambios
+
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </main>
+            <div th:if="${planes == null or planes.empty}"
+                 class="alert alert-info">
+                No hay planes registrados todavía.
+            </div>
 
-    </body>
+        </div>
 
+    </main>
+
+</body>
 </html>

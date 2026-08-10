@@ -18,47 +18,34 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "membresia")
-public class Membresia implements Serializable {
+@Table(name = "pago")
+public class Pago implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_membresia")
-    private Integer idMembresia;
+    @Column(name = "id_pago")
+    private Integer idPago;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    /*
-     * Nueva relación con el catálogo de planes.
-     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_plan")
+    @JoinColumn(name = "id_plan", nullable = false)
     private PlanMembresia planMembresia;
 
-    /*
-     * Campos anteriores. Se conservan temporalmente porque el dashboard
-     * y las consultas actuales todavía los utilizan.
-     */
-    private String plan;
-
-    private BigDecimal monto;
-
-    @Column(name = "fecha_pago")
+    @Column(name = "fecha_pago", nullable = false)
     private LocalDate fechaPago;
 
-    /*
-     * Nuevas fechas para controlar la vigencia de la membresía.
-     */
-    @Column(name = "fecha_inicio")
-    private LocalDate fechaInicio;
+    @Column(name = "fecha_proximo_pago", nullable = false)
+    private LocalDate fechaProximoPago;
 
-    @Column(name = "fecha_vencimiento")
-    private LocalDate fechaVencimiento;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal monto;
 
     @Enumerated(EnumType.STRING)
-    private EstadoMembresia estado;
+    @Column(name = "metodo_pago", nullable = false, length = 30)
+    private MetodoPago metodoPago;
 }
