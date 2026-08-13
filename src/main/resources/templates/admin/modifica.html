@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{general/fragmentos :: head}">
-    <title>Usuarios - FitSystem</title>
+    <title>Modificar usuario - FitSystem</title>
 </head>
 
 <body>
@@ -16,13 +16,10 @@
 
     <main class="contenido-cliente">
 
-        <section th:replace="~{usuario/fragmentos :: mensajes}">
+        <section th:replace="~{admin/fragmentos :: mensajes}">
         </section>
 
-        <section th:replace="~{usuario/fragmentos :: agregar}">
-        </section>
-
-        <section th:replace="~{usuario/fragmentos :: listado}">
+        <section th:replace="~{admin/formulario :: editar}">
         </section>
 
     </main>

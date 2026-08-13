@@ -3,16 +3,13 @@
 -- MySQL 8.0 o superior
 --
 -- Ejecute este archivo con un usuario administrador de MySQL
--- (por ejemplo, root). No incluye clientes, membresías ni pagos
--- de prueba.
+-- (por ejemplo, root). Incluye los usuarios, membresías y pagos
+-- de prueba existentes en la base de datos del proyecto.
 --
 -- Usuario MySQL usado por application.properties:
 --   usuario: admin
 --   contraseña: fitsystem
 --
--- Usuario inicial de la página:
---   usuario: admin
---   contraseña: Admin123*
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS proyecto_final
@@ -212,8 +209,8 @@ VALUES (
 ON DUPLICATE KEY UPDATE
     imagen_url = VALUES(imagen_url);
 
--- La contraseña de este usuario es: Admin123*
-INSERT IGNORE INTO usuario (
+-- Las contraseñas se conservan cifradas con BCrypt.
+INSERT INTO usuario (
     id_usuario,
     nombre,
     apellidos,
@@ -225,21 +222,96 @@ INSERT IGNORE INTO usuario (
     activo,
     ruta_imagen
 )
-VALUES (
-    1,
-    'Administrador',
-    'FitSystem',
-    'admin@fitsystem.com',
-    'admin',
-    '$2a$10$fVCMWaJQIfMG2L/pE8UsMuvYxypM9I848jHaeRqdKrwA2ta9xGxbq',
-    NULL,
-    'ADMINISTRADOR',
-    1,
-    NULL
-);
+VALUES
+    (1, 'Ana', 'Mora Solis', 'ana@fitsystem.com', 'amora',
+        '$2a$10$LS4PKIJpaD0cUaIO2a/BjOLrgC2wS9QgsHBrqh8GES4S4kBYUboiG',
+        '88880001', 'ADMINISTRADOR', 1, NULL),
+    (2, 'Carlos', 'Ruiz Perez', 'carlos@fitsystem.com', 'cruiz',
+        '$2a$10$3EFX2OIOrr3w8b7SaW8BWuyeABqiIaSf1j5PZrycjFBcWvw7QC6R2',
+        '88880002', 'ENTRENADOR', 1, NULL),
+    (3, 'Sebastian', 'Fung', 'sebastian@fitsystem.com', 'sebastian',
+        '$2a$10$e3kxxcOwPsZXqAmelYWHFuYKGZkwk4gt8dH6yZshuwR90FlNHaZxG',
+        '88880003', 'CLIENTE', 1, NULL),
+    (4, 'pruebaBC', 'prueba1', 'prueba@gmail.com', 'pruebaBC',
+        '$2a$10$/HC6Oe209kwf7HYXKF0YhuR.Q6JF1cEU1mRcdRYReRhctMX7CqowK',
+        '888', NULL, 1, NULL),
+    (5, 'prueba2Cliente', 'prueba', 'prueba2@gmail.com',
+        'prueba2Cliente',
+        '$2a$10$bO.XksNRebKZZrNrMAy1.ujeldhDdEEw346u9vV8Il1hnB8XcNTzq',
+        '1111', NULL, 1, NULL),
+    (7, 'prueba3', 'prueba3', 'prueba3@gmail.com',
+        'prueba3Entrenador',
+        '$2a$10$.Jw8S9Eb2TJ7IAm8.C4K7esW9IU5tHJePPTBeLtQ53A1EBaqF8Ntm',
+        '222', NULL, 1, NULL)
+ON DUPLICATE KEY UPDATE
+    nombre = VALUES(nombre),
+    apellidos = VALUES(apellidos),
+    correo = VALUES(correo),
+    username = VALUES(username),
+    password = VALUES(password),
+    telefono = VALUES(telefono),
+    rol = VALUES(rol),
+    activo = VALUES(activo),
+    ruta_imagen = VALUES(ruta_imagen);
 
-INSERT IGNORE INTO usuario_rol (id_usuario, id_rol)
-VALUES (1, 1);
+INSERT INTO usuario_rol (id_usuario, id_rol)
+VALUES
+    (1, 1),
+    (2, 3),
+    (3, 3),
+    (4, 3),
+    (5, 3),
+    (7, 2)
+ON DUPLICATE KEY UPDATE
+    id_rol = VALUES(id_rol);
+
+INSERT INTO membresia (
+    id_membresia,
+    id_usuario,
+    id_plan,
+    plan,
+    monto,
+    fecha_pago,
+    fecha_inicio,
+    fecha_vencimiento,
+    estado
+)
+VALUES
+    (1, 3, 2, 'Plan Premium', 18000.00,
+        '2026-08-02', '2026-08-02', '2026-09-02', 'ACTIVA'),
+    (2, 2, 3, 'Plan Completo', 250000.00,
+        '2026-08-10', '2026-08-10', '2026-09-10', 'ACTIVA')
+ON DUPLICATE KEY UPDATE
+    id_usuario = VALUES(id_usuario),
+    id_plan = VALUES(id_plan),
+    plan = VALUES(plan),
+    monto = VALUES(monto),
+    fecha_pago = VALUES(fecha_pago),
+    fecha_inicio = VALUES(fecha_inicio),
+    fecha_vencimiento = VALUES(fecha_vencimiento),
+    estado = VALUES(estado);
+
+INSERT INTO pago (
+    id_pago,
+    id_usuario,
+    id_plan,
+    fecha_pago,
+    fecha_proximo_pago,
+    monto,
+    metodo_pago
+)
+VALUES
+    (1, 3, 2, '2026-08-02', '2026-09-02',
+        18000.00, 'NO_REGISTRADO'),
+    (2, 5, 3, '2026-08-09', '2026-09-09',
+        25000.00, 'TRANSFERENCIA')
+ON DUPLICATE KEY UPDATE
+    id_usuario = VALUES(id_usuario),
+    id_plan = VALUES(id_plan),
+    fecha_pago = VALUES(fecha_pago),
+    fecha_proximo_pago = VALUES(fecha_proximo_pago),
+    monto = VALUES(monto),
+    metodo_pago = VALUES(metodo_pago);
 
 -- ============================================================
 -- COMPROBACIÓN FINAL
@@ -250,3 +322,6 @@ SELECT id_rol, rol FROM rol ORDER BY id_rol;
 SELECT id_plan, nombre, precio, activo
 FROM plan_membresia
 ORDER BY id_plan;
+SELECT COUNT(*) AS usuarios_importados FROM usuario;
+SELECT COUNT(*) AS membresias_importadas FROM membresia;
+SELECT COUNT(*) AS pagos_importados FROM pago;

@@ -76,7 +76,7 @@ public class UsuarioController {
                 "usuarioFormulario",
                 new Usuario());
 
-        return "usuario/listado";
+        return "admin/listado";
     }
 
     /*
@@ -186,7 +186,7 @@ public class UsuarioController {
                     EstadoMembresia.values());
         }
 
-        return "usuario/modifica";
+        return "admin/modifica";
     }
 
     /*
