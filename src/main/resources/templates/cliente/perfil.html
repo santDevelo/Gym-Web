@@ -1,1 +1,173 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Mi perfil - FitSystem</title>
+</head>
+
+<body>
+
+    <aside th:replace="~{dashboard/fragmentos :: sidebar}">
+    </aside>
+
+    <header th:replace="~{dashboard/fragmentos :: header}">
+    </header>
+
+    <main class="contenido-cliente"
+          sec:authorize="hasRole('CLIENTE')">
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Mi perfil
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consulta tus datos personales registrados en FitSystem.
+            </p>
+
+        </div>
+
+        <div class="row justify-content-center">
+
+            <div class="col-xl-9">
+
+                <div class="card card-dashboard">
+
+                    <div class="card-body p-4">
+
+                        <div class="row g-4 align-items-center">
+
+                            <!-- Fotografía y nombre -->
+                            <div class="col-md-4 text-center border-end">
+
+                                <img th:if="${usuario.rutaImagen != null
+                                             and !#strings.isEmpty(usuario.rutaImagen)}"
+                                     th:src="${usuario.rutaImagen}"
+                                     alt="Fotografía del cliente"
+                                     class="rounded-circle mb-3"
+                                     style="width: 120px;
+                                            height: 120px;
+                                            object-fit: cover;">
+
+                                <i th:unless="${usuario.rutaImagen != null
+                                               and !#strings.isEmpty(usuario.rutaImagen)}"
+                                   class="fa-solid fa-circle-user
+                                          text-purple mb-3"
+                                   style="font-size: 120px;">
+                                </i>
+
+                                <h4 class="mb-1"
+                                    th:text="|${usuario.nombre} ${usuario.apellidos}|">
+                                    Nombre del cliente
+                                </h4>
+
+                                <span class="badge text-bg-primary">
+                                    Cliente
+                                </span>
+
+                            </div>
+
+                            <!-- Información personal -->
+                            <div class="col-md-8">
+
+                                <h5 class="mb-4">
+                                    Información personal
+                                </h5>
+
+                                <div class="row g-3">
+
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-block">
+                                            Nombre
+                                        </small>
+                                        <strong th:text="${usuario.nombre}">
+                                            Nombre
+                                        </strong>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-block">
+                                            Apellidos
+                                        </small>
+                                        <strong th:text="${usuario.apellidos}">
+                                            Apellidos
+                                        </strong>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-block">
+                                            Nombre de usuario
+                                        </small>
+                                        <strong th:text="${usuario.username}">
+                                            usuario
+                                        </strong>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-block">
+                                            Estado de la cuenta
+                                        </small>
+                                        <span class="badge"
+                                              th:classappend="${usuario.activo}
+                                                              ? ' text-bg-success'
+                                                              : ' text-bg-danger'"
+                                              th:text="${usuario.activo
+                                                       ? 'ACTIVA'
+                                                       : 'INACTIVA'}">
+                                            ACTIVA
+                                        </span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-block">
+                                            Correo electrónico
+                                        </small>
+                                        <strong th:text="${usuario.correo != null
+                                                         ? usuario.correo
+                                                         : 'No registrado'}">
+                                            correo@ejemplo.com
+                                        </strong>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-block">
+                                            Teléfono
+                                        </small>
+                                        <strong th:text="${usuario.telefono != null
+                                                         and !#strings.isEmpty(usuario.telefono)
+                                                         ? usuario.telefono
+                                                         : 'No registrado'}">
+                                            8888-8888
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="alert alert-light border mt-4 mb-0">
+
+                    <i class="fa-solid fa-circle-info text-purple me-2"></i>
+
+                    Si necesitas corregir alguno de tus datos, comunícate
+                    con la administración del gimnasio.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

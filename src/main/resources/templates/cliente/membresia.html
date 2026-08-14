@@ -1,1 +1,294 @@
 
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Mi membresía - FitSystem</title>
+</head>
+
+<body>
+
+    <!-- Barra lateral compartida por todos los dashboards -->
+    <aside th:replace="~{dashboard/fragmentos :: sidebar}">
+    </aside>
+
+    <!-- Encabezado compartido -->
+    <header th:replace="~{dashboard/fragmentos :: header}">
+    </header>
+
+    <main class="contenido-cliente"
+          sec:authorize="hasRole('CLIENTE')">
+
+        <!-- Título de la vista -->
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Mi membresía
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consulta la información de tu plan actual.
+            </p>
+
+        </div>
+
+        <!-- Mensaje de operación correcta -->
+        <div class="alert alert-success"
+             th:if="${todoOk != null}"
+             th:text="${todoOk}">
+            Operación realizada correctamente.
+        </div>
+
+        <!-- Mensaje de error -->
+        <div class="alert alert-danger"
+             th:if="${error != null}"
+             th:text="${error}">
+            No fue posible realizar la operación.
+        </div>
+
+        <!-- Cliente con membresía registrada -->
+        <section th:if="${membresia != null}">
+
+            <div class="row g-4">
+
+                <!-- Información principal del plan -->
+                <div class="col-lg-7">
+
+                    <div class="card card-dashboard h-100">
+
+                        <div class="card-body p-4">
+
+                            <div class="mb-4">
+
+                                <div>
+
+                                    <p class="text-muted mb-1">
+                                        Plan actual
+                                    </p>
+
+                                    <h3 class="text-purple mb-2"
+                                        th:text="${membresia.planMembresia != null
+                                                 ? membresia.planMembresia.nombre
+                                                 : membresia.plan}">
+                                        Plan Fit
+                                    </h3>
+
+                                    <p class="text-muted mb-0"
+                                       th:if="${membresia.planMembresia != null
+                                                and membresia.planMembresia.descripcion != null}"
+                                       th:text="${membresia.planMembresia.descripcion}">
+                                        Descripción del plan
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <div class="row g-3 mt-1">
+
+                                <!-- Precio -->
+                                <div class="col-md-6">
+
+                                    <div class="p-3 bg-light rounded">
+
+                                        <small class="text-muted d-block">
+                                            Precio del plan
+                                        </small>
+
+                                        <strong class="fs-5"
+                                                th:text="|₡${#numbers.formatDecimal(
+                                                    membresia.planMembresia != null
+                                                    ? membresia.planMembresia.precio
+                                                    : membresia.monto,
+                                                    1,
+                                                    'COMMA',
+                                                    2,
+                                                    'POINT')}|">
+                                            ₡0.00
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Estado -->
+                                <div class="col-md-6">
+
+                                    <div class="p-3 bg-light rounded">
+
+                                        <small class="text-muted d-block mb-1">
+                                            Estado
+                                        </small>
+
+                                        <span class="badge"
+                                              th:classappend="${
+                                                  membresia.estado != null
+                                                  and membresia.estado.name() == 'ACTIVA'
+                                              }
+                                              ? ' text-bg-success'
+                                              : (${
+                                                  membresia.estado != null
+                                                  and membresia.estado.name() == 'PENDIENTE'
+                                              }
+                                              ? ' text-bg-warning'
+                                              : ' text-bg-danger')"
+                                              th:text="${membresia.estado}">
+                                            ACTIVA
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Fechas de la membresía -->
+                <div class="col-lg-5">
+
+                    <div class="card card-dashboard h-100">
+
+                        <div class="card-body p-4">
+
+                            <h5 class="mb-4">
+                                <i class="fa-solid fa-calendar-days
+                                          text-purple me-2">
+                                </i>
+                                Fechas de la membresía
+                            </h5>
+
+                            <div class="mb-4">
+
+                                <small class="text-muted d-block">
+                                    Fecha de inicio
+                                </small>
+
+                                <strong th:text="${membresia.fechaInicio != null
+                                                 ? membresia.fechaInicio
+                                                 : 'No registrada'}">
+                                    2026-08-01
+                                </strong>
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <small class="text-muted d-block">
+                                    Último pago registrado
+                                </small>
+
+                                <strong th:text="${membresia.fechaPago != null
+                                                 ? membresia.fechaPago
+                                                 : 'No registrado'}">
+                                    2026-08-01
+                                </strong>
+
+                            </div>
+
+                            <div>
+
+                                <small class="text-muted d-block">
+                                    Próximo pago o vencimiento
+                                </small>
+
+                                <strong class="text-purple"
+                                        th:text="${membresia.fechaVencimiento != null
+                                                 ? membresia.fechaVencimiento
+                                                 : 'No registrado'}">
+                                    2026-09-01
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Mensaje informativo -->
+            <div class="alert alert-light border mt-4">
+
+                <i class="fa-solid fa-circle-info
+                          text-purple me-2">
+                </i>
+
+                La administración del gimnasio gestiona los cambios
+                de plan y el registro de los pagos.
+
+            </div>
+
+            <!-- Cancelación disponible para membresías activas o pendientes -->
+            <div class="d-flex justify-content-end mt-3"
+                 th:if="${membresia.estado != null
+                          and (membresia.estado.name() == 'ACTIVA'
+                               or membresia.estado.name() == 'PENDIENTE')}">
+
+                <form th:action="@{/cliente/membresia/cancelar}"
+                      method="post">
+
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-danger px-3">
+                        Cancelar membresía
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Mensaje mostrado cuando la membresía está inactiva -->
+            <div class="alert alert-warning mt-3 mb-0"
+                 th:if="${membresia.estado != null
+                          and membresia.estado.name() == 'INACTIVA'}">
+
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                Tu membresía se encuentra inactiva. Comunícate con
+                la administración si deseas reactivarla.
+
+            </div>
+
+        </section>
+
+        <!-- Cliente sin membresía -->
+        <section th:if="${membresia == null}">
+
+            <div class="card card-dashboard">
+
+                <div class="card-body text-center py-5">
+
+                    <i class="fa-solid fa-credit-card
+                              fs-1 text-purple mb-3">
+                    </i>
+
+                    <h4>
+                        No tienes una membresía registrada
+                    </h4>
+
+                    <p class="text-muted mb-0">
+                        Comunícate con la administración del gimnasio
+                        para solicitar la asignación de un plan.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

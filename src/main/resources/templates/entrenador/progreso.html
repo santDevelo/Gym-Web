@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{general/fragmentos :: head}">
+    <title>Progreso - FitSystem</title>
+</head>
+
+<body>
+
+    <aside th:replace="~{dashboard/fragmentos :: sidebar}">
+    </aside>
+
+    <header th:replace="~{dashboard/fragmentos :: header}">
+    </header>
+
+    <main class="contenido-cliente"
+          sec:authorize="hasRole('ENTRENADOR')">
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Progreso de clientes
+            </h2>
+
+            <p class="text-muted mb-0">
+                Seguimiento basado en rutinas y asistencias registradas.
+            </p>
+
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100 p-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <small class="text-muted">Clientes activos</small>
+                            <h3 class="mb-0"
+                                th:text="${#lists.size(clientes)}">0</h3>
+                        </div>
+
+                        <i class="fa-solid fa-users fs-2 text-purple"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100 p-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <small class="text-muted">Visitas este mes</small>
+                            <h3 class="mb-0"
+                                th:text="${totalAsistenciasMes}">0</h3>
+                        </div>
+
+                        <i class="fa-solid fa-clipboard-check
+                                  fs-2 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100 p-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <small class="text-muted">Clientes con rutina</small>
+                            <h3 class="mb-0"
+                                th:text="${clientesConRutina}">0</h3>
+                        </div>
+
+                        <i class="fa-solid fa-dumbbell fs-2 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card card-dashboard"
+             th:if="${!#lists.isEmpty(clientes)}">
+
+            <div class="card-header bg-white p-3">
+
+                <h5 class="mb-0">
+                    Seguimiento de actividad
+                </h5>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th class="ps-4">Cliente</th>
+                                <th>Asistencias del mes</th>
+                                <th>Última visita</th>
+                                <th>Ejercicios asignados</th>
+                                <th class="pe-4">Actividad mensual</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="cliente : ${clientes}"
+                                th:with="visitas=${asistenciasMes.get(
+                                         cliente.idUsuario)},
+                                         ultima=${ultimasAsistencias.get(
+                                         cliente.idUsuario)},
+                                         ejercicios=${ejerciciosActivos.get(
+                                         cliente.idUsuario)}">
+
+                                <td class="ps-4 fw-semibold"
+                                    th:text="|${cliente.nombre}
+                                             ${cliente.apellidos}|">
+                                    Cliente
+                                </td>
+
+                                <td th:text="${visitas}">
+                                    0
+                                </td>
+
+                                <td th:text="${ultima != null
+                                             ? #temporals.format(
+                                             ultima.fecha,
+                                             'dd/MM/yyyy')
+                                             : 'Sin asistencias'}">
+                                    12/08/2026
+                                </td>
+
+                                <td th:text="${ejercicios}">
+                                    0
+                                </td>
+
+                                <td class="pe-4">
+
+                                    <span class="badge"
+                                          th:classappend="${visitas >= 8}
+                                                           ? ' text-bg-success'
+                                                           : (${visitas >= 4}
+                                                           ? ' text-bg-primary'
+                                                           : (${visitas > 0}
+                                                           ? ' text-bg-warning'
+                                                           : ' text-bg-secondary'))"
+                                          th:text="${visitas >= 8}
+                                                   ? 'CONSTANTE'
+                                                   : (${visitas >= 4}
+                                                   ? 'EN PROGRESO'
+                                                   : (${visitas > 0}
+                                                   ? 'INICIO'
+                                                   : 'SIN ACTIVIDAD'))">
+                                        SIN ACTIVIDAD
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card card-dashboard"
+             th:if="${#lists.isEmpty(clientes)}">
+
+            <div class="card-body text-center py-5">
+
+                <i class="fa-solid fa-chart-line fs-1 text-purple mb-3"></i>
+
+                <h4>No hay datos de progreso</h4>
+
+                <p class="text-muted mb-0">
+                    El seguimiento aparecerá cuando existan clientes activos.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

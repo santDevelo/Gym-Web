@@ -126,23 +126,138 @@
 
         </div>
 
-        <div class="row">
+        <div class="row row-cols-1 row-cols-sm-2
+                    row-cols-xl-4 g-3">
 
-            <div class="col-md-6 col-xl-4">
+            <div class="col">
 
-                <div class="card card-dashboard p-3">
+                <div class="card card-dashboard h-100">
 
-                    <div class="d-flex justify-content-between">
+                    <div class="card-body p-4">
 
-                        <div>
-                            <h6 class="text-muted">Clientes asignados</h6>
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-3">
 
-                            <h3 th:text="${clientesAsignados}">
-                                0
-                            </h3>
+                            <div>
+
+                                <small class="text-muted d-block mb-2">
+                                    Clientes activos
+                                </small>
+
+                                <h3 class="mb-0"
+                                    th:text="${clientesActivosEntrenador}">
+                                    0
+                                </h3>
+
+                            </div>
+
+                            <i class="fa-solid fa-users
+                                      fs-2 text-purple">
+                            </i>
+
                         </div>
 
-                        <i class="fa-solid fa-users fs-3 text-purple"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-3">
+
+                            <div>
+
+                                <small class="text-muted d-block mb-2">
+                                    Rutinas activas
+                                </small>
+
+                                <h3 class="mb-0"
+                                    th:text="${totalRutinasActivas}">
+                                    0
+                                </h3>
+
+                            </div>
+
+                            <i class="fa-solid fa-dumbbell
+                                      fs-2 text-primary">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-3">
+
+                            <div>
+
+                                <small class="text-muted d-block mb-2">
+                                    Ejercicios asignados
+                                </small>
+
+                                <h3 class="mb-0"
+                                    th:text="${totalEjerciciosAsignados}">
+                                    0
+                                </h3>
+
+                            </div>
+
+                            <i class="fa-solid fa-list-check
+                                      fs-2 text-success">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-3">
+
+                            <div>
+
+                                <small class="text-muted d-block mb-2">
+                                    Disponibles para rutina
+                                </small>
+
+                                <h3 class="mb-0"
+                                    th:text="${clientesDisponiblesRutina}">
+                                    0
+                                </h3>
+
+                            </div>
+
+                            <i class="fa-solid fa-user-plus
+                                      fs-2 text-warning">
+                            </i>
+
+                        </div>
 
                     </div>
 
@@ -165,63 +280,158 @@
         <div class="mb-4">
 
             <h3 class="mb-1">
-                Mi membresía
+                Mi resumen
             </h3>
 
-            <p class="text-muted">
-                Consulta el estado de tu membresía.
+            <p class="text-muted mb-0">
+                Consulta tu membresía, rutina y actividad reciente.
             </p>
 
         </div>
 
-        <div class="row">
+        <!-- Resumen principal -->
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
 
-            <div class="col-md-8 col-xl-5">
+            <div class="col">
 
-                <div class="card card-dashboard">
+                <div class="card card-dashboard h-100">
 
-                    <!-- Cliente con membresía -->
-                    <div class="card-body"
-                         th:if="${membresia != null}">
+                    <div class="card-body p-4">
 
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-3">
 
                             <div>
 
-                                <h5 class="text-purple"
+                                <small class="text-muted d-block mb-2">
+                                    Plan actual
+                                </small>
+
+                                <h4 class="text-purple mb-2"
+                                    th:if="${membresia != null}"
                                     th:text="${membresia.planMembresia != null
                                              ? membresia.planMembresia.nombre
                                              : membresia.plan}">
-                                    Plan
-                                </h5>
+                                    Plan Fit
+                                </h4>
 
-                                <p class="mb-0">
+                                <h4 class="text-muted mb-2"
+                                    th:if="${membresia == null}">
+                                    Sin membresía
+                                </h4>
 
-                                    Estado:
-
-                                    <strong th:text="${membresia.estado}">
-                                        Estado
-                                    </strong>
-
-                                </p>
+                                <span class="badge"
+                                      th:if="${membresia != null}"
+                                      th:classappend="${membresia.estado != null
+                                                       and membresia.estado.name() == 'ACTIVA'}
+                                                       ? ' text-bg-success'
+                                                       : ' text-bg-secondary'"
+                                      th:text="${membresia.estado}">
+                                    ACTIVA
+                                </span>
 
                             </div>
 
-                            <i class="fa-solid fa-crown fs-3 text-purple"></i>
+                            <i class="fa-solid fa-id-card
+                                      fs-2 text-purple">
+                            </i>
 
                         </div>
 
                     </div>
 
-                    <!-- Cliente sin membresía -->
-                    <div class="card-body text-center text-muted"
-                         th:if="${membresia == null}">
+                </div>
 
-                        <i class="fa-solid fa-credit-card fs-2 mb-3"></i>
+            </div>
 
-                        <p class="mb-0">
-                            No tienes una membresía registrada.
-                        </p>
+            <div class="col">
+
+                <div class="card card-dashboard h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-3">
+
+                            <div>
+
+                                <small class="text-muted d-block mb-2">
+                                    Próximo pago o vencimiento
+                                </small>
+
+                                <h4 class="mb-2"
+                                    th:if="${membresia != null
+                                             and membresia.fechaVencimiento != null}"
+                                    th:text="${#temporals.format(
+                                             membresia.fechaVencimiento,
+                                             'dd/MM/yyyy')}">
+                                    13/09/2026
+                                </h4>
+
+                                <h4 class="text-muted mb-2"
+                                    th:unless="${membresia != null
+                                                and membresia.fechaVencimiento != null}">
+                                    Sin fecha registrada
+                                </h4>
+
+                                <span class="text-muted"
+                                      th:if="${membresia != null
+                                               and (membresia.planMembresia != null
+                                               or membresia.monto != null)}"
+                                      th:with="montoPlan=${membresia.planMembresia != null
+                                               ? membresia.planMembresia.precio
+                                               : membresia.monto}"
+                                      th:text="${'₡'
+                                               + #numbers.formatDecimal(
+                                               montoPlan,
+                                               1,
+                                               'COMMA',
+                                               2,
+                                               'POINT')}">
+                                    ₡18,000.00
+                                </span>
+
+                            </div>
+
+                            <i class="fa-solid fa-calendar-days
+                                      fs-2 text-primary">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="card card-dashboard h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-3">
+
+                            <div>
+
+                                <small class="text-muted d-block mb-2">
+                                    Visitas este mes
+                                </small>
+
+                                <h3 class="mb-0"
+                                    th:text="${totalAsistenciasMes}">
+                                    0
+                                </h3>
+
+                            </div>
+
+                            <i class="fa-solid fa-clipboard-check
+                                      fs-2 text-success">
+                            </i>
+
+                        </div>
 
                     </div>
 

@@ -32,6 +32,9 @@ public interface UsuarioRepository
     List<Usuario> findDistinctByRoles_Rol(
             String rol);
 
+    List<Usuario> findDistinctByRoles_RolAndActivoTrue(
+            String rol);
+
     long countByRoles_RolAndActivoTrue(
             String rol);
 }

@@ -141,6 +141,46 @@ public class MembresiaService {
         return membresiaRepository.save(membresia);
     }
 
+    /*
+     * Inactiva la membresía actual del cliente.
+     * El registro se conserva para mantener el historial.
+     */
+    @Transactional
+    public Membresia inactivarMembresiaCliente(
+            Integer idUsuario) {
+
+        if (idUsuario == null) {
+            throw new IllegalArgumentException(
+                    "El cliente es obligatorio.");
+        }
+
+        Membresia membresia = membresiaRepository
+                .findTopByUsuarioIdUsuarioOrderByIdMembresiaDesc(
+                        idUsuario)
+                .orElseThrow(() ->
+                new IllegalArgumentException(
+                        "No tienes una membresía registrada."));
+
+        if (membresia.getEstado()
+                == EstadoMembresia.INACTIVA) {
+
+            throw new IllegalArgumentException(
+                    "La membresía ya se encuentra inactiva.");
+        }
+
+        if (membresia.getEstado()
+                == EstadoMembresia.VENCIDA) {
+
+            throw new IllegalArgumentException(
+                    "La membresía ya se encuentra vencida.");
+        }
+
+        membresia.setEstado(
+                EstadoMembresia.INACTIVA);
+
+        return membresiaRepository.save(membresia);
+    }
+
     private void validarDatos(
             Integer idUsuario,
             Integer idPlan,

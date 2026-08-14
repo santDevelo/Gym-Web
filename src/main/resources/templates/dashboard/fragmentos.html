@@ -107,25 +107,32 @@
 
                 <div sec:authorize="hasRole('ENTRENADOR')">
 
-                    <span class="nav-link">
+                    <a th:href="@{/entrenador/clientes}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'entrenador-clientes'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-users me-2"></i>
                         Clientes
-                    </span>
+                    </a>
 
-                    <span class="nav-link">
+                    <a th:href="@{/entrenador/rutinas}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'entrenador-rutinas'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-dumbbell me-2"></i>
                         Rutinas
-                    </span>
+                    </a>
 
-                    <span class="nav-link">
-                        <i class="fa-solid fa-calendar me-2"></i>
-                        Citas
-                    </span>
-
-                    <span class="nav-link">
+                    <a th:href="@{/entrenador/progreso}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'entrenador-progreso'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-chart-line me-2"></i>
                         Progreso
-                    </span>
+                    </a>
 
                 </div>
 
@@ -135,30 +142,44 @@
 
                 <div sec:authorize="hasRole('CLIENTE')">
 
-                    <span class="nav-link">
+                    <!-- Vista funcional: membresía del cliente -->
+                    <a th:href="@{/cliente/membresia}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'cliente-membresia'}
+                       ? ' active'
+                       : ''">
+
                         <i class="fa-solid fa-credit-card me-2"></i>
                         Mi membresía
-                    </span>
 
-                    <span class="nav-link">
+                    </a>
+
+                    <a th:href="@{/cliente/rutina}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'cliente-rutina'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-dumbbell me-2"></i>
                         Mi rutina
-                    </span>
+                    </a>
 
-                    <span class="nav-link">
-                        <i class="fa-solid fa-calendar-plus me-2"></i>
-                        Reservar cita
-                    </span>
-
-                    <span class="nav-link">
+                    <a th:href="@{/cliente/asistencia}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'cliente-asistencia'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-clipboard-check me-2"></i>
                         Mi asistencia
-                    </span>
+                    </a>
 
-                    <span class="nav-link">
+                    <a th:href="@{/cliente/perfil}"
+                       class="nav-link"
+                       th:classappend="${seccionActiva == 'cliente-perfil'}
+                                       ? ' active'
+                                       : ''">
                         <i class="fa-solid fa-user me-2"></i>
                         Mi perfil
-                    </span>
+                    </a>
 
                 </div>
 

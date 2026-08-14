@@ -132,6 +132,19 @@
     box-shadow: none;
 }
 
+.btn-simple-purple {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+    color: white;
+}
+
+.btn-simple-purple:hover,
+.btn-simple-purple:focus {
+    background-color: #5a32a3;
+    border-color: #5a32a3;
+    color: white;
+}
+
 :root{
     --sidebar:250px;
     --morado:#6F42C1;
