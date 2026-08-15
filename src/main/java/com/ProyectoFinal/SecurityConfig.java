@@ -16,64 +16,36 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            @Lazy RutaService rutaService
-    ) throws Exception {
-
-        var rutas = rutaService.getRutas();
-
+            @Lazy RutaService rutaService) throws Exception {
         http.authorizeHttpRequests(requests -> {
-
-            for (Ruta ruta : rutas) {
-
+            for (Ruta ruta : rutaService.listarRutas()) {
                 if (ruta.isRequiereRol()) {
-
-                    requests
-                            .requestMatchers(ruta.getRuta())
-                            .hasRole(
-                                    ruta.getRol().getRol()
-                            );
-
+                    requests.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
                 } else {
-
-                    requests
-                            .requestMatchers(ruta.getRuta())
-                            .permitAll();
+                    requests.requestMatchers(ruta.getRuta()).permitAll();
                 }
             }
-
             requests.anyRequest().authenticated();
         });
 
         http.formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl(
-                        "/dashboard",
-                        true
-                )
+                .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
-                .permitAll()
-        );
+                .permitAll());
 
         http.logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl(
-                        "/login?logout=true"
-                )
+                .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-                .permitAll()
-        );
+                .permitAll());
 
-        http.exceptionHandling(exceptions ->
-                exceptions.accessDeniedPage("/403")
-        );
-
-        http.sessionManagement(session ->
-                session.maximumSessions(1)
-                        .maxSessionsPreventsLogin(false)
-        );
-
+        http.exceptionHandling(exceptions -> exceptions.accessDeniedPage("/403"));
+        http.sessionManagement(session -> session
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false));
         return http.build();
     }
 

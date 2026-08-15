@@ -14,56 +14,35 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/registro")
 public class RegistroController {
 
+    private static final String REDIRECT_REGISTRO = "redirect:/registro";
+
     private final RegistroService registroService;
 
-    public RegistroController(
-            RegistroService registroService
-    ) {
+    public RegistroController(RegistroService registroService) {
         this.registroService = registroService;
     }
 
     @GetMapping
-    public String nuevo(
-            Usuario usuario
-    ) {
+    public String nuevo(Usuario usuario) {
         return "auth/registro";
     }
 
     @PostMapping
     public String crearUsuario(
             @Valid Usuario usuario,
-            BindingResult bindingResult,
-            RedirectAttributes redirectAttributes
-    ) {
-
-        if (bindingResult.hasErrors()) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    "Verifique los datos ingresados."
-            );
-
-            return "redirect:/registro";
+            BindingResult resultadoValidacion,
+            RedirectAttributes atributos) {
+        if (resultadoValidacion.hasErrors()) {
+            atributos.addFlashAttribute("error", "Verifique los datos ingresados.");
+            return REDIRECT_REGISTRO;
         }
 
-        boolean creado =
-                registroService.crearUsuario(usuario);
-
-        if (!creado) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    "El usuario o el correo ya existen."
-            );
-
-            return "redirect:/registro";
+        if (!registroService.crearUsuario(usuario)) {
+            atributos.addFlashAttribute("error", "El usuario o el correo ya existen.");
+            return REDIRECT_REGISTRO;
         }
 
-        redirectAttributes.addFlashAttribute(
-                "mensaje",
-                "Cuenta creada correctamente."
-        );
-
+        atributos.addFlashAttribute("mensaje", "Cuenta creada correctamente.");
         return "redirect:/login";
     }
 }

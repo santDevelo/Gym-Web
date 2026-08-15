@@ -1,6 +1,16 @@
 package com.ProyectoFinal.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -21,10 +31,7 @@ public class Usuario implements Serializable {
     private Integer idUsuario;
 
     @NotBlank
-    @Column(
-            unique = true,
-            length = 30
-    )
+    @Column(unique = true, length = 30)
     private String username;
 
     @NotBlank
@@ -40,19 +47,13 @@ public class Usuario implements Serializable {
     private String apellidos;
 
     @Email
-    @Column(
-            unique = true,
-            length = 100
-    )
+    @Column(unique = true, length = 100)
     private String correo;
 
     @Column(length = 25)
     private String telefono;
 
-    @Column(
-            name = "ruta_imagen",
-            length = 1024
-    )
+    @Column(name = "ruta_imagen", length = 1024)
     private String rutaImagen;
 
     private boolean activo;
@@ -60,21 +61,18 @@ public class Usuario implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_rol",
-            joinColumns = @JoinColumn(
-                    name = "id_usuario"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "id_rol"
-            )
-    )
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_rol"))
     private Set<Rol> roles = new HashSet<>();
 
     @Transient
     public boolean tieneRol(String nombreRol) {
+        return nombreRol != null
+                && roles.stream().anyMatch(rol -> nombreRol.equalsIgnoreCase(rol.getRol()));
+    }
 
-        return roles.stream().anyMatch(
-                rol -> rol.getRol()
-                        .equalsIgnoreCase(nombreRol)
-        );
+    @Transient
+    public boolean tieneRol(NombreRol nombreRol) {
+        return nombreRol != null && tieneRol(nombreRol.name());
     }
 }

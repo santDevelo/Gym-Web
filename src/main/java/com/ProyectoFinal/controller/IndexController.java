@@ -18,7 +18,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model) {
 
-        Home home = homeService.getHomePrincipal();
+        Home home = homeService.obtenerHomePrincipal();
 
         model.addAttribute("imagenGimnasio", home.getImagenUrl());
 

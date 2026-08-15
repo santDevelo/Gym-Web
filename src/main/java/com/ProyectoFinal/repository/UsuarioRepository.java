@@ -19,16 +19,6 @@ public interface UsuarioRepository
     Optional<Usuario> findByCorreo(
             String correo);
 
-    Optional<Usuario> findByUsernameOrCorreo(
-            String username,
-            String correo);
-
-    boolean existsByUsernameOrCorreo(
-            String username,
-            String correo);
-
-    List<Usuario> findByActivoTrue();
-
     List<Usuario> findDistinctByRoles_Rol(
             String rol);
 

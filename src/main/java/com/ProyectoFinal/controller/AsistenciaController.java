@@ -1,5 +1,6 @@
 package com.ProyectoFinal.controller;
 
+import com.ProyectoFinal.domain.NombreRol;
 import com.ProyectoFinal.domain.Usuario;
 import com.ProyectoFinal.service.AsistenciaService;
 import com.ProyectoFinal.service.UsuarioService;
@@ -16,43 +17,33 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AsistenciaController {
 
+    private static final String REDIRECT_DASHBOARD = "redirect:/dashboard";
+    private static final String REDIRECT_ASISTENCIA = "redirect:/cliente/asistencia";
+
     private final UsuarioService usuarioService;
     private final AsistenciaService asistenciaService;
 
     public AsistenciaController(
             UsuarioService usuarioService,
             AsistenciaService asistenciaService) {
-
         this.usuarioService = usuarioService;
         this.asistenciaService = asistenciaService;
     }
 
     @GetMapping("/cliente/asistencia")
-    public String mostrarAsistenciaCliente(
-            Principal principal,
-            Model model) {
-
-        Usuario usuario
-                = obtenerUsuarioAutenticado(principal);
-
-        if (!usuario.tieneRol("CLIENTE")) {
-            return "redirect:/dashboard";
+    public String mostrarAsistenciaCliente(Principal principal, Model model) {
+        Usuario cliente = obtenerUsuarioAutenticado(principal);
+        if (!cliente.tieneRol(NombreRol.CLIENTE)) {
+            return REDIRECT_DASHBOARD;
         }
 
-        model.addAttribute("usuario", usuario);
+        Integer idCliente = cliente.getIdUsuario();
+        model.addAttribute("usuario", cliente);
+        model.addAttribute("asistencias", asistenciaService.listarPorCliente(idCliente));
         model.addAttribute(
-                "asistencias",
-                asistenciaService.listarPorCliente(
-                        usuario.getIdUsuario()));
-        model.addAttribute(
-                "totalAsistenciasMes",
-                asistenciaService.contarAsistenciasDelMes(
-                        usuario.getIdUsuario()));
-        model.addAttribute(
-                "seccionActiva",
-                "cliente-asistencia");
+                "totalAsistenciasMes", asistenciaService.contarAsistenciasDelMes(idCliente));
+        model.addAttribute("seccionActiva", "cliente-asistencia");
         model.addAttribute("fechaActual", LocalDate.now());
-
         return "cliente/asistencia";
     }
 
@@ -60,80 +51,54 @@ public class AsistenciaController {
     public String agregarAsistencia(
             @RequestParam LocalDate fecha,
             @RequestParam LocalTime horaEntrada,
-            @RequestParam(required = false)
-            LocalTime horaSalida,
+            @RequestParam(required = false) LocalTime horaSalida,
             Principal principal,
-            RedirectAttributes redirectAttributes) {
-
-        Usuario usuario
-                = obtenerUsuarioAutenticado(principal);
-
-        if (!usuario.tieneRol("CLIENTE")) {
-            return "redirect:/dashboard";
+            RedirectAttributes atributos) {
+        Usuario cliente = obtenerUsuarioAutenticado(principal);
+        if (!cliente.tieneRol(NombreRol.CLIENTE)) {
+            return REDIRECT_DASHBOARD;
         }
 
-        try {
-
-            asistenciaService.agregar(
-                    usuario.getIdUsuario(),
-                    fecha,
-                    horaEntrada,
-                    horaSalida);
-
-            redirectAttributes.addFlashAttribute(
-                    "todoOk",
-                    "La asistencia fue agregada correctamente.");
-
-        } catch (IllegalArgumentException ex) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    ex.getMessage());
-        }
-
-        return "redirect:/cliente/asistencia";
+        ejecutarAccion(
+                () -> asistenciaService.agregar(
+                        cliente.getIdUsuario(), fecha, horaEntrada, horaSalida),
+                atributos,
+                "La asistencia fue agregada correctamente.");
+        return REDIRECT_ASISTENCIA;
     }
 
     @PostMapping("/cliente/asistencia/eliminar")
     public String eliminarAsistencia(
             @RequestParam Integer idAsistencia,
             Principal principal,
-            RedirectAttributes redirectAttributes) {
-
-        Usuario usuario
-                = obtenerUsuarioAutenticado(principal);
-
-        if (!usuario.tieneRol("CLIENTE")) {
-            return "redirect:/dashboard";
+            RedirectAttributes atributos) {
+        Usuario cliente = obtenerUsuarioAutenticado(principal);
+        if (!cliente.tieneRol(NombreRol.CLIENTE)) {
+            return REDIRECT_DASHBOARD;
         }
 
-        try {
-
-            asistenciaService.eliminar(
-                    usuario.getIdUsuario(),
-                    idAsistencia);
-
-            redirectAttributes.addFlashAttribute(
-                    "todoOk",
-                    "La asistencia fue eliminada correctamente.");
-
-        } catch (IllegalArgumentException ex) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    ex.getMessage());
-        }
-
-        return "redirect:/cliente/asistencia";
+        ejecutarAccion(
+                () -> asistenciaService.eliminar(cliente.getIdUsuario(), idAsistencia),
+                atributos,
+                "La asistencia fue eliminada correctamente.");
+        return REDIRECT_ASISTENCIA;
     }
 
-    private Usuario obtenerUsuarioAutenticado(
-            Principal principal) {
-
-        return usuarioService
-                .buscarPorUsername(principal.getName())
-                .orElseThrow(() ->
-                new IllegalStateException(
+    private Usuario obtenerUsuarioAutenticado(Principal principal) {
+        return usuarioService.buscarPorUsername(principal.getName())
+                .orElseThrow(() -> new IllegalStateException(
                         "El usuario autenticado no existe."));
+    }
+
+    private void ejecutarAccion(
+            Runnable accion,
+            RedirectAttributes atributos,
+            String mensajeExito) {
+        try {
+            accion.run();
+            atributos.addFlashAttribute("todoOk", mensajeExito);
+        } catch (IllegalArgumentException ex) {
+            atributos.addFlashAttribute("error", ex.getMessage());
+        }
     }
 }

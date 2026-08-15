@@ -15,15 +15,10 @@ public class HomeController {
         this.homeService = homeService;
     }
 
-  @GetMapping("/home")
-public String mostrarHome(Model model) {
-
-    Home home = homeService.getHomePrincipal();
-
-    System.out.println("URL encontrada: " + home.getImagenUrl());
-
-    model.addAttribute("imagenGimnasio", home.getImagenUrl());
-
-    return "index";
-}
+    @GetMapping("/home")
+    public String mostrarHome(Model model) {
+        Home home = homeService.obtenerHomePrincipal();
+        model.addAttribute("imagenGimnasio", home.getImagenUrl());
+        return "index";
+    }
 }

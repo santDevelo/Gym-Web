@@ -14,10 +14,10 @@ public class HomeService {
         this.homeRepository = homeRepository;
     }
 
-   
     @Transactional(readOnly = true)
-    public Home getHomePrincipal() {
+    public Home obtenerHomePrincipal() {
         return homeRepository.findById(1L)
-                .orElseThrow(() -> new IllegalArgumentException("El registro Home con ID 1 no existe."));
+                .orElseThrow(() -> new IllegalStateException(
+                        "El registro principal de la página de inicio no existe."));
     }
 }

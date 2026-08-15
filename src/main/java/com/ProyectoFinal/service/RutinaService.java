@@ -3,6 +3,7 @@ package com.ProyectoFinal.service;
 import com.ProyectoFinal.domain.EjercicioRutina;
 import com.ProyectoFinal.domain.EstadoMembresia;
 import com.ProyectoFinal.domain.Membresia;
+import com.ProyectoFinal.domain.NombreRol;
 import com.ProyectoFinal.domain.Rutina;
 import com.ProyectoFinal.domain.Usuario;
 import com.ProyectoFinal.repository.MembresiaRepository;
@@ -18,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RutinaService {
 
+    private static final int LONGITUD_NOMBRE = 80;
+    private static final int LONGITUD_OBJETIVO = 255;
+    private static final int LONGITUD_DESCRIPCION = 500;
+
     private final RutinaRepository rutinaRepository;
     private final MembresiaRepository membresiaRepository;
     private final UsuarioRepository usuarioRepository;
@@ -26,53 +31,38 @@ public class RutinaService {
             RutinaRepository rutinaRepository,
             MembresiaRepository membresiaRepository,
             UsuarioRepository usuarioRepository) {
-
         this.rutinaRepository = rutinaRepository;
         this.membresiaRepository = membresiaRepository;
         this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional(readOnly = true)
-    public Optional<Rutina> buscarActivaPorCliente(
-            Integer idUsuario) {
-
+    public Optional<Rutina> buscarActivaPorCliente(Integer idUsuario) {
         return rutinaRepository
-                .findTopByClienteIdUsuarioAndActivaTrueOrderByFechaAsignacionDesc(
-                        idUsuario);
+                .findTopByClienteIdUsuarioAndActivaTrueOrderByFechaAsignacionDesc(idUsuario);
     }
 
     @Transactional(readOnly = true)
     public List<Rutina> listarActivas() {
-
-        return rutinaRepository
-                .findByActivaTrueOrderByClienteNombreAscFechaAsignacionDesc();
+        return rutinaRepository.findByActivaTrueOrderByClienteNombreAscFechaAsignacionDesc();
     }
 
     @Transactional(readOnly = true)
     public List<Usuario> listarClientesConMembresiaActiva() {
-
-        return membresiaRepository
-                .findMembresiasActuales()
-                .stream()
+        return membresiaRepository.findMembresiasActuales().stream()
                 .filter(this::tieneMembresiaActiva)
                 .map(Membresia::getUsuario)
-                .filter(cliente -> cliente != null
-                && cliente.isActivo()
-                && cliente.tieneRol("CLIENTE"))
-                .sorted(Comparator
-                        .comparing(Usuario::getNombre)
+                .filter(this::esClienteActivo)
+                .sorted(Comparator.comparing(Usuario::getNombre)
                         .thenComparing(Usuario::getApellidos))
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<Usuario> listarClientesDisponibles() {
-
-        return listarClientesConMembresiaActiva()
-                .stream()
+        return listarClientesConMembresiaActiva().stream()
                 .filter(cliente -> !rutinaRepository
-                .existsByClienteIdUsuarioAndActivaTrue(
-                        cliente.getIdUsuario()))
+                        .existsByClienteIdUsuarioAndActivaTrue(cliente.getIdUsuario()))
                 .toList();
     }
 
@@ -83,82 +73,34 @@ public class RutinaService {
             String objetivo,
             String descripcion,
             LocalDate fechaAsignacion) {
+        validarDatosRutina(idCliente, nombre, objetivo, descripcion, fechaAsignacion);
 
-        validarDatosRutina(
-                idCliente,
-                nombre,
-                objetivo,
-                descripcion,
-                fechaAsignacion);
-
-        Usuario cliente = usuarioRepository
-                .findById(idCliente)
-                .orElseThrow(() ->
-                new IllegalArgumentException(
-                        "El cliente seleccionado no existe."));
-
-        if (!cliente.isActivo()
-                || !cliente.tieneRol("CLIENTE")) {
-
-            throw new IllegalArgumentException(
-                    "Debe seleccionar un cliente activo.");
-        }
-
-        Membresia membresia = membresiaRepository
-                .findTopByUsuarioIdUsuarioOrderByIdMembresiaDesc(
-                        idCliente)
-                .orElseThrow(() ->
-                new IllegalArgumentException(
-                        "El cliente no tiene una membresía registrada."));
-
-        if (!tieneMembresiaActiva(membresia)) {
-
-            throw new IllegalArgumentException(
-                    "El cliente debe tener una membresía activa y vigente.");
-        }
-
-        if (rutinaRepository
-                .existsByClienteIdUsuarioAndActivaTrue(
-                        idCliente)) {
-
-            throw new IllegalArgumentException(
-                    "El cliente ya tiene una rutina activa.");
-        }
+        Usuario cliente = obtenerClienteActivo(idCliente);
+        validarMembresiaActiva(idCliente);
+        validarClienteSinRutina(idCliente);
 
         Rutina rutina = new Rutina();
-
         rutina.setCliente(cliente);
         rutina.setNombre(nombre.trim());
-        rutina.setObjetivo(
-                limpiarTextoOpcional(objetivo));
-        rutina.setDescripcion(
-                limpiarTextoOpcional(descripcion));
+        rutina.setObjetivo(limpiarTextoOpcional(objetivo));
+        rutina.setDescripcion(limpiarTextoOpcional(descripcion));
         rutina.setFechaAsignacion(fechaAsignacion);
         rutina.setActiva(true);
-
         return rutinaRepository.save(rutina);
     }
 
     @Transactional
-    public void eliminarRutina(
-            Integer idRutina) {
-
+    public void eliminarRutina(Integer idRutina) {
         if (idRutina == null) {
-            throw new IllegalArgumentException(
-                    "La rutina es obligatoria.");
+            throw new IllegalArgumentException("La rutina es obligatoria.");
         }
 
-        Rutina rutina = rutinaRepository
-                .findById(idRutina)
-                .orElseThrow(() ->
-                new IllegalArgumentException(
+        Rutina rutina = rutinaRepository.findById(idRutina)
+                .orElseThrow(() -> new IllegalArgumentException(
                         "La rutina seleccionada no existe."));
-
         if (!rutina.isActiva()) {
-            throw new IllegalArgumentException(
-                    "La rutina ya no se encuentra activa.");
+            throw new IllegalArgumentException("La rutina ya no se encuentra activa.");
         }
-
         rutinaRepository.delete(rutina);
     }
 
@@ -170,41 +112,16 @@ public class RutinaService {
             Integer series,
             String repeticiones,
             String observaciones) {
+        validarDatosEjercicio(dia, nombre, series, repeticiones);
 
-        validarDatosEjercicio(
-                dia,
-                nombre,
-                series,
-                repeticiones);
-
-        Rutina rutina = obtenerRutinaActiva(
-                idUsuario);
-
-        int siguienteOrden = rutina
-                .getEjercicios()
-                .stream()
-                .map(EjercicioRutina::getOrden)
-                .filter(orden -> orden != null)
-                .max(Integer::compareTo)
-                .orElse(0) + 1;
-
-        EjercicioRutina ejercicio
-                = new EjercicioRutina();
-
+        Rutina rutina = obtenerRutinaActiva(idUsuario);
+        EjercicioRutina ejercicio = new EjercicioRutina();
         ejercicio.setRutina(rutina);
-        ejercicio.setOrden(siguienteOrden);
-
-        copiarDatosEjercicio(
-                ejercicio,
-                dia,
-                nombre,
-                series,
-                repeticiones,
-                observaciones);
+        ejercicio.setOrden(obtenerSiguienteOrden(rutina));
+        copiarDatosEjercicio(ejercicio, dia, nombre, series, repeticiones, observaciones);
 
         rutina.getEjercicios().add(ejercicio);
         rutinaRepository.save(rutina);
-
         return ejercicio;
     }
 
@@ -217,85 +134,76 @@ public class RutinaService {
             Integer series,
             String repeticiones,
             String observaciones) {
+        validarDatosEjercicio(dia, nombre, series, repeticiones);
 
-        validarDatosEjercicio(
-                dia,
-                nombre,
-                series,
-                repeticiones);
-
-        if (idEjercicio == null) {
-            throw new IllegalArgumentException(
-                    "El ejercicio es obligatorio.");
-        }
-
-        Rutina rutina = obtenerRutinaActiva(
-                idUsuario);
-
-        EjercicioRutina ejercicio = rutina
-                .getEjercicios()
-                .stream()
-                .filter(item -> idEjercicio.equals(
-                        item.getIdEjercicio()))
-                .findFirst()
-                .orElseThrow(() ->
-                new IllegalArgumentException(
-                        "El ejercicio no pertenece a tu rutina activa."));
-
-        copiarDatosEjercicio(
-                ejercicio,
-                dia,
-                nombre,
-                series,
-                repeticiones,
-                observaciones);
-
+        Rutina rutina = obtenerRutinaActiva(idUsuario);
+        EjercicioRutina ejercicio = obtenerEjercicio(rutina, idEjercicio);
+        copiarDatosEjercicio(ejercicio, dia, nombre, series, repeticiones, observaciones);
         rutinaRepository.save(rutina);
-
         return ejercicio;
     }
 
     @Transactional
-    public void eliminarEjercicio(
-            Integer idUsuario,
-            Integer idEjercicio) {
-
-        if (idEjercicio == null) {
-            throw new IllegalArgumentException(
-                    "El ejercicio es obligatorio.");
-        }
-
-        Rutina rutina = obtenerRutinaActiva(
-                idUsuario);
-
-        EjercicioRutina ejercicio = rutina
-                .getEjercicios()
-                .stream()
-                .filter(item -> idEjercicio.equals(
-                        item.getIdEjercicio()))
-                .findFirst()
-                .orElseThrow(() ->
-                new IllegalArgumentException(
-                        "El ejercicio no pertenece a tu rutina activa."));
-
+    public void eliminarEjercicio(Integer idUsuario, Integer idEjercicio) {
+        Rutina rutina = obtenerRutinaActiva(idUsuario);
+        EjercicioRutina ejercicio = obtenerEjercicio(rutina, idEjercicio);
         rutina.getEjercicios().remove(ejercicio);
         rutinaRepository.save(rutina);
     }
 
-    private Rutina obtenerRutinaActiva(
-            Integer idUsuario) {
-
-        if (idUsuario == null) {
-            throw new IllegalArgumentException(
-                    "El cliente es obligatorio.");
+    private Usuario obtenerClienteActivo(Integer idCliente) {
+        Usuario cliente = usuarioRepository.findById(idCliente)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "El cliente seleccionado no existe."));
+        if (!esClienteActivo(cliente)) {
+            throw new IllegalArgumentException("Debe seleccionar un cliente activo.");
         }
+        return cliente;
+    }
 
+    private void validarMembresiaActiva(Integer idCliente) {
+        Membresia membresia = membresiaRepository
+                .findTopByUsuarioIdUsuarioOrderByIdMembresiaDesc(idCliente)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "El cliente no tiene una membresía registrada."));
+        if (!tieneMembresiaActiva(membresia)) {
+            throw new IllegalArgumentException(
+                    "El cliente debe tener una membresía activa y vigente.");
+        }
+    }
+
+    private void validarClienteSinRutina(Integer idCliente) {
+        if (rutinaRepository.existsByClienteIdUsuarioAndActivaTrue(idCliente)) {
+            throw new IllegalArgumentException("El cliente ya tiene una rutina activa.");
+        }
+    }
+
+    private Rutina obtenerRutinaActiva(Integer idUsuario) {
+        if (idUsuario == null) {
+            throw new IllegalArgumentException("El cliente es obligatorio.");
+        }
         return rutinaRepository
-                .findTopByClienteIdUsuarioAndActivaTrueOrderByFechaAsignacionDesc(
-                        idUsuario)
-                .orElseThrow(() ->
-                new IllegalArgumentException(
-                        "No tienes una rutina activa."));
+                .findTopByClienteIdUsuarioAndActivaTrueOrderByFechaAsignacionDesc(idUsuario)
+                .orElseThrow(() -> new IllegalArgumentException("No tienes una rutina activa."));
+    }
+
+    private EjercicioRutina obtenerEjercicio(Rutina rutina, Integer idEjercicio) {
+        if (idEjercicio == null) {
+            throw new IllegalArgumentException("El ejercicio es obligatorio.");
+        }
+        return rutina.getEjercicios().stream()
+                .filter(item -> idEjercicio.equals(item.getIdEjercicio()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "El ejercicio no pertenece a tu rutina activa."));
+    }
+
+    private int obtenerSiguienteOrden(Rutina rutina) {
+        return rutina.getEjercicios().stream()
+                .map(EjercicioRutina::getOrden)
+                .filter(orden -> orden != null)
+                .max(Integer::compareTo)
+                .orElse(0) + 1;
     }
 
     private void copiarDatosEjercicio(
@@ -305,14 +213,11 @@ public class RutinaService {
             Integer series,
             String repeticiones,
             String observaciones) {
-
         ejercicio.setDia(dia.trim());
         ejercicio.setNombre(nombre.trim());
         ejercicio.setSeries(series);
-        ejercicio.setRepeticiones(
-                repeticiones.trim());
-        ejercicio.setObservaciones(
-                limpiarTextoOpcional(observaciones));
+        ejercicio.setRepeticiones(repeticiones.trim());
+        ejercicio.setObservaciones(limpiarTextoOpcional(observaciones));
     }
 
     private void validarDatosEjercicio(
@@ -320,25 +225,18 @@ public class RutinaService {
             String nombre,
             Integer series,
             String repeticiones) {
-
         if (!tieneTexto(dia)) {
-            throw new IllegalArgumentException(
-                    "Debe seleccionar un día.");
+            throw new IllegalArgumentException("Debe seleccionar un día.");
         }
-
         if (!tieneTexto(nombre)) {
-            throw new IllegalArgumentException(
-                    "El nombre del ejercicio es obligatorio.");
+            throw new IllegalArgumentException("El nombre del ejercicio es obligatorio.");
         }
-
         if (series == null || series <= 0) {
             throw new IllegalArgumentException(
                     "La cantidad de series debe ser mayor que cero.");
         }
-
         if (!tieneTexto(repeticiones)) {
-            throw new IllegalArgumentException(
-                    "Las repeticiones son obligatorias.");
+            throw new IllegalArgumentException("Las repeticiones son obligatorias.");
         }
     }
 
@@ -348,68 +246,58 @@ public class RutinaService {
             String objetivo,
             String descripcion,
             LocalDate fechaAsignacion) {
-
         if (idCliente == null) {
-            throw new IllegalArgumentException(
-                    "Debe seleccionar un cliente.");
+            throw new IllegalArgumentException("Debe seleccionar un cliente.");
         }
-
-        if (!tieneTexto(nombre)) {
-            throw new IllegalArgumentException(
-                    "El nombre de la rutina es obligatorio.");
-        }
-
-        if (nombre.trim().length() > 80) {
-            throw new IllegalArgumentException(
-                    "El nombre no puede superar 80 caracteres.");
-        }
-
-        if (tieneTexto(objetivo)
-                && objetivo.trim().length() > 255) {
-            throw new IllegalArgumentException(
-                    "El objetivo no puede superar 255 caracteres.");
-        }
-
-        if (tieneTexto(descripcion)
-                && descripcion.trim().length() > 500) {
-            throw new IllegalArgumentException(
-                    "La descripción no puede superar 500 caracteres.");
-        }
-
+        validarTextoObligatorio(nombre, "El nombre de la rutina es obligatorio.");
+        validarLongitud(nombre, LONGITUD_NOMBRE, "El nombre");
+        validarLongitudOpcional(objetivo, LONGITUD_OBJETIVO, "El objetivo");
+        validarLongitudOpcional(descripcion, LONGITUD_DESCRIPCION, "La descripción");
         if (fechaAsignacion == null) {
-            throw new IllegalArgumentException(
-                    "La fecha de asignación es obligatoria.");
+            throw new IllegalArgumentException("La fecha de asignación es obligatoria.");
         }
     }
 
-    private boolean tieneMembresiaActiva(
-            Membresia membresia) {
+    private void validarTextoObligatorio(String texto, String mensaje) {
+        if (!tieneTexto(texto)) {
+            throw new IllegalArgumentException(mensaje);
+        }
+    }
 
-        if (membresia == null
-                || membresia.getEstado()
-                != EstadoMembresia.ACTIVA) {
+    private void validarLongitud(String texto, int maximo, String campo) {
+        if (texto.trim().length() > maximo) {
+            throw new IllegalArgumentException(
+                    campo + " no puede superar " + maximo + " caracteres.");
+        }
+    }
+
+    private void validarLongitudOpcional(String texto, int maximo, String campo) {
+        if (tieneTexto(texto)) {
+            validarLongitud(texto, maximo, campo);
+        }
+    }
+
+    private boolean esClienteActivo(Usuario usuario) {
+        return usuario != null
+                && usuario.isActivo()
+                && usuario.tieneRol(NombreRol.CLIENTE);
+    }
+
+    private boolean tieneMembresiaActiva(Membresia membresia) {
+        if (membresia == null || membresia.getEstado() != EstadoMembresia.ACTIVA) {
             return false;
         }
 
         LocalDate hoy = LocalDate.now();
-
-        boolean yaInicio
-                = membresia.getFechaInicio() == null
+        boolean yaInicio = membresia.getFechaInicio() == null
                 || !membresia.getFechaInicio().isAfter(hoy);
-
-        boolean noHaVencido
-                = membresia.getFechaVencimiento() == null
+        boolean noHaVencido = membresia.getFechaVencimiento() == null
                 || !membresia.getFechaVencimiento().isBefore(hoy);
-
         return yaInicio && noHaVencido;
     }
 
-    private String limpiarTextoOpcional(
-            String texto) {
-
-        return tieneTexto(texto)
-                ? texto.trim()
-                : null;
+    private String limpiarTextoOpcional(String texto) {
+        return tieneTexto(texto) ? texto.trim() : null;
     }
 
     private boolean tieneTexto(String texto) {

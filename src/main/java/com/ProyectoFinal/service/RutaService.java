@@ -11,15 +11,12 @@ public class RutaService {
 
     private final RutaRepository rutaRepository;
 
-    public RutaService(
-            RutaRepository rutaRepository
-    ) {
+    public RutaService(RutaRepository rutaRepository) {
         this.rutaRepository = rutaRepository;
     }
 
     @Transactional(readOnly = true)
-    public List<Ruta> getRutas() {
-        return rutaRepository
-                .findAllByOrderByRequiereRolAsc();
+    public List<Ruta> listarRutas() {
+        return rutaRepository.findAllByOrderByRequiereRolAsc();
     }
 }

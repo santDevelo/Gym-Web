@@ -2,6 +2,7 @@ package com.ProyectoFinal.controller;
 
 import com.ProyectoFinal.domain.EstadoMembresia;
 import com.ProyectoFinal.domain.Membresia;
+import com.ProyectoFinal.domain.NombreRol;
 import com.ProyectoFinal.domain.Rol;
 import com.ProyectoFinal.domain.Usuario;
 import com.ProyectoFinal.service.MembresiaService;
@@ -26,6 +27,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
+    private static final String REDIRECT_LISTADO = "redirect:/usuario/listado";
+
     private final UsuarioService usuarioService;
     private final MembresiaService membresiaService;
     private final PlanMembresiaService planMembresiaService;
@@ -34,316 +37,161 @@ public class UsuarioController {
             UsuarioService usuarioService,
             MembresiaService membresiaService,
             PlanMembresiaService planMembresiaService) {
-
         this.usuarioService = usuarioService;
         this.membresiaService = membresiaService;
         this.planMembresiaService = planMembresiaService;
     }
 
-    /*
-     * Mostrar listado
-     */
-
     @GetMapping("/listado")
     public String listado(
-            @RequestParam(
-                    name = "rol",
-                    required = false)
-            String filtroRol,
+            @RequestParam(name = "rol", required = false) String filtroRol,
             Principal principal,
             Model model) {
+        cargarDatosComunes(principal, model, determinarSeccionActiva(filtroRol));
 
-        String seccionActiva
-                = determinarSeccionActiva(filtroRol);
-
-        cargarDatosComunes(
-                principal,
-                model,
-                seccionActiva);
-
-        List<Usuario> usuarios
-                = obtenerUsuarios(filtroRol);
-
-        model.addAttribute(
-                "usuarios",
-                usuarios);
-
-        model.addAttribute(
-                "totalUsuarios",
-                usuarios.size());
-
-        model.addAttribute(
-                "usuarioFormulario",
-                new Usuario());
-
+        List<Usuario> usuarios = obtenerUsuarios(filtroRol);
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("totalUsuarios", usuarios.size());
+        model.addAttribute("usuarioFormulario", new Usuario());
         return "admin/listado";
     }
 
-    /*
-     * Guardar usuario nuevo o modificado
-     */
-
     @PostMapping("/guardar")
     public String guardar(
-            @ModelAttribute("usuarioFormulario")
-            Usuario usuarioFormulario,
-            @RequestParam("idRol")
-            Integer idRol,
-            @RequestParam(
-                    name = "imagenFile",
-                    required = false)
-            MultipartFile imagenFile,
-            RedirectAttributes redirectAttributes) {
-
-        try {
-
-            usuarioService.guardarDesdeAdministracion(
-                    usuarioFormulario,
-                    idRol,
-                    imagenFile);
-
-            redirectAttributes.addFlashAttribute(
-                    "todoOk",
-                    "El usuario fue guardado correctamente.");
-
-        } catch (IllegalArgumentException
-                | IllegalStateException ex) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    ex.getMessage());
-        }
-
-        return "redirect:/usuario/listado";
+            @ModelAttribute("usuarioFormulario") Usuario formulario,
+            @RequestParam Integer idRol,
+            @RequestParam(name = "imagenFile", required = false) MultipartFile imagenFile,
+            RedirectAttributes atributos) {
+        ejecutarAccion(
+                () -> usuarioService.guardarDesdeAdministracion(formulario, idRol, imagenFile),
+                atributos,
+                "El usuario fue guardado correctamente.");
+        return REDIRECT_LISTADO;
     }
-
-    /*
-     * Mostrar formulario de modificación
-     */
 
     @GetMapping("/modificar/{idUsuario}")
     public String modificar(
             @PathVariable Integer idUsuario,
             Principal principal,
             Model model,
-            RedirectAttributes redirectAttributes) {
-
-        var usuarioOptional
-                = usuarioService.buscarPorId(
-                        idUsuario);
-
-        if (usuarioOptional.isEmpty()) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    "El usuario no fue encontrado.");
-
-            return "redirect:/usuario/listado";
+            RedirectAttributes atributos) {
+        Usuario formulario = usuarioService.buscarPorId(idUsuario).orElse(null);
+        if (formulario == null) {
+            atributos.addFlashAttribute("error", "El usuario no fue encontrado.");
+            return REDIRECT_LISTADO;
         }
 
-        Usuario usuarioFormulario
-                = usuarioOptional.get();
+        cargarDatosComunes(principal, model, "usuarios");
+        model.addAttribute("usuarioFormulario", formulario);
+        model.addAttribute("idRolActual", obtenerIdRolActual(formulario));
 
-        Integer idRolActual
-                = usuarioFormulario
-                        .getRoles()
-                        .stream()
-                        .findFirst()
-                        .map(Rol::getIdRol)
-                        .orElse(null);
-
-        cargarDatosComunes(
-                principal,
-                model,
-                "usuarios");
-
-        model.addAttribute(
-                "usuarioFormulario",
-                usuarioFormulario);
-
-        model.addAttribute(
-                "idRolActual",
-                idRolActual);
-
-        if (usuarioFormulario.tieneRol("CLIENTE")) {
-
-            Membresia membresiaFormulario
-                    = membresiaService
-                            .buscarUltimaPorUsuario(idUsuario)
-                            .orElseGet(() ->
-                            crearMembresiaInicial(usuarioFormulario));
-
-            model.addAttribute(
-                    "membresiaFormulario",
-                    membresiaFormulario);
-
-            model.addAttribute(
-                    "planes",
-                    planMembresiaService.listarActivos());
-
-            model.addAttribute(
-                    "estadosMembresia",
-                    EstadoMembresia.values());
+        if (formulario.tieneRol(NombreRol.CLIENTE)) {
+            cargarDatosMembresia(model, formulario);
         }
-
         return "admin/modifica";
     }
 
-    /*
-     * Guardar o modificar la membresía de un cliente.
-     */
     @PostMapping("/membresia/guardar")
     public String guardarMembresia(
             @RequestParam Integer idUsuario,
             @RequestParam Integer idPlan,
-            @RequestParam
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate fechaInicio,
-            @RequestParam
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate fechaVencimiento,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaVencimiento,
             @RequestParam EstadoMembresia estado,
-            RedirectAttributes redirectAttributes) {
-
+            RedirectAttributes atributos) {
         try {
-
             membresiaService.guardarMembresiaCliente(
-                    idUsuario,
-                    idPlan,
-                    fechaInicio,
-                    fechaVencimiento,
-                    estado);
-
-            redirectAttributes.addFlashAttribute(
-                    "todoOk",
-                    "La membresía del cliente fue guardada correctamente.");
-
-            return "redirect:/usuario/listado?rol=CLIENTE";
-
+                    idUsuario, idPlan, fechaInicio, fechaVencimiento, estado);
+            atributos.addFlashAttribute(
+                    "todoOk", "La membresía del cliente fue guardada correctamente.");
+            return REDIRECT_LISTADO + "?rol=" + NombreRol.CLIENTE.name();
         } catch (IllegalArgumentException ex) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    ex.getMessage());
-
-            return "redirect:/usuario/modificar/"
-                    + idUsuario;
+            atributos.addFlashAttribute("error", ex.getMessage());
+            return "redirect:/usuario/modificar/" + idUsuario;
         }
     }
 
-    /*
-     * Activar o desactivar
-     */
-
-    @PostMapping(
-            "/cambiar-estado/{idUsuario}")
+    @PostMapping("/cambiar-estado/{idUsuario}")
     public String cambiarEstado(
             @PathVariable Integer idUsuario,
             Principal principal,
-            RedirectAttributes redirectAttributes) {
-
-        try {
-
-            usuarioService.cambiarEstado(
-                    idUsuario,
-                    principal.getName());
-
-            redirectAttributes.addFlashAttribute(
-                    "todoOk",
-                    "El estado del usuario fue actualizado.");
-
-        } catch (IllegalArgumentException ex) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    ex.getMessage());
-        }
-
-        return "redirect:/usuario/listado";
+            RedirectAttributes atributos) {
+        ejecutarAccion(
+                () -> usuarioService.cambiarEstado(idUsuario, principal.getName()),
+                atributos,
+                "El estado del usuario fue actualizado.");
+        return REDIRECT_LISTADO;
     }
-
-    /*
-     * Datos compartidos por las vistas
-     */
 
     private void cargarDatosComunes(
             Principal principal,
             Model model,
             String seccionActiva) {
+        Usuario usuarioAutenticado = usuarioService.buscarPorUsername(principal.getName())
+                .orElseThrow(() -> new IllegalStateException(
+                        "No se encontró el usuario autenticado."));
 
-        Usuario usuarioAutenticado
-                = usuarioService
-                        .buscarPorUsername(
-                                principal.getName())
-                        .orElseThrow(() ->
-                        new IllegalStateException(
-                                "No se encontró el usuario autenticado."));
-
-        model.addAttribute(
-                "usuario",
-                usuarioAutenticado);
-
-        model.addAttribute(
-                "roles",
-                usuarioService.listarRoles());
-
-        model.addAttribute(
-                "seccionActiva",
-                seccionActiva);
+        model.addAttribute("usuario", usuarioAutenticado);
+        model.addAttribute("roles", usuarioService.listarRoles());
+        model.addAttribute("seccionActiva", seccionActiva);
     }
 
-    private Membresia crearMembresiaInicial(
-            Usuario cliente) {
+    private void cargarDatosMembresia(Model model, Usuario cliente) {
+        Membresia membresia = membresiaService
+                .buscarUltimaPorUsuario(cliente.getIdUsuario())
+                .orElseGet(() -> crearMembresiaInicial(cliente));
 
+        model.addAttribute("membresiaFormulario", membresia);
+        model.addAttribute("planes", planMembresiaService.listarActivos());
+        model.addAttribute("estadosMembresia", EstadoMembresia.values());
+    }
+
+    private Membresia crearMembresiaInicial(Usuario cliente) {
         LocalDate fechaInicio = LocalDate.now();
-
         Membresia membresia = new Membresia();
-
         membresia.setUsuario(cliente);
         membresia.setFechaInicio(fechaInicio);
-        membresia.setFechaVencimiento(
-                fechaInicio.plusMonths(1));
-        membresia.setEstado(
-                EstadoMembresia.ACTIVA);
-
+        membresia.setFechaVencimiento(fechaInicio.plusMonths(1));
+        membresia.setEstado(EstadoMembresia.ACTIVA);
         return membresia;
     }
 
-    private List<Usuario> obtenerUsuarios(
-            String filtroRol) {
+    private Integer obtenerIdRolActual(Usuario usuario) {
+        return usuario.getRoles().stream()
+                .findFirst()
+                .map(Rol::getIdRol)
+                .orElse(null);
+    }
 
-        if ("CLIENTE".equalsIgnoreCase(
-                filtroRol)) {
-
-            return usuarioService.listarPorRol(
-                    "CLIENTE");
+    private List<Usuario> obtenerUsuarios(String filtroRol) {
+        if (NombreRol.CLIENTE.coincideCon(filtroRol)) {
+            return usuarioService.listarPorRol(NombreRol.CLIENTE);
         }
-
-        if ("ENTRENADOR".equalsIgnoreCase(
-                filtroRol)) {
-
-            return usuarioService.listarPorRol(
-                    "ENTRENADOR");
+        if (NombreRol.ENTRENADOR.coincideCon(filtroRol)) {
+            return usuarioService.listarPorRol(NombreRol.ENTRENADOR);
         }
-
         return usuarioService.listarTodosConRoles();
     }
 
-    private String determinarSeccionActiva(
-            String filtroRol) {
-
-        if ("CLIENTE".equalsIgnoreCase(
-                filtroRol)) {
-
+    private String determinarSeccionActiva(String filtroRol) {
+        if (NombreRol.CLIENTE.coincideCon(filtroRol)) {
             return "clientes";
         }
-
-        if ("ENTRENADOR".equalsIgnoreCase(
-                filtroRol)) {
-
+        if (NombreRol.ENTRENADOR.coincideCon(filtroRol)) {
             return "empleados";
         }
-
         return "usuarios";
+    }
+
+    private void ejecutarAccion(
+            Runnable accion,
+            RedirectAttributes atributos,
+            String mensajeExito) {
+        try {
+            accion.run();
+            atributos.addFlashAttribute("todoOk", mensajeExito);
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            atributos.addFlashAttribute("error", ex.getMessage());
+        }
     }
 }

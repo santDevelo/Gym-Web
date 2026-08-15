@@ -32,17 +32,11 @@ public class Membresia implements Serializable {
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
-    /*
-     * Nueva relación con el catálogo de planes.
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_plan")
     private PlanMembresia planMembresia;
 
-    /*
-     * Campos anteriores. Se conservan temporalmente porque el dashboard
-     * y las consultas actuales todavía los utilizan.
-     */
+    // Se conservan mientras la base de datos mantenga las columnas heredadas.
     private String plan;
 
     private BigDecimal monto;
@@ -50,9 +44,6 @@ public class Membresia implements Serializable {
     @Column(name = "fecha_pago")
     private LocalDate fechaPago;
 
-    /*
-     * Nuevas fechas para controlar la vigencia de la membresía.
-     */
     @Column(name = "fecha_inicio")
     private LocalDate fechaInicio;
 
