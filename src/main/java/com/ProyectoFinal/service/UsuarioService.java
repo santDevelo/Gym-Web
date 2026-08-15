@@ -14,9 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+// Capa de servicio: reglas de negocio de Usuario (alta, edición, activar/
+// desactivar). El controlador nunca habla directo con el repository; siempre
+// pasa por aquí, que valida y delega en UsuarioRepository.
 @Service
 public class UsuarioService {
 
+    // Todas las dependencias son "private final" e inyectadas por constructor
+    // (sin @Autowired en campo), como se vio en clase.
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final FirebaseStorageService firebaseStorageService;
@@ -104,6 +109,9 @@ public class UsuarioService {
         return rolRepository.findAll();
     }
 
+    // Alta o edición de usuario desde el panel de administración. Distingue
+    // "crear" de "editar" según si formulario.idUsuario viene null (patrón
+    // visto en clase: alta vs. edición por id == null).
     @Transactional
     public Usuario guardarDesdeAdministracion(
             Usuario formulario,
@@ -140,6 +148,9 @@ public class UsuarioService {
         return usuario;
     }
 
+    // Si no hay id es un usuario nuevo; si hay id, se recupera el existente
+    // y solo se re-encripta la contraseña si el campo llegó con texto (dejarlo
+    // en blanco al editar significa "no cambiar la contraseña").
     private Usuario obtenerUsuarioParaGuardar(
             Usuario formulario) {
 
@@ -165,6 +176,8 @@ public class UsuarioService {
         return usuario;
     }
 
+    // La contraseña siempre se guarda cifrada con BCrypt (PasswordEncoder),
+    // nunca en texto plano
     private Usuario crearUsuario(String password) {
 
         if (!tieneTexto(password)) {
@@ -282,6 +295,8 @@ public class UsuarioService {
                 : null;
     }
 
+    // Si no vino archivo, no hace nada (la imagen es opcional). Si vino, la
+    // sube a Firebase Storage y guarda la URL resultante en el usuario.
     private void guardarImagen(
             Usuario usuario,
             MultipartFile imagenFile) {
@@ -312,6 +327,8 @@ public class UsuarioService {
         }
     }
 
+    // Activa o desactiva (borrado lógico) un usuario. No deja que el admin
+    // se desactive a sí mismo para evitar quedarse fuera del sistema.
     @Transactional
     public void cambiarEstado(
             Integer idUsuario,

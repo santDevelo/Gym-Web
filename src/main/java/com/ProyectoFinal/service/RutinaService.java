@@ -15,6 +15,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Capa de servicio: reglas de negocio de Rutina y sus EjercicioRutina.
+// Reutilizada tanto por el entrenador (gestiona la rutina de cualquier
+// cliente) como por el cliente (gestiona solo la suya): así lo pide el
+// CONTEXTO_FITSYSTEM del proyecto, para no duplicar Service/Repository por rol.
 @Service
 public class RutinaService {
 
@@ -48,6 +52,8 @@ public class RutinaService {
                 .findByActivaTrueOrderByClienteNombreAscFechaAsignacionDesc();
     }
 
+    // Clientes con membresía vigente (activa y dentro de las fechas), a
+    // quienes sí se les puede crear o mantener una rutina
     @Transactional(readOnly = true)
     public List<Usuario> listarClientesConMembresiaActiva() {
 
@@ -65,6 +71,8 @@ public class RutinaService {
                 .toList();
     }
 
+    // De los clientes con membresía activa, deja solo los que todavía NO
+    // tienen una rutina activa (para el selector del formulario "Agregar rutina")
     @Transactional(readOnly = true)
     public List<Usuario> listarClientesDisponibles() {
 
@@ -76,6 +84,9 @@ public class RutinaService {
                 .toList();
     }
 
+    // Crea la rutina de un cliente, validando: cliente activo con rol CLIENTE,
+    // membresía activa y vigente, y que no tenga ya otra rutina activa (solo
+    // una rutina activa por cliente a la vez)
     @Transactional
     public Rutina crearRutina(
             Integer idCliente,
@@ -139,6 +150,8 @@ public class RutinaService {
         return rutinaRepository.save(rutina);
     }
 
+    // Al borrar la rutina, sus ejercicios se eliminan solos por la relación
+    // en cascada (orphanRemoval) definida en Rutina.ejercicios
     @Transactional
     public void eliminarRutina(
             Integer idRutina) {
@@ -162,6 +175,9 @@ public class RutinaService {
         rutinaRepository.delete(rutina);
     }
 
+    // idUsuario es el cliente dueño de la rutina (si lo llama el propio
+    // cliente, es su id; si lo llama el entrenador, es el id que eligió en el
+    // formulario). El nuevo ejercicio se agrega al final (mayor orden + 1).
     @Transactional
     public EjercicioRutina agregarEjercicio(
             Integer idUsuario,
@@ -282,6 +298,8 @@ public class RutinaService {
         rutinaRepository.save(rutina);
     }
 
+    // Punto único para ubicar "la rutina sobre la que se está trabajando";
+    // lanza error si el cliente no tiene ninguna rutina activa
     private Rutina obtenerRutinaActiva(
             Integer idUsuario) {
 
@@ -382,6 +400,8 @@ public class RutinaService {
         }
     }
 
+    // Una membresía cuenta como activa si su estado es ACTIVA y hoy cae
+    // entre fecha de inicio y fecha de vencimiento (fechas null = sin límite)
     private boolean tieneMembresiaActiva(
             Membresia membresia) {
 

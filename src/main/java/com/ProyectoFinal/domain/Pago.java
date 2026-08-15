@@ -16,6 +16,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
+// Entidad JPA para la tabla "pago": historial manual de pagos (FitSystem no
+// procesa pagos en línea, solo deja registro de que el cliente pagó). Cada
+// pago registrado actualiza también la vigencia de la Membresia relacionada.
 @Data
 @Entity
 @Table(name = "pago")

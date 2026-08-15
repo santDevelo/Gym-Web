@@ -16,6 +16,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
+// Entidad JPA para la tabla "membresia": relaciona a un cliente con su plan
+// vigente (fechas y estado). Cada vez que se asigna o renueva una membresía se
+// actualiza esta misma fila; el historial de pagos vive aparte, en Pago.
 @Data
 @Entity
 @Table(name = "membresia")

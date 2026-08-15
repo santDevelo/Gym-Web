@@ -9,6 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Capa de servicio para el auto-registro público (formulario "/registro").
+// A diferencia del alta hecha por un admin, aquí el rol siempre es CLIENTE
+// y no se permite escoger otro.
 @Service
 public class RegistroService {
 
@@ -26,6 +29,9 @@ public class RegistroService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Registra una cuenta nueva desde el formulario público. Devuelve false
+    // (en vez de lanzar excepción) cuando los datos no son válidos o el
+    // usuario/correo ya existe, para que el controlador decida qué mensaje mostrar.
     @Transactional
     public boolean crearUsuario(Usuario usuario) {
 
@@ -35,6 +41,7 @@ public class RegistroService {
             return false;
         }
 
+        // Todo el que se registra por este formulario queda como CLIENTE
         Rol rolCliente = rolRepository
                 .findByRol("CLIENTE")
                 .orElseThrow(() ->

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+// Controlador de la página pública de inicio ("/"), la primera que ve
+// cualquier visitante sin necesidad de iniciar sesión.
 @Controller
 public class IndexController {
 

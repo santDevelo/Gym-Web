@@ -12,6 +12,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Capa de servicio: registrar y eliminar pagos del historial manual.
+// Registrar un pago también actualiza la vigencia de la Membresia asociada
+// (fecha de vencimiento, monto, estado), como explica CONTEXTO_FITSYSTEM.
 @Service
 public class PagoService {
 
@@ -66,6 +69,7 @@ public class PagoService {
 
         LocalDate fechaActual = LocalDate.now();
 
+        // Crea la fila del historial de pagos
         Pago pago = new Pago();
 
         pago.setUsuario(membresia.getUsuario());
@@ -76,6 +80,7 @@ public class PagoService {
         pago.setMonto(monto);
         pago.setMetodoPago(metodoPago);
 
+        // Y además renueva la membresía del cliente con la nueva fecha de vencimiento
         membresia.setFechaPago(fechaActual);
         membresia.setFechaVencimiento(fechaProximoPago);
         membresia.setEstado(EstadoMembresia.ACTIVA);

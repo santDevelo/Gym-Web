@@ -12,6 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+// Configura el bean de Google Cloud Storage (Firebase Storage) a partir de
+// la credencial JSON de la cuenta de servicio empaquetada en resources.
+// FirebaseStorageService recibe este bean por inyección de constructor.
 @Configuration
 public class StorageConfig {
 

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Controlador del auto-registro público (ruta libre, sin autenticación,
+// ver tabla "ruta": "/registro" y "/registro/**" con requiere_rol = 0).
 @Controller
 @RequestMapping("/registro")
 public class RegistroController {
@@ -22,6 +24,7 @@ public class RegistroController {
         this.registroService = registroService;
     }
 
+    // Muestra el formulario vacío
     @GetMapping
     public String nuevo(
             Usuario usuario
@@ -29,6 +32,8 @@ public class RegistroController {
         return "auth/registro";
     }
 
+    // Procesa el formulario. Usa RedirectAttributes (flash attributes) para
+    // mostrar mensajes de éxito/error luego del redirect (patrón POST-Redirect-GET).
     @PostMapping
     public String crearUsuario(
             @Valid Usuario usuario,
@@ -36,6 +41,7 @@ public class RegistroController {
             RedirectAttributes redirectAttributes
     ) {
 
+        // @Valid + BindingResult: si @NotBlank/@Email fallan, no se llega al service
         if (bindingResult.hasErrors()) {
 
             redirectAttributes.addFlashAttribute(

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.Data;
 
+// Entidad JPA para la tabla "rol" (catálogo simple: ADMINISTRADOR, ENTRENADOR,
+// CLIENTE). Se relaciona con Usuario mediante la tabla intermedia usuario_rol.
 @Data
 @Entity
 @Table(name = "rol")

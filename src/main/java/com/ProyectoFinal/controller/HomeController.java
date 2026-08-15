@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+// Controlador de "/home", equivalente público a "/" (ver ruta pública en la
+// tabla "ruta"). Reutiliza la misma vista "index".
 @Controller
 public class HomeController {
 

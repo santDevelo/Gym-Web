@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Controlador de Rutina y EjercicioRutina. Atiende tanto las rutas del
+// cliente ("/cliente/rutina/...", solo su propia rutina) como las del
+// entrenador ("/entrenador/rutinas/...", cualquier cliente), reutilizando el
+// mismo RutinaService en vez de duplicar controlador por rol.
 @Controller
 public class RutinaController {
 

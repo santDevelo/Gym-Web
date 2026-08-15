@@ -15,6 +15,9 @@ import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
 
+// Entidad JPA para la tabla "asistencia": marca de entrada/salida de un
+// cliente en el gimnasio. La combinación (id_cliente, fecha) es única en BD
+// (uk_asistencia_cliente_fecha): solo una asistencia por cliente por día.
 @Getter
 @Setter
 @Entity

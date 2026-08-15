@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+// Entidad JPA para la tabla "home": guarda la imagen que se muestra en la
+// portada pública (rutas "/" y "/home"). Solo existe una fila (id = 1).
 @Entity
 
 public class Home {

@@ -25,6 +25,12 @@
 
         </div>
 
+        <div class="alert alert-danger"
+             th:if="${error != null}"
+             th:text="${error}">
+            No fue posible crear la cuenta.
+        </div>
+
         <form th:action="@{/registro}" method="post">
 
             <div class="mb-3">

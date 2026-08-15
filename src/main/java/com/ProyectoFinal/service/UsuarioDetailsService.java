@@ -12,6 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Implementación de UserDetailsService que Spring Security usa para
+// autenticar contra la tabla usuario en BD (en vez del InMemoryUserDetailsManager
+// de las primeras clases de seguridad). Se registra con el nombre de bean
+// "userDetailsService" para que Spring Security lo tome automáticamente.
 @Service("userDetailsService")
 public class UsuarioDetailsService
         implements UserDetailsService {
@@ -27,12 +31,14 @@ public class UsuarioDetailsService
         this.session = session;
     }
 
+    // Spring Security llama este método en cada intento de login
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(
             String username
     ) throws UsernameNotFoundException {
 
+        // Solo usuarios activos pueden autenticarse
         Usuario usuario = usuarioRepository
                 .findByUsernameAndActivoTrue(username)
                 .orElseThrow(() ->
@@ -42,12 +48,15 @@ public class UsuarioDetailsService
                         )
                 );
 
+        // Guarda la foto de perfil en la sesión para no consultarla en cada
+        // petición (se usa en el header del dashboard)
         session.removeAttribute("imagenUsuario");
         session.setAttribute(
                 "imagenUsuario",
                 usuario.getRutaImagen()
         );
 
+        // Spring Security espera los roles con el prefijo "ROLE_"
         var autoridades = usuario.getRoles()
                 .stream()
                 .map(rol ->

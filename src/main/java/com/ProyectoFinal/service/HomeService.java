@@ -5,6 +5,7 @@ import com.ProyectoFinal.repository.HomeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Capa de servicio para Home (imagen de portada pública).
 @Service
 public class HomeService {
 
@@ -14,7 +15,8 @@ public class HomeService {
         this.homeRepository = homeRepository;
     }
 
-   
+
+    // Siempre se busca el registro con id = 1: solo existe una fila de portada
     @Transactional(readOnly = true)
     public Home getHomePrincipal() {
         return homeRepository.findById(1L)

@@ -14,6 +14,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Capa de servicio: reglas de negocio de Membresia (asignar plan a un
+// cliente, calcular ingresos del mes, cancelar membresía, etc.).
 @Service
 public class MembresiaService {
 
@@ -45,6 +47,8 @@ public class MembresiaService {
         return membresiaRepository.countByEstado(estado);
     }
 
+    // Suma los montos pagados entre el primer y el último día del mes actual,
+    // usado en la tarjeta "Ingresos del mes" del dashboard del administrador
     @Transactional(readOnly = true)
     public BigDecimal ingresosDelMes() {
 

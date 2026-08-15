@@ -26,6 +26,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Controlador central del proyecto: un único dashboard a nivel de código
+// ("/dashboard") que muestra contenido distinto según el rol del usuario
+// autenticado (sec:authorize en la vista), en vez de tener un controlador
+// separado por rol (regla acordada en CONTEXTO_FITSYSTEM). También agrupa
+// aquí las pantallas de membresía, pagos y planes por ser parte del mismo
+// panel administrativo/del cliente.
 @Controller
 public class DashboardController {
 
@@ -52,6 +58,8 @@ public class DashboardController {
         this.rutinaService = rutinaService;
     }
 
+    // Arma las métricas del panel según el o los roles del usuario. Un mismo
+    // usuario puede entrar por más de un "if" si tuviera varios roles.
     @GetMapping({
         "/dashboard",
         "/dashboard/"
@@ -272,6 +280,8 @@ public String mostrarMembresiaCliente(
         return "entrenador/clientes";
     }
 
+    // "Progreso" no es una entidad propia: se calcula al vuelo combinando
+    // asistencias y ejercicios de cada cliente (así lo aclara CONTEXTO_FITSYSTEM)
     @GetMapping("/entrenador/progreso")
     public String mostrarProgresoEntrenador(
             Principal principal,
@@ -529,6 +539,8 @@ public String mostrarMembresiaCliente(
         return "redirect:/admin/pagos";
     }
 
+    // Principal.getName() da el username de la sesión; se busca el Usuario
+    // completo porque la vista necesita más que el nombre (roles, foto, etc.)
     private Usuario obtenerUsuarioAutenticado(
             Principal principal) {
 

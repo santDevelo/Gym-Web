@@ -19,6 +19,15 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+// Entidad JPA para la tabla "rutina": la rutina de ejercicios activa de un
+// cliente, asignada por un entrenador. Solo puede haber una rutina activa por
+// cliente a la vez (esa regla se valida en RutinaService, no aquí).
+//
+// Se usa @Getter/@Setter en vez de @Data a propósito: como esta clase tiene
+// una lista de EjercicioRutina y EjercicioRutina apunta de vuelta a Rutina
+// (relación bidireccional), un equals/hashCode/toString generado por @Data
+// en ambos lados terminaría llamándose uno a otro sin parar (recursión
+// infinita / StackOverflowError). @Getter/@Setter evita ese problema.
 @Getter
 @Setter
 @Entity
@@ -51,6 +60,9 @@ public class Rutina implements Serializable {
     @Column(nullable = false)
     private boolean activa;
 
+    // Relación uno a muchos con sus ejercicios. cascade = ALL + orphanRemoval
+    // hace que, al borrar la rutina o quitar un ejercicio de la lista, JPA
+    // borre también las filas de ejercicio_rutina sin tener que hacerlo a mano.
     @OneToMany(
             mappedBy = "rutina",
             fetch = FetchType.EAGER,

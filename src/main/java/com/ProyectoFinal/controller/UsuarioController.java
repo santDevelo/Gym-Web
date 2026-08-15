@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Controlador de administración de usuarios (solo ADMINISTRADOR, ver tabla
+// "ruta": "/usuario/**" requiere el rol 1). Orquesta usuario, su membresía
+// (si es cliente) y delega toda la lógica de negocio a los Service.
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -118,7 +121,8 @@ public class UsuarioController {
     }
 
     /*
-     * Mostrar formulario de modificación
+     * Mostrar formulario de modificación. Si el usuario es CLIENTE, además
+     * prepara los datos de su membresía para editarla en el mismo formulario.
      */
 
     @GetMapping("/modificar/{idUsuario}")
@@ -266,6 +270,9 @@ public class UsuarioController {
      * Datos compartidos por las vistas
      */
 
+    // Datos que todas las vistas de administración necesitan: el usuario
+    // autenticado (para el header), el catálogo de roles y qué sección del
+    // menú lateral queda marcada como activa
     private void cargarDatosComunes(
             Principal principal,
             Model model,
@@ -292,6 +299,8 @@ public class UsuarioController {
                 seccionActiva);
     }
 
+    // Cuando un cliente todavía no tiene membresía, arma una "en blanco" con
+    // valores por defecto (mes desde hoy) solo para precargar el formulario
     private Membresia crearMembresiaInicial(
             Usuario cliente) {
 

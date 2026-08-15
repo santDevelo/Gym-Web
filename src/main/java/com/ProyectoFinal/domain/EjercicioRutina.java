@@ -13,6 +13,10 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+// Entidad JPA para la tabla "ejercicio_rutina": un ejercicio dentro de una
+// Rutina (día, nombre, series, repeticiones). @Getter/@Setter en vez de @Data
+// por el mismo motivo que en Rutina: evitar recursión infinita en la relación
+// bidireccional rutina <-> ejercicios.
 @Getter
 @Setter
 @Entity
@@ -45,6 +49,7 @@ public class EjercicioRutina implements Serializable {
     @Column(length = 255)
     private String observaciones;
 
+    // Define el orden de despliegue dentro de la rutina (ver @OrderBy en Rutina)
     @Column(nullable = false)
     private Integer orden;
 }

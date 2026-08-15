@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Capa de servicio: reglas de negocio del catálogo de planes de membresía.
 @Service
 public class PlanMembresiaService {
 
@@ -34,6 +35,8 @@ public class PlanMembresiaService {
         return planMembresiaRepository.findById(idPlan);
     }
 
+    // Edita un plan existente (no se crean planes nuevos desde la pantalla
+    // de administración, solo se ajustan precio/descripción/activo).
     @Transactional
     public PlanMembresia actualizar(
             Integer idPlan,

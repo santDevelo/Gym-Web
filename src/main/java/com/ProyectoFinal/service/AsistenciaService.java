@@ -11,6 +11,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Capa de servicio: reglas de negocio de Asistencia (marcar entrada/salida
+// del cliente al gimnasio y consultar su historial).
 @Service
 public class AsistenciaService {
 
@@ -59,6 +61,9 @@ public class AsistenciaService {
                         idUsuario);
     }
 
+    // Registra una visita del cliente. La tabla tiene una restricción única
+    // (id_cliente, fecha) en BD; aquí se valida antes de insertar para poder
+    // mostrar un mensaje claro en vez de que falle con un error de MySQL.
     @Transactional
     public Asistencia agregar(
             Integer idUsuario,
@@ -92,6 +97,8 @@ public class AsistenciaService {
         return asistenciaRepository.save(asistencia);
     }
 
+    // Solo deja borrar la asistencia si pertenece al mismo cliente que la
+    // pide (evita que alguien borre el registro de otro cambiando el id)
     @Transactional
     public void eliminar(
             Integer idUsuario,

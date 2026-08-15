@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.Data;
 
+// Entidad JPA para la tabla "ruta": guarda en BD qué URL requiere qué rol.
+// SecurityConfig lee esta tabla al arrancar para armar el securityFilterChain
+// dinámicamente, en vez de tener las URLs escritas a mano en el código.
 @Data
 @Entity
 @Table(name = "ruta")
@@ -16,6 +19,7 @@ public class Ruta implements Serializable {
     @Column(name = "id_ruta")
     private Integer idRuta;
 
+    // Patrón de URL, por ejemplo "/admin/**"
     @Column(
             name = "ruta",
             length = 255,
@@ -23,6 +27,7 @@ public class Ruta implements Serializable {
     )
     private String ruta;
 
+    // Si es false, la ruta es pública (permitAll); si es true, exige el rol de "rol"
     @Column(name = "requiere_rol")
     private boolean requiereRol;
 

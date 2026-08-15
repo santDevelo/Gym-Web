@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Controlador de Asistencia: el propio cliente registra y consulta su
+// historial de entradas al gimnasio ("/cliente/asistencia/...").
 @Controller
 public class AsistenciaController {
 
