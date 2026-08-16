@@ -27,6 +27,19 @@ class ProyectoFinalApplicationTests {
     }
 
     @Test
+    void rutasPublicasUsanLaMismaVistaDeInicio() throws Exception {
+
+        for (String ruta : List.of("/", "/home")) {
+
+            mockMvc.perform(get(ruta))
+                    .andExpect(status().isOk())
+                    .andExpect(org.springframework.test.web.servlet
+                            .result.MockMvcResultMatchers.view()
+                            .name("index"));
+        }
+    }
+
+    @Test
     void cambioDeIdiomaSeConservaDuranteLaSesion() throws Exception {
 
         var sesion = new MockHttpSession();
