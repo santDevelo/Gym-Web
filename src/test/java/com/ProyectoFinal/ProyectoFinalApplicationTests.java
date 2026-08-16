@@ -27,6 +27,34 @@ class ProyectoFinalApplicationTests {
     }
 
     @Test
+    void cambioDeIdiomaSeConservaDuranteLaSesion() throws Exception {
+
+        var sesion = new MockHttpSession();
+
+        mockMvc.perform(get("/login")
+                .param("lang", "en")
+                .session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        org.hamcrest.Matchers.containsString(
+                                "Log in to your account")));
+
+        mockMvc.perform(get("/login").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        org.hamcrest.Matchers.containsString(
+                                "Log in to your account")));
+
+        mockMvc.perform(get("/login")
+                .param("lang", "fr")
+                .session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        org.hamcrest.Matchers.containsString(
+                                "Connectez-vous à votre compte")));
+    }
+
+    @Test
     void dashboardClienteSeRenderiza() throws Exception {
 
         var sesion = crearSesion(
@@ -51,6 +79,38 @@ class ProyectoFinalApplicationTests {
                         org.hamcrest.Matchers.not(
                                 org.hamcrest.Matchers.containsString(
                                 "Accesos rápidos"))));
+    }
+
+    @Test
+    void vistasClienteSeRenderizan() throws Exception {
+
+        var sesion = crearSesion("sebastian", "CLIENTE");
+
+        for (String ruta : List.of(
+                "/cliente/membresia",
+                "/cliente/rutina",
+                "/cliente/asistencia",
+                "/cliente/perfil")) {
+
+            mockMvc.perform(get(ruta).session(sesion))
+                    .andExpect(status().isOk());
+        }
+    }
+
+    @Test
+    void vistasAdministrativasSeRenderizan() throws Exception {
+
+        var sesion = crearSesion("amora", "ADMINISTRADOR");
+
+        for (String ruta : List.of(
+                "/dashboard",
+                "/usuario/listado",
+                "/admin/membresias",
+                "/admin/pagos")) {
+
+            mockMvc.perform(get(ruta).session(sesion))
+                    .andExpect(status().isOk());
+        }
     }
 
     @Test

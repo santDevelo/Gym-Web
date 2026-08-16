@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -20,11 +20,11 @@
 
         <div class="mb-4">
 
-            <h2 class="mb-1">
+            <h2 class="mb-1" th:text="#{entrenador.progresoTitulo}">
                 Progreso de clientes
             </h2>
 
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-0" th:text="#{entrenador.progresoDescripcionDetalle}">
                 Seguimiento basado en rutinas y asistencias registradas.
             </p>
 
@@ -39,7 +39,7 @@
                     <div class="d-flex justify-content-between">
 
                         <div>
-                            <small class="text-muted">Clientes activos</small>
+                            <small class="text-muted" th:text="#{entrenador.clientesTitulo}">Clientes activos</small>
                             <h3 class="mb-0"
                                 th:text="${#lists.size(clientes)}">0</h3>
                         </div>
@@ -59,7 +59,7 @@
                     <div class="d-flex justify-content-between">
 
                         <div>
-                            <small class="text-muted">Visitas este mes</small>
+                            <small class="text-muted" th:text="#{entrenador.visitasMes}">Visitas este mes</small>
                             <h3 class="mb-0"
                                 th:text="${totalAsistenciasMes}">0</h3>
                         </div>
@@ -80,7 +80,7 @@
                     <div class="d-flex justify-content-between">
 
                         <div>
-                            <small class="text-muted">Clientes con rutina</small>
+                            <small class="text-muted" th:text="#{entrenador.clientesConRutina}">Clientes con rutina</small>
                             <h3 class="mb-0"
                                 th:text="${clientesConRutina}">0</h3>
                         </div>
@@ -100,7 +100,7 @@
 
             <div class="card-header bg-white p-3">
 
-                <h5 class="mb-0">
+                <h5 class="mb-0" th:text="#{entrenador.seguimiento}">
                     Seguimiento de actividad
                 </h5>
 
@@ -115,11 +115,11 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th class="ps-4">Cliente</th>
-                                <th>Asistencias del mes</th>
-                                <th>Última visita</th>
-                                <th>Ejercicios asignados</th>
-                                <th class="pe-4">Actividad mensual</th>
+                                <th class="ps-4" th:text="#{comun.cliente}">Cliente</th>
+                                <th th:text="#{entrenador.asistenciasMes}">Asistencias del mes</th>
+                                <th th:text="#{entrenador.ultimaVisita}">Última visita</th>
+                                <th th:text="#{dashboard.entrenador.ejerciciosAsignados}">Ejercicios asignados</th>
+                                <th class="pe-4" th:text="#{entrenador.actividadMensual}">Actividad mensual</th>
                             </tr>
 
                         </thead>
@@ -148,7 +148,7 @@
                                              ? #temporals.format(
                                              ultima.fecha,
                                              'dd/MM/yyyy')
-                                             : 'Sin asistencias'}">
+                                             : #messages.msg('entrenador.sinAsistencias')}">
                                     12/08/2026
                                 </td>
 
@@ -159,20 +159,20 @@
                                 <td class="pe-4">
 
                                     <span class="badge"
-                                          th:classappend="${visitas >= 8}
+                                          th:classappend="${visitas >= 8
                                                            ? ' text-bg-success'
-                                                           : (${visitas >= 4}
+                                                           : (visitas >= 4
                                                            ? ' text-bg-primary'
-                                                           : (${visitas > 0}
+                                                           : (visitas > 0
                                                            ? ' text-bg-warning'
-                                                           : ' text-bg-secondary'))"
-                                          th:text="${visitas >= 8}
-                                                   ? 'CONSTANTE'
-                                                   : (${visitas >= 4}
-                                                   ? 'EN PROGRESO'
-                                                   : (${visitas > 0}
-                                                   ? 'INICIO'
-                                                   : 'SIN ACTIVIDAD'))">
+                                                           : ' text-bg-secondary'))}"
+                                          th:text="${visitas >= 8
+                                                   ? #messages.msg('entrenador.constante')
+                                                   : (visitas >= 4
+                                                   ? #messages.msg('entrenador.enProgreso')
+                                                   : (visitas > 0
+                                                   ? #messages.msg('entrenador.inicio')
+                                                   : #messages.msg('entrenador.sinActividad')))}">
                                         SIN ACTIVIDAD
                                     </span>
 
@@ -197,9 +197,9 @@
 
                 <i class="fa-solid fa-chart-line fs-1 text-purple mb-3"></i>
 
-                <h4>No hay datos de progreso</h4>
+                <h4 th:text="#{entrenador.sinProgreso}">No hay datos de progreso</h4>
 
-                <p class="text-muted mb-0">
+                <p class="text-muted mb-0" th:text="#{entrenador.sinProgresoDetalle}">
                     El seguimiento aparecerá cuando existan clientes activos.
                 </p>
 

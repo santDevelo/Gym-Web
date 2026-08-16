@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
+// Representa una entrada inmutable del historial manual de pagos del gimnasio.
 @Data
 @Entity
 @Table(name = "pago")

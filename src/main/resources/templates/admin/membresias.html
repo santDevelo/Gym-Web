@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{general/fragmentos :: head}">
@@ -22,8 +22,8 @@
         <div class="container-fluid py-4">
 
             <div class="mb-4">
-                <h3 class="mb-1">Membresías</h3>
-                <p class="text-muted mb-0">
+                <h3 class="mb-1" th:text="#{membresia.titulo}">Membresías</h3>
+                <p class="text-muted mb-0" th:text="#{membresia.descripcionPlanes}">
                     Consulta y modifica los planes disponibles en FitSystem.
                 </p>
             </div>
@@ -54,8 +54,8 @@
                                                       ? ' bg-success'
                                                       : ' bg-secondary'"
                                       th:text="${plan.activo
-                                                ? 'Activo'
-                                                : 'Inactivo'}">
+                                                ? #messages.msg('comun.activo')
+                                                : #messages.msg('comun.inactivo')}">
                                     Estado
                                 </span>
 
@@ -76,7 +76,7 @@
                                         1,
                                         'COMMA',
                                         0,
-                                        'POINT')} / mes + IVA|">
+                                        'POINT')} ${#messages.msg('membresia.porMesIva')}|">
                                 ₡0 / mes + IVA
                             </p>
 
@@ -86,7 +86,7 @@
                                     th:data-bs-target="|#editarPlan${plan.idPlan}|">
 
                                 <i class="fa-solid fa-pen-to-square me-2"></i>
-                                Editar
+                                <span th:text="#{accion.editar}">Editar</span>
 
                             </button>
 
@@ -105,14 +105,14 @@
 
                                 <div class="modal-header">
 
-                                    <h5 class="modal-title">
+                                    <h5 class="modal-title" th:text="#{membresia.editarMembresia}">
                                         Editar membresía
                                     </h5>
 
                                     <button type="button"
                                             class="btn-close"
                                             data-bs-dismiss="modal"
-                                            aria-label="Cerrar">
+                                            th:aria-label="#{accion.cerrar}">
                                     </button>
 
                                 </div>
@@ -129,7 +129,8 @@
                                         <div class="mb-3">
 
                                             <label th:for="|nombrePlan${plan.idPlan}|"
-                                                   class="form-label">
+                                                   class="form-label"
+                                                   th:text="#{comun.nombre}">
                                                 Nombre
                                             </label>
 
@@ -146,7 +147,8 @@
                                         <div class="mb-3">
 
                                             <label th:for="|descripcionPlan${plan.idPlan}|"
-                                                   class="form-label">
+                                                   class="form-label"
+                                                   th:text="#{comun.descripcion}">
                                                 Descripción
                                             </label>
 
@@ -163,7 +165,8 @@
                                         <div class="mb-3">
 
                                             <label th:for="|precioPlan${plan.idPlan}|"
-                                                   class="form-label">
+                                                   class="form-label"
+                                                   th:text="#{membresia.precioMensual}">
                                                 Precio mensual
                                             </label>
 
@@ -194,7 +197,8 @@
                                                    th:checked="${plan.activo}">
 
                                             <label th:for="|activoPlan${plan.idPlan}|"
-                                                   class="form-check-label">
+                                                   class="form-check-label"
+                                                   th:text="#{membresia.planActivo}">
                                                 Plan activo
                                             </label>
 
@@ -206,7 +210,8 @@
 
                                         <button type="button"
                                                 class="btn btn-secondary"
-                                                data-bs-dismiss="modal">
+                                                data-bs-dismiss="modal"
+                                                th:text="#{accion.cancelar}">
                                             Cancelar
                                         </button>
 
@@ -216,7 +221,7 @@
                                             <i class="fa-solid
                                                       fa-floppy-disk me-2"></i>
 
-                                            Guardar cambios
+                                            <span th:text="#{accion.guardarCambios}">Guardar cambios</span>
 
                                         </button>
 
@@ -235,7 +240,8 @@
             </div>
 
             <div th:if="${planes == null or planes.empty}"
-                 class="alert alert-info">
+                 class="alert alert-info"
+                 th:text="#{membresia.sinPlanes}">
                 No hay planes registrados todavía.
             </div>
 

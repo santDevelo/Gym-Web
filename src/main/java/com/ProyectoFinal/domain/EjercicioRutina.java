@@ -13,6 +13,7 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+// Representa un ejercicio concreto dentro de una rutina y su posición de visualización.
 @Getter
 @Setter
 @Entity

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.Data;
 
+// Representa un rol persistente utilizado para autorización y visibilidad de opciones.
 @Data
 @Entity
 @Table(name = "rol")

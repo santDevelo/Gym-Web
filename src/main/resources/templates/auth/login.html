@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{general/fragmentos :: head}">
@@ -7,6 +7,10 @@
 </head>
 
 <body class="login-bg">
+
+<div class="position-fixed top-0 end-0 m-3">
+    <div th:replace="~{general/fragmentos :: idiomas}"></div>
+</div>
 
 <div class="container vh-100
             d-flex justify-content-center
@@ -24,7 +28,7 @@
                 FitSystem
             </h1>
 
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-0" th:text="#{auth.iniciarCuenta}">
                 Inicia sesión en tu cuenta
             </p>
 
@@ -35,8 +39,7 @@
 
             <div class="mb-3">
 
-                <label for="username"
-                       class="form-label">
+                <label for="username" class="form-label" th:text="#{auth.usuario}">
                     Usuario
                 </label>
 
@@ -52,8 +55,7 @@
 
             <div class="mb-4">
 
-                <label for="password"
-                       class="form-label">
+                <label for="password" class="form-label" th:text="#{auth.contrasena}">
                     Contraseña
                 </label>
 
@@ -68,7 +70,7 @@
 
             <div th:if="${param.error}"
                  class="alert alert-danger text-center"
-                 role="alert">
+                 role="alert" th:text="#{auth.credencialesInvalidas}">
 
                 Usuario o contraseña incorrectos.
 
@@ -76,7 +78,7 @@
 
             <div th:if="${param.logout}"
                  class="alert alert-success text-center"
-                 role="alert">
+                 role="alert" th:text="#{auth.sesionCerrada}">
 
                 La sesión se cerró correctamente.
 
@@ -98,7 +100,7 @@
                 <i class="fa-solid fa-right-to-bracket me-2">
                 </i>
 
-                Iniciar sesión
+                <span th:text="#{auth.iniciarSesion}">Iniciar sesión</span>
 
             </button>
 
@@ -108,13 +110,13 @@
 
         <div class="text-center">
 
-            <p class="mb-2">
+            <p class="mb-2" th:text="#{auth.sinCuenta}">
                 ¿No tienes una cuenta?
             </p>
 
             <a th:href="@{/registro}"
                class="text-decoration-none
-                      fw-bold text-purple">
+                      fw-bold text-purple" th:text="#{auth.registrateAqui}">
 
                 Regístrate aquí
 
@@ -124,8 +126,7 @@
 
         <div class="text-center mt-3">
 
-            <a th:href="@{/}"
-               class="text-decoration-none">
+            <a th:href="@{/}" class="text-decoration-none" th:text="#{auth.volverInicio}">
 
                 ← Volver al inicio
 

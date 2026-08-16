@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Atiende las solicitudes de la sección de asistencia del cliente.
+// Delega las validaciones y el acceso a datos en AsistenciaService.
 @Controller
 public class AsistenciaController {
 
@@ -84,12 +86,14 @@ public class AsistenciaController {
         return REDIRECT_ASISTENCIA;
     }
 
+    // Obtiene el usuario de la sesión para no confiar en identificadores enviados por el navegador.
     private Usuario obtenerUsuarioAutenticado(Principal principal) {
         return usuarioService.buscarPorUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException(
                         "El usuario autenticado no existe."));
     }
 
+    // Convierte el resultado de una operación en los mensajes mostrados después de redirigir.
     private void ejecutarAccion(
             Runnable accion,
             RedirectAttributes atributos,

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -24,7 +24,7 @@
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="alert"
-                        aria-label="Cerrar">
+                        th:attr="aria-label=#{accion.cerrar}">
                 </button>
 
             </div>
@@ -43,7 +43,7 @@
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="alert"
-                        aria-label="Cerrar">
+                        th:attr="aria-label=#{accion.cerrar}">
                 </button>
 
             </div>
@@ -64,11 +64,11 @@
 
                 <div>
 
-                    <h3 class="mb-1">
+                    <h3 class="mb-1" th:text="#{usuario.administracion}">
                         Administración de usuarios
                     </h3>
 
-                    <p class="text-muted mb-0">
+                    <p class="text-muted mb-0" th:text="#{usuario.descripcion}">
                         Gestiona los usuarios registrados en FitSystem.
                     </p>
 
@@ -80,7 +80,7 @@
                         data-bs-target="#agregarUsuarioModal">
 
                     <i class="fa-solid fa-user-plus me-2"></i>
-                    Agregar usuario
+                    <span th:text="#{usuario.agregar}">Agregar usuario</span>
 
                 </button>
 
@@ -108,14 +108,14 @@
                             <i class="fa-solid fa-user-plus
                                       text-purple me-2"></i>
 
-                            Nuevo usuario
+                            <span th:text="#{usuario.nuevo}">Nuevo usuario</span>
 
                         </h5>
 
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
-                                aria-label="Cerrar">
+                                th:attr="aria-label=#{accion.cerrar}">
                         </button>
 
                     </div>
@@ -131,8 +131,8 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="usernameNuevo"
-                                           class="form-label">
+                                    <label for="usernameNuevo" class="form-label"
+                                           th:text="#{usuario.nombreUsuario}">
                                         Nombre de usuario
                                     </label>
 
@@ -147,8 +147,8 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="passwordNuevo"
-                                           class="form-label">
+                                    <label for="passwordNuevo" class="form-label"
+                                           th:text="#{auth.contrasena}">
                                         Contraseña
                                     </label>
 
@@ -163,8 +163,7 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="nombreNuevo"
-                                           class="form-label">
+                                    <label for="nombreNuevo" class="form-label" th:text="#{auth.nombre}">
                                         Nombre
                                     </label>
 
@@ -179,8 +178,7 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="apellidosNuevo"
-                                           class="form-label">
+                                    <label for="apellidosNuevo" class="form-label" th:text="#{auth.apellidos}">
                                         Apellidos
                                     </label>
 
@@ -195,8 +193,7 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="correoNuevo"
-                                           class="form-label">
+                                    <label for="correoNuevo" class="form-label" th:text="#{usuario.correo}">
                                         Correo
                                     </label>
 
@@ -210,8 +207,7 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="telefonoNuevo"
-                                           class="form-label">
+                                    <label for="telefonoNuevo" class="form-label" th:text="#{auth.telefono}">
                                         Teléfono
                                     </label>
 
@@ -225,8 +221,7 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="rolNuevo"
-                                           class="form-label">
+                                    <label for="rolNuevo" class="form-label" th:text="#{usuario.rol}">
                                         Rol
                                     </label>
 
@@ -235,13 +230,13 @@
                                             class="form-select"
                                             required>
 
-                                        <option value="">
+                                        <option value="" th:text="#{usuario.seleccionarRol}">
                                             Seleccione un rol
                                         </option>
 
                                         <option th:each="rol : ${roles}"
                                                 th:value="${rol.idRol}"
-                                                th:text="${rol.rol}">
+                                                th:text="#{__${'rol.' + #strings.toLowerCase(rol.rol)}__}">
                                             Rol
                                         </option>
 
@@ -251,8 +246,7 @@
 
                                 <div class="col-md-6">
 
-                                    <label for="imagenNueva"
-                                           class="form-label">
+                                    <label for="imagenNueva" class="form-label" th:text="#{usuario.imagen}">
                                         Imagen
                                     </label>
 
@@ -275,8 +269,8 @@
                                                class="form-check-input"
                                                checked>
 
-                                        <label for="activoNuevo"
-                                               class="form-check-label">
+                                        <label for="activoNuevo" class="form-check-label"
+                                               th:text="#{usuario.usuarioActivo}">
                                             Usuario activo
                                         </label>
 
@@ -292,7 +286,7 @@
 
                             <button type="button"
                                     class="btn btn-secondary"
-                                    data-bs-dismiss="modal">
+                                    data-bs-dismiss="modal" th:text="#{accion.cancelar}">
 
                                 Cancelar
 
@@ -304,7 +298,7 @@
                                 <i class="fa-solid
                                           fa-floppy-disk me-2"></i>
 
-                                Guardar usuario
+                                <span th:text="#{usuario.guardar}">Guardar usuario</span>
 
                             </button>
 
@@ -332,12 +326,12 @@
                             d-flex justify-content-between
                             align-items-center py-3">
 
-                    <h5 class="mb-0">
+                    <h5 class="mb-0" th:text="#{usuario.registrados}">
                         Usuarios registrados
                     </h5>
 
                     <span class="badge bg-primary"
-                          th:text="|Total: ${totalUsuarios}|">
+                          th:text="#{comun.totalCantidad(${totalUsuarios})}">
                         Total: 0
                     </span>
 
@@ -354,12 +348,12 @@
                             <thead>
 
                                 <tr>
-                                    <th>Usuario</th>
-                                    <th>Nombre</th>
-                                    <th>Correo</th>
-                                    <th>Rol</th>
-                                    <th>Estado</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th th:text="#{usuario.username}">Usuario</th>
+                                    <th th:text="#{comun.nombre}">Nombre</th>
+                                    <th th:text="#{usuario.correo}">Correo</th>
+                                    <th th:text="#{usuario.rol}">Rol</th>
+                                    <th th:text="#{comun.estado}">Estado</th>
+                                    <th class="text-end" th:text="#{comun.acciones}">Acciones</th>
                                 </tr>
 
                             </thead>
@@ -378,7 +372,7 @@
                                                          and !#strings.isEmpty(
                                                          persona.rutaImagen)}"
                                                  th:src="${persona.rutaImagen}"
-                                                 alt="Usuario"
+                                             th:alt="#{usuario.imagen}"
                                                  class="rounded-circle"
                                                  style="width: 38px;
                                                         height: 38px;
@@ -406,16 +400,14 @@
                                         Nombre completo
                                     </td>
 
-                                    <td th:text="${persona.correo != null
-                                                  ? persona.correo
-                                                  : 'Sin correo'}">
+                                    <td th:text="${persona.correo != null ? persona.correo : #messages.msg('usuario.sinCorreo')}">
                                         correo@ejemplo.com
                                     </td>
 
                                     <td>
 
                                         <span th:each="rol : ${persona.roles}"
-                                              th:text="${rol.rol}"
+                                              th:text="#{__${'rol.' + #strings.toLowerCase(rol.rol)}__}"
                                               class="badge bg-primary me-1">
                                             Rol
                                         </span>
@@ -424,13 +416,13 @@
 
                                     <td>
 
-                                        <span th:if="${persona.activo}"
-                                              class="badge bg-success">
+                                        <span th:if="${persona.activo}" class="badge bg-success"
+                                              th:text="#{comun.activo}">
                                             Activo
                                         </span>
 
-                                        <span th:unless="${persona.activo}"
-                                              class="badge bg-secondary">
+                                        <span th:unless="${persona.activo}" class="badge bg-secondary"
+                                              th:text="#{comun.inactivo}">
                                             Inactivo
                                         </span>
 
@@ -445,7 +437,7 @@
                                             <i class="fa-solid
                                                       fa-pen-to-square"></i>
 
-                                            Modificar
+                                            <span th:text="#{accion.modificar}">Modificar</span>
 
                                         </a>
 
@@ -466,8 +458,8 @@
                                                           fa-power-off"></i>
 
                                                 <span th:text="${persona.activo
-                                                               ? 'Desactivar'
-                                                               : 'Activar'}">
+                                                               ? #messages.msg('accion.desactivar')
+                                                               : #messages.msg('accion.activar')}">
                                                     Estado
                                                 </span>
 
@@ -491,7 +483,7 @@
 
                         <i class="fa-solid fa-users fs-1 mb-3"></i>
 
-                        <p class="mb-0">
+                        <p class="mb-0" th:text="#{usuario.noRegistrados}">
                             No hay usuarios registrados.
                         </p>
 

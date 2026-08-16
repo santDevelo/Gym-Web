@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -24,11 +24,11 @@
         <!-- Título de la vista -->
         <div class="mb-4">
 
-            <h2 class="mb-1">
+            <h2 class="mb-1" th:text="#{membresia.miTitulo}">
                 Mi membresía
             </h2>
 
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-0" th:text="#{membresia.miDescripcion}">
                 Consulta la información de tu plan actual.
             </p>
 
@@ -64,7 +64,7 @@
 
                                 <div>
 
-                                    <p class="text-muted mb-1">
+                                    <p class="text-muted mb-1" th:text="#{membresia.planActual}">
                                         Plan actual
                                     </p>
 
@@ -95,7 +95,7 @@
 
                                     <div class="p-3 bg-light rounded">
 
-                                        <small class="text-muted d-block">
+                                        <small class="text-muted d-block" th:text="#{membresia.precioPlan}">
                                             Precio del plan
                                         </small>
 
@@ -120,7 +120,7 @@
 
                                     <div class="p-3 bg-light rounded">
 
-                                        <small class="text-muted d-block mb-1">
+                                        <small class="text-muted d-block mb-1" th:text="#{comun.estado}">
                                             Estado
                                         </small>
 
@@ -136,7 +136,7 @@
                                               }
                                               ? ' text-bg-warning'
                                               : ' text-bg-danger')"
-                                              th:text="${membresia.estado}">
+                                              th:text="#{__${'estado.' + #strings.toLowerCase(membresia.estado.name())}__}">
                                             ACTIVA
                                         </span>
 
@@ -163,18 +163,18 @@
                                 <i class="fa-solid fa-calendar-days
                                           text-purple me-2">
                                 </i>
-                                Fechas de la membresía
+                                <span th:text="#{membresia.fechas}">Fechas de la membresía</span>
                             </h5>
 
                             <div class="mb-4">
 
-                                <small class="text-muted d-block">
+                                <small class="text-muted d-block" th:text="#{membresia.fechaInicio}">
                                     Fecha de inicio
                                 </small>
 
                                 <strong th:text="${membresia.fechaInicio != null
                                                  ? membresia.fechaInicio
-                                                 : 'No registrada'}">
+                                                 : #messages.msg('comun.noRegistrada')}">
                                     2026-08-01
                                 </strong>
 
@@ -182,13 +182,13 @@
 
                             <div class="mb-4">
 
-                                <small class="text-muted d-block">
+                                <small class="text-muted d-block" th:text="#{membresia.ultimoPago}">
                                     Último pago registrado
                                 </small>
 
                                 <strong th:text="${membresia.fechaPago != null
                                                  ? membresia.fechaPago
-                                                 : 'No registrado'}">
+                                                 : #messages.msg('comun.noRegistrado')}">
                                     2026-08-01
                                 </strong>
 
@@ -196,14 +196,14 @@
 
                             <div>
 
-                                <small class="text-muted d-block">
+                                <small class="text-muted d-block" th:text="#{membresia.proximoPago}">
                                     Próximo pago o vencimiento
                                 </small>
 
                                 <strong class="text-purple"
                                         th:text="${membresia.fechaVencimiento != null
                                                  ? membresia.fechaVencimiento
-                                                 : 'No registrado'}">
+                                                 : #messages.msg('comun.noRegistrado')}">
                                     2026-09-01
                                 </strong>
 
@@ -224,8 +224,7 @@
                           text-purple me-2">
                 </i>
 
-                La administración del gimnasio gestiona los cambios
-                de plan y el registro de los pagos.
+                <span th:text="#{membresia.gestionAdmin}">La administración del gimnasio gestiona los cambios de plan y el registro de los pagos.</span>
 
             </div>
 
@@ -240,7 +239,7 @@
 
                     <button type="submit"
                             class="btn btn-sm btn-outline-danger px-3">
-                        Cancelar membresía
+                        <span th:text="#{membresia.cancelar}">Cancelar membresía</span>
 
                     </button>
 
@@ -255,8 +254,7 @@
 
                 <i class="fa-solid fa-circle-exclamation me-2"></i>
 
-                Tu membresía se encuentra inactiva. Comunícate con
-                la administración si deseas reactivarla.
+                <span th:text="#{membresia.inactivaDetalle}">Tu membresía se encuentra inactiva.</span>
 
             </div>
 
@@ -273,13 +271,12 @@
                               fs-1 text-purple mb-3">
                     </i>
 
-                    <h4>
+                    <h4 th:text="#{membresia.sinRegistro}">
                         No tienes una membresía registrada
                     </h4>
 
-                    <p class="text-muted mb-0">
-                        Comunícate con la administración del gimnasio
-                        para solicitar la asignación de un plan.
+                    <p class="text-muted mb-0" th:text="#{membresia.sinRegistroDetalle}">
+                        Comunícate con la administración del gimnasio para solicitar la asignación de un plan.
                     </p>
 
                 </div>

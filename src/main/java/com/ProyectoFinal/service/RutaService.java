@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Consulta las reglas de acceso almacenadas en la tabla de rutas.
 @Service
 public class RutaService {
 

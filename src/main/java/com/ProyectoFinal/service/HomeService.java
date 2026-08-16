@@ -5,6 +5,7 @@ import com.ProyectoFinal.repository.HomeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Consulta la información utilizada por la página pública de inicio.
 @Service
 public class HomeService {
 

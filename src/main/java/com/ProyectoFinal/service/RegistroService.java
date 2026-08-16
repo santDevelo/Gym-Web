@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Crea cuentas públicas con el rol CLIENTE.
+// Normaliza los datos, cifra la contraseña y evita usuarios o correos duplicados.
 @Service
 public class RegistroService {
 
@@ -41,6 +43,7 @@ public class RegistroService {
         return true;
     }
 
+    // Completa los valores que no deben ser controlados directamente por el formulario.
     private void prepararNuevoUsuario(Usuario usuario, Rol rolCliente) {
         usuario.setIdUsuario(null);
         usuario.setUsername(usuario.getUsername().trim());

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Gestiona el formulario público utilizado para registrar nuevos clientes.
 @Controller
 @RequestMapping("/registro")
 public class RegistroController {

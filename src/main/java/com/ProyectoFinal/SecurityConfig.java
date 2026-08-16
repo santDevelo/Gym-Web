@@ -10,7 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+// Configura autenticación, cierre de sesión y permisos por URL.
+// Las reglas de acceso se leen de la base de datos mediante RutaService.
 @Configuration
+
+
 public class SecurityConfig {
 
     @Bean
@@ -18,6 +22,7 @@ public class SecurityConfig {
             HttpSecurity http,
             @Lazy RutaService rutaService) throws Exception {
         http.authorizeHttpRequests(requests -> {
+            // Las rutas públicas y protegidas pueden cambiarse desde la tabla ruta.
             for (Ruta ruta : rutaService.listarRutas()) {
                 if (ruta.isRequiereRol()) {
                     requests.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
@@ -28,6 +33,7 @@ public class SecurityConfig {
             requests.anyRequest().authenticated();
         });
 
+        // Se utiliza el formulario propio de FitSystem en lugar del formulario de Spring.
         http.formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")

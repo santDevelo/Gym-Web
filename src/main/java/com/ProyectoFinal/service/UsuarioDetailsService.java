@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Adaptador entre los usuarios de FitSystem y Spring Security.
+// Carga las autoridades con el prefijo ROLE_ y conserva la imagen en la sesión.
 @Service("userDetailsService")
 public class UsuarioDetailsService implements UserDetailsService {
 

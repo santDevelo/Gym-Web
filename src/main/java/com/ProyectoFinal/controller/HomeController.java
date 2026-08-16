@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+// Muestra la página principal cuando se accede mediante la ruta alternativa /home.
 @Controller
 public class HomeController {
 

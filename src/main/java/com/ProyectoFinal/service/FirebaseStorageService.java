@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+// Guarda imágenes en Firebase Storage y devuelve una URL firmada para mostrarlas.
+// El archivo se envía directamente desde memoria, sin crear archivos temporales locales.
 @Service
 public class FirebaseStorageService {
 
@@ -44,6 +46,7 @@ public class FirebaseStorageService {
         return storage.signUrl(blobInfo, VIGENCIA_URL_DIAS, TimeUnit.DAYS).toString();
     }
 
+    // Genera un nombre estable para que cada usuario conserve una ubicación reconocible.
     private String crearNombreArchivo(String nombreOriginal, Integer id) {
         String extension = obtenerExtension(nombreOriginal);
         return "img" + String.format("%014d", id) + extension;

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+// Centraliza las consultas y operaciones administrativas de usuarios.
+// También cifra contraseñas, valida duplicados y delega el almacenamiento de imágenes.
 @Service
 public class UsuarioService {
 
@@ -113,6 +115,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new IllegalArgumentException("El rol seleccionado no existe."));
     }
 
+    // Decide si se debe crear una cuenta o actualizar una existente.
     private Usuario obtenerUsuarioParaGuardar(Usuario formulario) {
         if (formulario.getIdUsuario() == null) {
             return crearUsuario(formulario.getPassword());
@@ -161,6 +164,7 @@ public class UsuarioService {
         }
     }
 
+    // Permite conservar el username y correo actuales, pero evita usarlos en otra cuenta.
     private void validarDuplicados(Usuario formulario) {
         Integer idActual = formulario.getIdUsuario();
         String username = formulario.getUsername().trim();

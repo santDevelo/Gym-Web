@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Gestiona el listado, creación y modificación de usuarios desde administración.
+// La edición de la membresía se habilita únicamente cuando el usuario es cliente.
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -123,6 +125,7 @@ public class UsuarioController {
         return REDIRECT_LISTADO;
     }
 
+    // Agrega al modelo los datos compartidos por el listado y el formulario de modificación.
     private void cargarDatosComunes(
             Principal principal,
             Model model,
@@ -136,6 +139,7 @@ public class UsuarioController {
         model.addAttribute("seccionActiva", seccionActiva);
     }
 
+    // Prepara el formulario de membresía existente o uno nuevo con valores iniciales.
     private void cargarDatosMembresia(Model model, Usuario cliente) {
         Membresia membresia = membresiaService
                 .buscarUltimaPorUsuario(cliente.getIdUsuario())
@@ -163,6 +167,7 @@ public class UsuarioController {
                 .orElse(null);
     }
 
+    // Aplica el filtro recibido en la URL sin duplicar consultas en el controlador.
     private List<Usuario> obtenerUsuarios(String filtroRol) {
         if (NombreRol.CLIENTE.coincideCon(filtroRol)) {
             return usuarioService.listarPorRol(NombreRol.CLIENTE);
@@ -183,6 +188,7 @@ public class UsuarioController {
         return "usuarios";
     }
 
+    // Ejecuta una acción y prepara el mensaje que se mostrará después de la redirección.
     private void ejecutarAccion(
             Runnable accion,
             RedirectAttributes atributos,

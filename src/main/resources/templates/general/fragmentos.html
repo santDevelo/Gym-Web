@@ -1,6 +1,6 @@
 <head th:fragment="head">
     <meta charset="UTF-8">
-    <title>FitSystem - Membresías</title>
+    <title th:text="#{app.titulo}">FitSystem</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.7/css/bootstrap.min.css}" />
@@ -10,6 +10,19 @@
     <!-- Scripts -->
     <script th:src="@{/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js}"></script>
 </head>
+
+<div th:fragment="idiomas" class="dropdown">
+    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-language me-1"></i>
+        <span th:text="#{idioma.titulo}">Idioma</span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="?lang=es" th:text="#{idioma.espanol}">Español</a></li>
+        <li><a class="dropdown-item" href="?lang=en" th:text="#{idioma.ingles}">English</a></li>
+        <li><a class="dropdown-item" href="?lang=fr" th:text="#{idioma.frances}">Français</a></li>
+    </ul>
+</div>
 
 <header th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
@@ -22,22 +35,24 @@
 
             <div class="d-flex align-items-center gap-3 ms-auto">
 
+                <div th:replace="~{general/fragmentos :: idiomas}"></div>
+
                 <ul class="navbar-nav flex-row align-items-center gap-3 mb-0">
 
                     <li class="nav-item d-none d-md-block">
-                        <a class="nav-link fw-semibold" href="#">
+                        <a class="nav-link fw-semibold" href="#" th:text="#{inicio.nosotros}">
                             Nosotros
                         </a>
                     </li>
 
                     <li class="nav-item d-none d-md-block">
-                        <a class="nav-link fw-semibold" href="#">
+                        <a class="nav-link fw-semibold" href="#" th:text="#{inicio.promociones}">
                             Promociones
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-dark px-4" th:href="@{/acceso}">
+                        <a class="btn btn-dark px-4" th:href="@{/acceso}" th:text="#{inicio.inscribirse}">
                             ¡Inscríbete ya!
                         </a>
                     </li>
@@ -67,32 +82,37 @@
                 <span class="text-dark">Fit</span><span class="text-purple">System</span>
             </h5>
 
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                    th:attr="aria-label=#{accion.cerrar}"></button>
 
         </div>
 
         <div class="offcanvas-body">
 
-            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-4">
+            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-4"
+               th:text="#{inicio.inscribirse}">
                 ¡Inscríbete ya!
             </a>
 
             <ul class="list-unstyled">
 
                 <li class="mb-3">
-                    <a th:href="@{/login}" class="text-dark text-decoration-none fw-semibold">
+                    <a th:href="@{/login}" class="text-dark text-decoration-none fw-semibold"
+                       th:text="#{inicio.iniciarSesion}">
                         Iniciar Sesión
                     </a>
                 </li>
 
                 <li class="mb-3">
-                    <a th:href="@{/registro}" class="text-dark text-decoration-none fw-semibold">
+                    <a th:href="@{/registro}" class="text-dark text-decoration-none fw-semibold"
+                       th:text="#{inicio.registrarse}">
                         Registrarse
                     </a>
                 </li>
 
                 <li class="mb-3">
-                    <a th:href="@{/login}" class="text-dark text-decoration-none fw-semibold">
+                    <a th:href="@{/login}" class="text-dark text-decoration-none fw-semibold"
+                       th:text="#{rol.administrador}">
                         Administrador
                     </a>
                 </li>
@@ -112,7 +132,7 @@
         <div class="col-lg-5 d-flex">
 
             <img th:src="${imagenGimnasio}"
-                 alt="Imagen del gimnasio"
+                 th:alt="#{inicio.imagenGimnasio}"
                  class="img-fluid rounded shadow w-100"
                  style="height:100%; min-height:560px; object-fit:cover;">
 
@@ -122,7 +142,7 @@
 
             <div class="banner-plan text-center mb-4">
 
-                <h2 class="fw-bold text-uppercase mb-0">
+                <h2 class="fw-bold text-uppercase mb-0" th:text="#{inicio.elegirPlan}">
                     ELEGÍ TU PLAN
                 </h2>
 
@@ -137,29 +157,30 @@
 
                         <div class="card-body text-center">
 
-                            <h5 class="fw-bold">
+                            <h5 class="fw-bold" th:text="#{inicio.planCompleto}">
                                 Plan Completo
                             </h5>
 
-                            <p>
+                            <p th:text="#{inicio.planCompletoDescripcion}">
                                 El más completo de FitSystem
                             </p>
 
-                            <p class="fw-bold">
+                            <p class="fw-bold" th:text="#{inicio.precioCompleto}">
                                 ₡28,000 / mes + IVA
                             </p>
 
-                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3">
+                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3"
+                               th:text="#{inicio.inscribirse}">
                                 ¡Inscribite ya!
                             </a>
 
                             <ul class="list-unstyled text-start">
 
-                                <li><span class="check-purple">✓</span> Entrena en todas las sedes disponibles</li>
-                                <li><span class="check-purple">✓</span> Acceso ilimitado a todas las áreas</li>
-                                <li><span class="check-purple">✓</span> Zona premium (spa / recuperación)</li>
-                                <li><span class="check-purple">✓</span> Clases grupales diferenciadas</li>
-                                <li><span class="check-purple">✓</span> Rutinas personalizadas</li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioSedes}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioAreasIlimitadas}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioPremium}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioClases}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioRutinas}"></span></li>
 
                             </ul>
 
@@ -176,29 +197,30 @@
 
                         <div class="card-body text-center">
 
-                            <h5 class="fw-bold">
+                            <h5 class="fw-bold" th:text="#{inicio.planFit}">
                                 Plan Fit
                             </h5>
 
-                            <p>
+                            <p th:text="#{inicio.planFitDescripcion}">
                                 Para usuarios constantes
                             </p>
 
-                            <p class="fw-bold">
+                            <p class="fw-bold" th:text="#{inicio.precioFit}">
                                 ₡18,000 / mes + IVA
                             </p>
 
-                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3">
+                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3"
+                               th:text="#{inicio.inscribirse}">
                                 ¡Inscribite ya!
                             </a>
 
                             <ul class="list-unstyled text-start">
 
-                                <li><span class="check-purple">✓</span> Entrena en todas las sedes disponibles</li>
-                                <li><span class="check-purple">✓</span> Acceso ilimitado a todas las áreas</li>
-                                <li><span class="check-purple">✓</span> Zona premium (spa / recuperación)</li>
-                                <li><span class="check-purple">✓</span> Clases grupales diferenciadas</li>
-                                <li><span class="check-purple">✓</span> Rutinas personalizadas</li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioSedes}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioAreasIlimitadas}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioPremium}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioClases}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioRutinas}"></span></li>
 
                             </ul>
 
@@ -215,29 +237,30 @@
 
                         <div class="card-body text-center">
 
-                            <h5 class="fw-bold">
+                            <h5 class="fw-bold" th:text="#{inicio.planBasico}">
                                 Plan Básico
                             </h5>
 
-                            <p>
+                            <p th:text="#{inicio.planBasicoDescripcion}">
                                 El más económico de FitSystem
                             </p>
 
-                            <p class="fw-bold">
+                            <p class="fw-bold" th:text="#{inicio.precioBasico}">
                                 ₡12,000 / mes + IVA
                             </p>
 
-                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3">
+                            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3"
+                               th:text="#{inicio.inscribirse}">
                                 ¡Inscribite ya!
                             </a>
 
                             <ul class="list-unstyled text-start">
 
-                                <li><span class="check-purple">✓</span> Entrena en todas las sedes disponibles</li>
-                                <li><span class="check-purple">✓</span> Acceso limitado a todas las áreas</li>
-                                <li><span class="check-purple">✓</span> Zona premium (spa / recuperación)</li>
-                                <li><span class="check-purple">✓</span> Clases grupales diferenciadas</li>
-                                <li><span class="check-purple">✓</span> Rutinas personalizadas</li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioSedes}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioAreasLimitadas}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioPremium}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioClases}"></span></li>
+                                <li><span class="check-purple">✓</span> <span th:text="#{inicio.beneficioRutinas}"></span></li>
 
                             </ul>
 
@@ -259,7 +282,7 @@
 
     <div class="container text-center">
 
-        <small>
+        <small th:text="#{app.derechos}">
             &copy; 2026 FitSystem - Todos los derechos reservados
         </small>
 

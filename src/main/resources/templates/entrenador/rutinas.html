@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -23,11 +23,11 @@
 
             <div>
 
-                <h2 class="mb-1">
+                <h2 class="mb-1" th:text="#{rutina.entrenadorTitulo}">
                     Rutinas de clientes
                 </h2>
 
-                <p class="text-muted mb-0">
+                <p class="text-muted mb-0" th:text="#{rutina.entrenadorDescripcion}">
                     Consulta las rutinas activas y sus ejercicios asignados.
                 </p>
 
@@ -40,7 +40,7 @@
                         data-bs-toggle="modal"
                         data-bs-target="#modalAgregarRutina">
                     <i class="fa-solid fa-plus me-2"></i>
-                    Agregar rutina
+                    <span th:text="#{rutina.agregarRutina}">Agregar rutina</span>
                 </button>
 
             </div>
@@ -73,11 +73,11 @@
 
                         <div>
 
-                            <h5 class="modal-title">
+                            <h5 class="modal-title" th:text="#{rutina.agregarRutina}">
                                 Agregar rutina
                             </h5>
 
-                            <small class="text-muted">
+                            <small class="text-muted" th:text="#{rutina.clientesNoDisponibles}">
                                 Los clientes no disponibles aparecen
                                 deshabilitados en la lista.
                             </small>
@@ -87,7 +87,7 @@
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
-                                aria-label="Cerrar">
+                                th:aria-label="#{accion.cerrar}">
                         </button>
 
                     </div>
@@ -102,7 +102,8 @@
                                 <div class="mb-3">
 
                                     <label for="clienteRutina"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{comun.cliente}">
                                         Cliente
                                     </label>
 
@@ -111,7 +112,7 @@
                                             class="form-select"
                                             required>
 
-                                        <option value="">
+                                        <option value="" th:text="#{rutina.seleccionarCliente}">
                                             Seleccionar cliente
                                         </option>
 
@@ -127,9 +128,9 @@
                                                 th:text="${cliente.nombre + ' '
                                                          + cliente.apellidos
                                                          + (!membresiaActiva
-                                                         ? ' - Membresía inactiva'
+                                                         ? ' - ' + #messages.msg('rutina.membresiaInactiva')
                                                          : (!disponible
-                                                         ? ' - Ya tiene rutina activa'
+                                                         ? ' - ' + #messages.msg('rutina.yaTieneRutina')
                                                          : ''))}">
                                             Nombre del cliente
                                         </option>
@@ -141,7 +142,8 @@
                                 <div class="mb-3">
 
                                     <label for="fechaRutina"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{rutina.fechaAsignacion}">
                                         Fecha de asignación
                                     </label>
 
@@ -157,7 +159,8 @@
                                 <div class="mb-3">
 
                                     <label for="nombreRutina"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{rutina.nombre}">
                                         Nombre de la rutina
                                     </label>
 
@@ -166,7 +169,7 @@
                                            name="nombre"
                                            class="form-control"
                                            maxlength="80"
-                                           placeholder="Ejemplo: Rutina de fuerza inicial"
+                                           th:placeholder="#{rutina.ejemploNombre}"
                                            required>
 
                                 </div>
@@ -174,7 +177,8 @@
                                 <div class="mb-3">
 
                                     <label for="objetivoRutina"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{rutina.objetivo}">
                                         Objetivo
                                     </label>
 
@@ -183,14 +187,15 @@
                                            name="objetivo"
                                            class="form-control"
                                            maxlength="255"
-                                           placeholder="Ejemplo: Mejorar fuerza y resistencia">
+                                           th:placeholder="#{rutina.ejemploObjetivo}">
 
                                 </div>
 
                                 <div>
 
                                     <label for="descripcionRutina"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{comun.descripcion}">
                                         Descripción
                                     </label>
 
@@ -199,7 +204,7 @@
                                               class="form-control"
                                               rows="3"
                                               maxlength="500"
-                                              placeholder="Indicaciones generales de la rutina"></textarea>
+                                              th:placeholder="#{rutina.indicacionesGenerales}"></textarea>
 
                                 </div>
 
@@ -211,12 +216,14 @@
 
                             <button type="button"
                                     class="btn btn-light"
-                                    data-bs-dismiss="modal">
+                                    data-bs-dismiss="modal"
+                                    th:text="#{accion.cerrar}">
                                 Cerrar
                             </button>
 
                             <button type="submit"
-                                    class="btn btn-purple px-4">
+                                    class="btn btn-purple px-4"
+                                    th:text="#{rutina.guardarRutina}">
                                 Guardar rutina
                             </button>
 
@@ -236,12 +243,12 @@
             <div class="card-header bg-white p-3
                         d-flex justify-content-between align-items-center">
 
-                <h5 class="mb-0">
+                <h5 class="mb-0" th:text="#{dashboard.entrenador.rutinasActivas}">
                     Rutinas activas
                 </h5>
 
                 <span class="badge text-bg-primary"
-                      th:text="|Total: ${#lists.size(rutinas)}|">
+                      th:text="#{comun.totalCantidad(${#lists.size(rutinas)})}">
                     Total: 0
                 </span>
 
@@ -256,12 +263,12 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th class="ps-4">Cliente</th>
-                                <th>Rutina</th>
-                                <th>Objetivo</th>
-                                <th>Fecha de asignación</th>
-                                <th>Ejercicios</th>
-                                <th class="pe-4 text-end">Acciones</th>
+                                <th class="ps-4" th:text="#{comun.cliente}">Cliente</th>
+                                <th th:text="#{nav.rutinas}">Rutina</th>
+                                <th th:text="#{rutina.objetivo}">Objetivo</th>
+                                <th th:text="#{rutina.fechaAsignacion}">Fecha de asignación</th>
+                                <th th:text="#{rutina.ejercicio}">Ejercicios</th>
+                                <th class="pe-4 text-end" th:text="#{comun.acciones}">Acciones</th>
                             </tr>
 
                         </thead>
@@ -283,7 +290,7 @@
 
                                 <td th:text="${rutina.objetivo != null
                                              ? rutina.objetivo
-                                             : 'Sin objetivo registrado'}">
+                                             : #messages.msg('rutina.sinObjetivo')}">
                                     Objetivo
                                 </td>
 
@@ -313,7 +320,7 @@
                                                 data-bs-toggle="modal"
                                                 th:attr="data-bs-target=${'#modalRutina'
                                                          + rutina.idRutina}">
-                                            Gestionar ejercicios
+                                            <span th:text="#{rutina.gestionarEjercicios}">Gestionar ejercicios</span>
                                         </button>
 
                                         <form th:action="@{/entrenador/rutinas/eliminar}"
@@ -325,7 +332,7 @@
 
                                             <button type="submit"
                                                     class="btn btn-sm btn-danger">
-                                                Eliminar
+                                                <span th:text="#{accion.eliminar}">Eliminar</span>
                                             </button>
 
                                         </form>
@@ -353,9 +360,9 @@
 
                 <i class="fa-solid fa-dumbbell fs-1 text-purple mb-3"></i>
 
-                <h4>No hay rutinas activas</h4>
+                <h4 th:text="#{rutina.sinActivas}">No hay rutinas activas</h4>
 
-                <p class="text-muted mb-0">
+                <p class="text-muted mb-0" th:text="#{rutina.sinActivasDetalle}">
                     Las rutinas activas aparecerán en esta sección.
                 </p>
 
@@ -394,7 +401,7 @@
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
-                                aria-label="Cerrar">
+                                th:aria-label="#{accion.cerrar}">
                         </button>
 
                     </div>
@@ -406,7 +413,7 @@
                                 data-bs-toggle="modal"
                                 th:attr="data-bs-target=${'#modalAgregarEjercicioEntrenador'
                                          + rutina.idRutina}">
-                            Agregar ejercicio
+                            <span th:text="#{rutina.agregarEjercicio}">Agregar ejercicio</span>
                         </button>
 
                     </div>
@@ -421,12 +428,12 @@
                                 <thead class="table-light">
 
                                     <tr>
-                                        <th class="ps-4">Día</th>
-                                        <th>Ejercicio</th>
-                                        <th>Series</th>
-                                        <th>Repeticiones</th>
-                                        <th>Indicaciones</th>
-                                        <th class="pe-4 text-end">Acciones</th>
+                                        <th class="ps-4" th:text="#{rutina.dia}">Día</th>
+                                        <th th:text="#{rutina.ejercicio}">Ejercicio</th>
+                                        <th th:text="#{rutina.series}">Series</th>
+                                        <th th:text="#{rutina.repeticiones}">Repeticiones</th>
+                                        <th th:text="#{rutina.indicaciones}">Indicaciones</th>
+                                        <th class="pe-4 text-end" th:text="#{comun.acciones}">Acciones</th>
                                     </tr>
 
                                 </thead>
@@ -441,7 +448,7 @@
                                         <td class="ps-4">
 
                                             <span class="badge text-bg-primary"
-                                                  th:text="${ejercicio.dia}">
+                                                  th:text="#{__${'dia.' + #strings.toLowerCase(ejercicio.dia)}__}">
                                                 Lunes
                                             </span>
 
@@ -463,7 +470,7 @@
                                         <td class="text-muted"
                                             th:text="${ejercicio.observaciones != null
                                                      ? ejercicio.observaciones
-                                                     : 'Sin indicaciones'}">
+                                                     : #messages.msg('comun.sinIndicaciones')}">
                                             Indicaciones
                                         </td>
 
@@ -475,7 +482,7 @@
                                                     data-bs-toggle="modal"
                                                     th:attr="data-bs-target=${'#modalEditarEjercicioEntrenador'
                                                              + ejercicio.idEjercicio}">
-                                                Editar
+                                                <span th:text="#{accion.editar}">Editar</span>
                                             </button>
 
                                             <form th:action="@{/entrenador/rutinas/ejercicios/eliminar}"
@@ -492,7 +499,7 @@
 
                                                 <button type="submit"
                                                         class="btn btn-sm btn-danger">
-                                                    Eliminar
+                                                    <span th:text="#{accion.eliminar}">Eliminar</span>
                                                 </button>
 
                                             </form>
@@ -512,7 +519,8 @@
                     </div>
 
                     <div class="modal-body text-center text-muted py-5"
-                         th:if="${#lists.isEmpty(rutina.ejercicios)}">
+                         th:if="${#lists.isEmpty(rutina.ejercicios)}"
+                         th:text="#{rutina.sinEjercicios}">
 
                         Esta rutina todavía no tiene ejercicios asignados.
 
@@ -522,7 +530,8 @@
 
                         <button type="button"
                                 class="btn btn-sm btn-light"
-                                data-bs-dismiss="modal">
+                                data-bs-dismiss="modal"
+                                th:text="#{accion.cerrar}">
                             Cerrar
                         </button>
 
@@ -556,7 +565,7 @@
 
                             <div>
 
-                                <h5 class="modal-title">
+                                <h5 class="modal-title" th:text="#{rutina.agregarEjercicio}">
                                     Agregar ejercicio
                                 </h5>
 
@@ -571,7 +580,7 @@
                             <button type="button"
                                     class="btn-close"
                                     data-bs-dismiss="modal"
-                                    aria-label="Cerrar">
+                                    th:aria-label="#{accion.cerrar}">
                             </button>
 
                         </div>
@@ -580,7 +589,7 @@
 
                             <div class="mb-3">
 
-                                <label class="form-label">
+                                <label class="form-label" th:text="#{rutina.dia}">
                                     Día
                                 </label>
 
@@ -588,13 +597,13 @@
                                         class="form-select"
                                         required>
 
-                                    <option value="">
+                                    <option value="" th:text="#{rutina.seleccionarDia}">
                                         Selecciona un día
                                     </option>
 
                                     <option th:each="dia : ${diasSemana}"
                                             th:value="${dia}"
-                                            th:text="${dia}">
+                                            th:text="#{__${'dia.' + #strings.toLowerCase(dia)}__}">
                                         Lunes
                                     </option>
 
@@ -604,7 +613,7 @@
 
                             <div class="mb-3">
 
-                                <label class="form-label">
+                                <label class="form-label" th:text="#{rutina.ejercicio}">
                                     Ejercicio
                                 </label>
 
@@ -618,7 +627,7 @@
 
                             <div class="mb-3">
 
-                                <label class="form-label">
+                                <label class="form-label" th:text="#{rutina.series}">
                                     Series
                                 </label>
 
@@ -632,7 +641,7 @@
 
                             <div class="mb-3">
 
-                                <label class="form-label">
+                                <label class="form-label" th:text="#{rutina.repeticiones}">
                                     Repeticiones
                                 </label>
 
@@ -640,14 +649,14 @@
                                        name="repeticiones"
                                        class="form-control"
                                        maxlength="30"
-                                       placeholder="Ejemplo: 10-12"
+                                       th:placeholder="#{rutina.ejemploRepeticiones}"
                                        required>
 
                             </div>
 
                             <div>
 
-                                <label class="form-label">
+                                <label class="form-label" th:text="#{rutina.indicaciones}">
                                     Indicaciones
                                 </label>
 
@@ -665,12 +674,14 @@
 
                             <button type="button"
                                     class="btn btn-sm btn-light"
-                                    data-bs-dismiss="modal">
+                                    data-bs-dismiss="modal"
+                                    th:text="#{accion.cerrar}">
                                 Cerrar
                             </button>
 
                             <button type="submit"
-                                    class="btn btn-sm btn-purple px-3">
+                                    class="btn btn-sm btn-purple px-3"
+                                    th:text="#{accion.guardar}">
                                 Guardar
                             </button>
 
@@ -712,7 +723,7 @@
 
                                 <div>
 
-                                    <h5 class="modal-title">
+                                    <h5 class="modal-title" th:text="#{rutina.editarEjercicio}">
                                         Editar ejercicio
                                     </h5>
 
@@ -727,7 +738,7 @@
                                 <button type="button"
                                         class="btn-close"
                                         data-bs-dismiss="modal"
-                                        aria-label="Cerrar">
+                                        th:aria-label="#{accion.cerrar}">
                                 </button>
 
                             </div>
@@ -736,7 +747,7 @@
 
                                 <div class="mb-3">
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.dia}">
                                         Día
                                     </label>
 
@@ -746,7 +757,7 @@
 
                                         <option th:each="dia : ${diasSemana}"
                                                 th:value="${dia}"
-                                                th:text="${dia}"
+                                                th:text="#{__${'dia.' + #strings.toLowerCase(dia)}__}"
                                                 th:selected="${dia
                                                 == ejercicio.dia}">
                                             Lunes
@@ -758,7 +769,7 @@
 
                                 <div class="mb-3">
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.ejercicio}">
                                         Ejercicio
                                     </label>
 
@@ -773,7 +784,7 @@
 
                                 <div class="mb-3">
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.series}">
                                         Series
                                     </label>
 
@@ -788,7 +799,7 @@
 
                                 <div class="mb-3">
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.repeticiones}">
                                         Repeticiones
                                     </label>
 
@@ -803,7 +814,7 @@
 
                                 <div>
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.indicaciones}">
                                         Indicaciones
                                     </label>
 
@@ -822,12 +833,14 @@
 
                                 <button type="button"
                                         class="btn btn-sm btn-light"
-                                        data-bs-dismiss="modal">
+                                        data-bs-dismiss="modal"
+                                        th:text="#{accion.cerrar}">
                                     Cerrar
                                 </button>
 
                                 <button type="submit"
-                                        class="btn btn-sm btn-purple px-3">
+                                        class="btn btn-sm btn-purple px-3"
+                                        th:text="#{accion.guardarCambios}">
                                     Guardar cambios
                                 </button>
 

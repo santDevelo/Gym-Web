@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+// Acceso a las asistencias y consultas derivadas por cliente y fecha.
 public interface AsistenciaRepository
         extends JpaRepository<Asistencia, Integer> {
 

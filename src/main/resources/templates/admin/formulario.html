@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org">
 
 <body>
@@ -22,7 +22,7 @@
                                           fa-user-pen
                                           text-purple me-2"></i>
 
-                                Modificar usuario
+                                <span th:text="#{usuario.modificar}">Modificar usuario</span>
 
                             </h4>
 
@@ -42,8 +42,8 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="username"
-                                               class="form-label">
+                                        <label for="username" class="form-label"
+                                               th:text="#{usuario.nombreUsuario}">
                                             Nombre de usuario
                                         </label>
 
@@ -58,8 +58,8 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="password"
-                                               class="form-label">
+                                        <label for="password" class="form-label"
+                                               th:text="#{usuario.nuevaContrasena}">
                                             Nueva contraseña
                                         </label>
 
@@ -70,7 +70,7 @@
                                                maxlength="100"
                                                autocomplete="new-password">
 
-                                        <small class="text-muted">
+                                        <small class="text-muted" th:text="#{usuario.conservarContrasena}">
                                             Déjala vacía para conservar
                                             la contraseña actual.
                                         </small>
@@ -79,8 +79,7 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="nombre"
-                                               class="form-label">
+                                        <label for="nombre" class="form-label" th:text="#{auth.nombre}">
                                             Nombre
                                         </label>
 
@@ -95,8 +94,7 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="apellidos"
-                                               class="form-label">
+                                        <label for="apellidos" class="form-label" th:text="#{auth.apellidos}">
                                             Apellidos
                                         </label>
 
@@ -111,8 +109,7 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="correo"
-                                               class="form-label">
+                                        <label for="correo" class="form-label" th:text="#{usuario.correo}">
                                             Correo
                                         </label>
 
@@ -126,8 +123,7 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="telefono"
-                                               class="form-label">
+                                        <label for="telefono" class="form-label" th:text="#{auth.telefono}">
                                             Teléfono
                                         </label>
 
@@ -141,8 +137,7 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="idRol"
-                                               class="form-label">
+                                        <label for="idRol" class="form-label" th:text="#{usuario.rol}">
                                             Rol
                                         </label>
 
@@ -153,7 +148,7 @@
 
                                             <option th:each="rol : ${roles}"
                                                     th:value="${rol.idRol}"
-                                                    th:text="${rol.rol}"
+                                                    th:text="#{__${'rol.' + #strings.toLowerCase(rol.rol)}__}"
                                                     th:selected="${rol.idRol
                                                                    == idRolActual}">
                                                 Rol
@@ -165,8 +160,8 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="imagenFile"
-                                               class="form-label">
+                                        <label for="imagenFile" class="form-label"
+                                               th:text="#{usuario.nuevaImagen}">
                                             Nueva imagen
                                         </label>
 
@@ -187,8 +182,8 @@
                                                    th:field="*{activo}"
                                                    class="form-check-input">
 
-                                            <label for="activo"
-                                                   class="form-check-label">
+                                            <label for="activo" class="form-check-label"
+                                                   th:text="#{usuario.usuarioActivo}">
                                                 Usuario activo
                                             </label>
 
@@ -202,12 +197,12 @@
                                                   and !#strings.isEmpty(
                                                   usuarioFormulario.rutaImagen)}">
 
-                                        <p class="text-muted mb-2">
+                                        <p class="text-muted mb-2" th:text="#{usuario.imagenActual}">
                                             Imagen actual
                                         </p>
 
                                         <img th:src="${usuarioFormulario.rutaImagen}"
-                                             alt="Imagen actual"
+                                 th:alt="#{usuario.imagenActual}"
                                              class="rounded-circle"
                                              style="width: 90px;
                                                     height: 90px;
@@ -226,7 +221,7 @@
                                         <i class="fa-solid
                                                   fa-arrow-left me-2"></i>
 
-                                        Regresar
+                                        <span th:text="#{accion.regresar}">Regresar</span>
 
                                     </a>
 
@@ -236,7 +231,7 @@
                                         <i class="fa-solid
                                                   fa-floppy-disk me-2"></i>
 
-                                        Guardar cambios
+                                        <span th:text="#{accion.guardarCambios}">Guardar cambios</span>
 
                                     </button>
 
@@ -272,7 +267,7 @@
                                           fa-credit-card
                                           text-purple me-2"></i>
 
-                                Membresía del cliente
+                                <span th:text="#{usuario.membresiaCliente}">Membresía del cliente</span>
 
                             </h4>
 
@@ -291,8 +286,7 @@
 
                                     <div class="col-12">
 
-                                        <label for="idPlan"
-                                               class="form-label">
+                                        <label for="idPlan" class="form-label" th:text="#{membresia.plan}">
                                             Plan
                                         </label>
 
@@ -301,7 +295,7 @@
                                                 class="form-select"
                                                 required>
 
-                                            <option value="">
+                                            <option value="" th:text="#{membresia.seleccionarPlan}">
                                                 Seleccione un plan
                                             </option>
 
@@ -320,8 +314,8 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="fechaInicio"
-                                               class="form-label">
+                                        <label for="fechaInicio" class="form-label"
+                                               th:text="#{membresia.fechaInicio}">
                                             Fecha de inicio
                                         </label>
 
@@ -336,8 +330,8 @@
 
                                     <div class="col-md-6">
 
-                                        <label for="fechaVencimiento"
-                                               class="form-label">
+                                        <label for="fechaVencimiento" class="form-label"
+                                               th:text="#{membresia.fechaVencimiento}">
                                             Fecha de vencimiento
                                         </label>
 
@@ -352,8 +346,8 @@
 
                                     <div class="col-12">
 
-                                        <label for="estadoMembresia"
-                                               class="form-label">
+                                        <label for="estadoMembresia" class="form-label"
+                                               th:text="#{comun.estado}">
                                             Estado
                                         </label>
 
@@ -365,7 +359,7 @@
                                             <option th:each="estadoDisponible : ${estadosMembresia}"
                                                     th:value="${estadoDisponible}"
                                                     th:selected="${membresiaFormulario.estado == estadoDisponible}"
-                                                    th:text="${estadoDisponible}">
+                                                    th:text="#{__${'estado.' + #strings.toLowerCase(estadoDisponible.name())}__}">
                                                 Estado
                                             </option>
 
@@ -383,7 +377,7 @@
                                         <i class="fa-solid
                                                   fa-floppy-disk me-2"></i>
 
-                                        Guardar membresía
+                                        <span th:text="#{membresia.guardar}">Guardar membresía</span>
 
                                     </button>
 

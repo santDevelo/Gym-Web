@@ -13,6 +13,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Registra el historial manual de pagos.
+// Cada pago actualiza también las fechas y el estado de la membresía relacionada.
 @Service
 public class PagoService {
 
@@ -57,6 +59,7 @@ public class PagoService {
         pagoRepository.deleteById(idPago);
     }
 
+    // Comprueba que el pago se asocie con una membresía y un cliente válidos.
     private Membresia obtenerMembresiaValida(Integer idMembresia) {
         Membresia membresia = membresiaRepository.findById(idMembresia)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -88,6 +91,7 @@ public class PagoService {
         return pago;
     }
 
+    // Sincroniza la membresía con la información del pago recién registrado.
     private void actualizarMembresia(
             Membresia membresia,
             LocalDate fechaPago,

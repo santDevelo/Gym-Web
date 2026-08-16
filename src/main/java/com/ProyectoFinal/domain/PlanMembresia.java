@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.Data;
 
+// Define un plan ofrecido por el gimnasio, con su descripción, precio y disponibilidad.
 @Data
 @Entity
 @Table(name = "plan_membresia")

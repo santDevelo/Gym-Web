@@ -16,6 +16,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Aplica las reglas de creación de rutinas y mantenimiento de ejercicios.
+// Una rutina nueva solo puede asignarse a un cliente activo, con membresía vigente y sin otra
+// rutina activa.
 @Service
 public class RutinaService {
 
@@ -151,6 +154,7 @@ public class RutinaService {
         rutinaRepository.save(rutina);
     }
 
+    // Obtiene el cliente y confirma que su cuenta continúe habilitada.
     private Usuario obtenerClienteActivo(Integer idCliente) {
         Usuario cliente = usuarioRepository.findById(idCliente)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -161,6 +165,7 @@ public class RutinaService {
         return cliente;
     }
 
+    // Verifica estado y fechas de la última membresía del cliente.
     private void validarMembresiaActiva(Integer idCliente) {
         Membresia membresia = membresiaRepository
                 .findTopByUsuarioIdUsuarioOrderByIdMembresiaDesc(idCliente)
@@ -198,6 +203,7 @@ public class RutinaService {
                         "El ejercicio no pertenece a tu rutina activa."));
     }
 
+    // Coloca el ejercicio nuevo después del último ejercicio de la rutina.
     private int obtenerSiguienteOrden(Rutina rutina) {
         return rutina.getEjercicios().stream()
                 .map(EjercicioRutina::getOrden)
@@ -283,6 +289,7 @@ public class RutinaService {
                 && usuario.tieneRol(NombreRol.CLIENTE);
     }
 
+    // Considera tanto el estado como las fechas de inicio y vencimiento.
     private boolean tieneMembresiaActiva(Membresia membresia) {
         if (membresia == null || membresia.getEstado() != EstadoMembresia.ACTIVA) {
             return false;

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+// Construye el cliente de Google Cloud Storage usando las credenciales incluidas en recursos.
 @Configuration
 public class StorageConfig {
 
@@ -23,6 +24,7 @@ public class StorageConfig {
 
     @Bean
     public Storage storage() throws IOException {
+        // try-with-resources garantiza el cierre del archivo de credenciales.
         ClassPathResource recurso = new ClassPathResource(rutaCredenciales);
         try (InputStream entrada = recurso.getInputStream()) {
             GoogleCredentials credenciales = GoogleCredentials.fromStream(entrada);

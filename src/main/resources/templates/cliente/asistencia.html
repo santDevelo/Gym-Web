@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -23,11 +23,11 @@
 
             <div>
 
-                <h2 class="mb-1">
+                <h2 class="mb-1" th:text="#{asistencia.titulo}">
                     Mi asistencia
                 </h2>
 
-                <p class="text-muted mb-0">
+                <p class="text-muted mb-0" th:text="#{asistencia.descripcion}">
                     Consulta tu historial de visitas al gimnasio.
                 </p>
 
@@ -37,7 +37,7 @@
                     class="btn btn-sm btn-purple px-3"
                     data-bs-toggle="modal"
                     data-bs-target="#modalAgregarAsistencia">
-                Agregar asistencia
+                <span th:text="#{asistencia.agregar}">Agregar asistencia</span>
             </button>
 
         </div>
@@ -68,7 +68,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block">
+                                <small class="text-muted d-block" th:text="#{asistencia.totalMes}">
                                     Visitas este mes
                                 </small>
 
@@ -99,7 +99,7 @@
 
             <div class="card-header bg-white p-3">
 
-                <h5 class="mb-0">
+                <h5 class="mb-0" th:text="#{asistencia.historial}">
                     Historial de asistencia
                 </h5>
 
@@ -114,10 +114,10 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th class="ps-4">Fecha</th>
-                                <th>Hora de entrada</th>
-                                <th>Hora de salida</th>
-                                <th class="pe-4 text-end">Acciones</th>
+                                <th class="ps-4" th:text="#{comun.fecha}">Fecha</th>
+                                <th th:text="#{asistencia.entrada}">Hora de entrada</th>
+                                <th th:text="#{asistencia.salida}">Hora de salida</th>
+                                <th class="pe-4 text-end" th:text="#{comun.acciones}">Acciones</th>
                             </tr>
 
                         </thead>
@@ -137,7 +137,7 @@
 
                                 <td th:text="${asistencia.horaSalida != null
                                              ? asistencia.horaSalida
-                                             : 'Sin registrar'}">
+                                             : #messages.msg('asistencia.sinSalida')}">
                                     09:30
                                 </td>
 
@@ -153,7 +153,7 @@
 
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger">
-                                            Eliminar
+                                            <span th:text="#{accion.eliminar}">Eliminar</span>
                                         </button>
 
                                     </form>
@@ -182,9 +182,9 @@
                           fs-1 text-purple mb-3">
                 </i>
 
-                <h4>No hay asistencias registradas</h4>
+                <h4 th:text="#{asistencia.sinRegistros}">No hay asistencias registradas</h4>
 
-                <p class="text-muted mb-0">
+                <p class="text-muted mb-0" th:text="#{asistencia.sinRegistrosDetalle}">
                     Tus visitas aparecerán aquí cuando sean registradas.
                 </p>
 
@@ -209,14 +209,15 @@
                         <div class="modal-header">
 
                             <h5 class="modal-title"
-                                id="tituloAgregarAsistencia">
+                                id="tituloAgregarAsistencia"
+                                th:text="#{asistencia.agregar}">
                                 Agregar asistencia
                             </h5>
 
                             <button type="button"
                                     class="btn-close"
                                     data-bs-dismiss="modal"
-                                    aria-label="Cerrar">
+                                    th:aria-label="#{accion.cerrar}">
                             </button>
 
                         </div>
@@ -226,7 +227,8 @@
                             <div class="mb-3">
 
                                 <label for="fechaAsistencia"
-                                       class="form-label">
+                                       class="form-label"
+                                       th:text="#{comun.fecha}">
                                     Fecha
                                 </label>
 
@@ -245,7 +247,8 @@
                                 <div class="col-sm-6">
 
                                     <label for="horaEntrada"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{asistencia.entrada}">
                                         Hora de entrada
                                     </label>
 
@@ -260,7 +263,8 @@
                                 <div class="col-sm-6">
 
                                     <label for="horaSalida"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{asistencia.salida}">
                                         Hora de salida
                                     </label>
 
@@ -273,7 +277,7 @@
 
                             </div>
 
-                            <small class="text-muted d-block mt-2">
+                            <small class="text-muted d-block mt-2" th:text="#{asistencia.salidaOpcional}">
                                 La hora de salida puede quedar sin registrar.
                             </small>
 
@@ -283,12 +287,14 @@
 
                             <button type="button"
                                     class="btn btn-sm btn-light"
-                                    data-bs-dismiss="modal">
+                                    data-bs-dismiss="modal"
+                                    th:text="#{accion.cerrar}">
                                 Cerrar
                             </button>
 
                             <button type="submit"
-                                    class="btn btn-sm btn-purple px-3">
+                                    class="btn btn-sm btn-purple px-3"
+                                    th:text="#{accion.guardar}">
                                 Guardar
                             </button>
 

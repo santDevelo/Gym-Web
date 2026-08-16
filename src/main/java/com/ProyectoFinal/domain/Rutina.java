@@ -19,6 +19,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+// Agrupa los ejercicios asignados a un cliente dentro de una rutina activa o histórica.
 @Getter
 @Setter
 @Entity
@@ -51,7 +52,7 @@ public class Rutina implements Serializable {
     @Column(nullable = false)
     private boolean activa;
 
-    @OneToMany(
+    @OneToMany(//relacion 1 a muchos, una rutina puede ser usada por muchos usuaiarios 
             mappedBy = "rutina",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,

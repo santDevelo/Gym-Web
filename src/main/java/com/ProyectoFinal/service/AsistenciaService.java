@@ -11,6 +11,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Contiene las reglas para registrar y consultar asistencias.
+// Impide fechas futuras, horas inválidas y más de una asistencia por día.
 @Service
 public class AsistenciaService {
 
@@ -74,6 +76,7 @@ public class AsistenciaService {
         asistenciaRepository.delete(asistencia);
     }
 
+    // Evita duplicar el registro diario de un mismo cliente.
     private void validarFechaDisponible(Integer idUsuario, LocalDate fecha) {
         if (asistenciaRepository.existsByClienteIdUsuarioAndFecha(idUsuario, fecha)) {
             throw new IllegalArgumentException(

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -20,11 +20,11 @@
 
         <div class="mb-4">
 
-            <h2 class="mb-1">
+            <h2 class="mb-1" th:text="#{perfil.titulo}">
                 Mi perfil
             </h2>
 
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-0" th:text="#{perfil.descripcion}">
                 Consulta tus datos personales registrados en FitSystem.
             </p>
 
@@ -46,7 +46,7 @@
                                 <img th:if="${usuario.rutaImagen != null
                                              and !#strings.isEmpty(usuario.rutaImagen)}"
                                      th:src="${usuario.rutaImagen}"
-                                     alt="Fotografía del cliente"
+                                     th:alt="#{perfil.fotoAlt}"
                                      class="rounded-circle mb-3"
                                      style="width: 120px;
                                             height: 120px;
@@ -64,7 +64,7 @@
                                     Nombre del cliente
                                 </h4>
 
-                                <span class="badge text-bg-primary">
+                                <span class="badge text-bg-primary" th:text="#{rol.cliente}">
                                     Cliente
                                 </span>
 
@@ -73,14 +73,14 @@
                             <!-- Información personal -->
                             <div class="col-md-8">
 
-                                <h5 class="mb-4">
+                                <h5 class="mb-4" th:text="#{perfil.informacionPersonal}">
                                     Información personal
                                 </h5>
 
                                 <div class="row g-3">
 
                                     <div class="col-sm-6">
-                                        <small class="text-muted d-block">
+                                        <small class="text-muted d-block" th:text="#{comun.nombre}">
                                             Nombre
                                         </small>
                                         <strong th:text="${usuario.nombre}">
@@ -89,7 +89,7 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <small class="text-muted d-block">
+                                        <small class="text-muted d-block" th:text="#{perfil.apellidos}">
                                             Apellidos
                                         </small>
                                         <strong th:text="${usuario.apellidos}">
@@ -98,7 +98,7 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <small class="text-muted d-block">
+                                        <small class="text-muted d-block" th:text="#{perfil.nombreUsuario}">
                                             Nombre de usuario
                                         </small>
                                         <strong th:text="${usuario.username}">
@@ -107,7 +107,7 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <small class="text-muted d-block">
+                                        <small class="text-muted d-block" th:text="#{perfil.estadoCuenta}">
                                             Estado de la cuenta
                                         </small>
                                         <span class="badge"
@@ -115,31 +115,31 @@
                                                               ? ' text-bg-success'
                                                               : ' text-bg-danger'"
                                               th:text="${usuario.activo
-                                                       ? 'ACTIVA'
-                                                       : 'INACTIVA'}">
+                                                       ? #messages.msg('estado.activa')
+                                                       : #messages.msg('estado.inactiva')}">
                                             ACTIVA
                                         </span>
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <small class="text-muted d-block">
+                                        <small class="text-muted d-block" th:text="#{perfil.correo}">
                                             Correo electrónico
                                         </small>
                                         <strong th:text="${usuario.correo != null
                                                          ? usuario.correo
-                                                         : 'No registrado'}">
+                                                         : #messages.msg('comun.noRegistrado')}">
                                             correo@ejemplo.com
                                         </strong>
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <small class="text-muted d-block">
+                                        <small class="text-muted d-block" th:text="#{perfil.telefono}">
                                             Teléfono
                                         </small>
                                         <strong th:text="${usuario.telefono != null
                                                          and !#strings.isEmpty(usuario.telefono)
                                                          ? usuario.telefono
-                                                         : 'No registrado'}">
+                                                         : #messages.msg('comun.noRegistrado')}">
                                             8888-8888
                                         </strong>
                                     </div>
@@ -158,8 +158,7 @@
 
                     <i class="fa-solid fa-circle-info text-purple me-2"></i>
 
-                    Si necesitas corregir alguno de tus datos, comunícate
-                    con la administración del gimnasio.
+                    <span th:text="#{perfil.aviso}">Si necesitas corregir alguno de tus datos, comunícate con la administración del gimnasio.</span>
 
                 </div>
 

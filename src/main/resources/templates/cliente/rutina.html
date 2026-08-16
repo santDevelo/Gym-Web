@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -20,11 +20,11 @@
 
         <div class="mb-4">
 
-            <h2 class="mb-1">
+            <h2 class="mb-1" th:text="#{rutina.miTitulo}">
                 Mi rutina
             </h2>
 
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-0" th:text="#{rutina.miDescripcion}">
                 Consulta los ejercicios de tu rutina activa.
             </p>
 
@@ -51,7 +51,7 @@
                         class="btn btn-sm btn-purple px-3"
                         data-bs-toggle="modal"
                         data-bs-target="#modalAgregarEjercicio">
-                    Agregar ejercicio
+                    <span th:text="#{rutina.agregarEjercicio}">Agregar ejercicio</span>
                 </button>
 
             </div>
@@ -69,12 +69,12 @@
                             <thead class="table-light">
 
                                 <tr>
-                                    <th class="ps-4">Día</th>
-                                    <th>Ejercicio</th>
-                                    <th>Series</th>
-                                    <th>Repeticiones</th>
-                                    <th>Indicaciones</th>
-                                    <th class="pe-4 text-end">Acciones</th>
+                                    <th class="ps-4" th:text="#{rutina.dia}">Día</th>
+                                    <th th:text="#{rutina.ejercicio}">Ejercicio</th>
+                                    <th th:text="#{rutina.series}">Series</th>
+                                    <th th:text="#{rutina.repeticiones}">Repeticiones</th>
+                                    <th th:text="#{rutina.indicaciones}">Indicaciones</th>
+                                    <th class="pe-4 text-end" th:text="#{comun.acciones}">Acciones</th>
                                 </tr>
 
                             </thead>
@@ -85,7 +85,7 @@
 
                                     <td class="ps-4">
                                         <span class="badge text-bg-primary"
-                                              th:text="${ejercicio.dia}">
+                                              th:text="#{__${'dia.' + #strings.toLowerCase(ejercicio.dia)}__}">
                                             Lunes
                                         </span>
                                     </td>
@@ -106,7 +106,7 @@
                                     <td class="text-muted"
                                         th:text="${ejercicio.observaciones != null
                                                  ? ejercicio.observaciones
-                                                 : 'Sin indicaciones'}">
+                                                 : #messages.msg('comun.sinIndicaciones')}">
                                         Sin indicaciones
                                     </td>
 
@@ -118,7 +118,7 @@
                                                 data-bs-toggle="modal"
                                                 th:attr="data-bs-target=${'#modalEditarEjercicio'
                                                          + ejercicio.idEjercicio}">
-                                            Editar
+                                            <span th:text="#{accion.editar}">Editar</span>
                                         </button>
 
                                         <form th:action="@{/cliente/rutina/ejercicios/eliminar}"
@@ -131,7 +131,7 @@
 
                                             <button type="submit"
                                                     class="btn btn-sm btn-danger">
-                                                Eliminar
+                                                <span th:text="#{accion.eliminar}">Eliminar</span>
                                             </button>
 
                                         </form>
@@ -151,7 +151,8 @@
             </div>
 
             <div class="alert alert-light border"
-                 th:if="${#lists.isEmpty(rutina.ejercicios)}">
+                 th:if="${#lists.isEmpty(rutina.ejercicios)}"
+                 th:text="#{rutina.sinEjercicios}">
 
                 Esta rutina todavía no tiene ejercicios asignados.
 
@@ -174,14 +175,15 @@
                             <div class="modal-header">
 
                                 <h5 class="modal-title"
-                                    id="tituloAgregarEjercicio">
+                                    id="tituloAgregarEjercicio"
+                                    th:text="#{rutina.agregarEjercicio}">
                                     Agregar ejercicio
                                 </h5>
 
                                 <button type="button"
                                         class="btn-close"
                                         data-bs-dismiss="modal"
-                                        aria-label="Cerrar">
+                                        th:aria-label="#{accion.cerrar}">
                                 </button>
 
                             </div>
@@ -191,7 +193,8 @@
                                 <div class="mb-3">
 
                                     <label for="diaNuevo"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{rutina.dia}">
                                         Día
                                     </label>
 
@@ -200,13 +203,13 @@
                                             class="form-select"
                                             required>
 
-                                        <option value="">
+                                        <option value="" th:text="#{rutina.seleccionarDia}">
                                             Selecciona un día
                                         </option>
 
                                         <option th:each="dia : ${diasSemana}"
                                                 th:value="${dia}"
-                                                th:text="${dia}">
+                                                th:text="#{__${'dia.' + #strings.toLowerCase(dia)}__}">
                                             Lunes
                                         </option>
 
@@ -217,7 +220,8 @@
                                 <div class="mb-3">
 
                                     <label for="nombreNuevo"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{rutina.ejercicio}">
                                         Ejercicio
                                     </label>
 
@@ -235,7 +239,8 @@
                                     <div class="col-sm-6">
 
                                         <label for="seriesNuevas"
-                                               class="form-label">
+                                               class="form-label"
+                                               th:text="#{rutina.series}">
                                             Series
                                         </label>
 
@@ -251,7 +256,8 @@
                                     <div class="col-sm-6">
 
                                         <label for="repeticionesNuevas"
-                                               class="form-label">
+                                               class="form-label"
+                                               th:text="#{rutina.repeticiones}">
                                             Repeticiones
                                         </label>
 
@@ -260,7 +266,7 @@
                                                name="repeticiones"
                                                class="form-control"
                                                maxlength="30"
-                                               placeholder="Ejemplo: 10-12"
+                                               th:placeholder="#{rutina.ejemploRepeticiones}"
                                                required>
 
                                     </div>
@@ -270,7 +276,8 @@
                                 <div>
 
                                     <label for="observacionesNuevas"
-                                           class="form-label">
+                                           class="form-label"
+                                           th:text="#{rutina.indicaciones}">
                                         Indicaciones
                                     </label>
 
@@ -289,12 +296,14 @@
 
                                 <button type="button"
                                         class="btn btn-sm btn-light"
-                                        data-bs-dismiss="modal">
+                                        data-bs-dismiss="modal"
+                                        th:text="#{accion.cerrar}">
                                     Cerrar
                                 </button>
 
                                 <button type="submit"
-                                        class="btn btn-sm btn-purple px-3">
+                                        class="btn btn-sm btn-purple px-3"
+                                        th:text="#{accion.guardar}">
                                     Guardar
                                 </button>
 
@@ -328,14 +337,14 @@
 
                             <div class="modal-header">
 
-                                <h5 class="modal-title">
+                                <h5 class="modal-title" th:text="#{rutina.editarEjercicio}">
                                     Editar ejercicio
                                 </h5>
 
                                 <button type="button"
                                         class="btn-close"
                                         data-bs-dismiss="modal"
-                                        aria-label="Cerrar">
+                                        th:aria-label="#{accion.cerrar}">
                                 </button>
 
                             </div>
@@ -344,7 +353,7 @@
 
                                 <div class="mb-3">
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.dia}">
                                         Día
                                     </label>
 
@@ -354,7 +363,7 @@
 
                                         <option th:each="dia : ${diasSemana}"
                                                 th:value="${dia}"
-                                                th:text="${dia}"
+                                                th:text="#{__${'dia.' + #strings.toLowerCase(dia)}__}"
                                                 th:selected="${dia == ejercicio.dia}">
                                             Lunes
                                         </option>
@@ -365,7 +374,7 @@
 
                                 <div class="mb-3">
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.ejercicio}">
                                         Ejercicio
                                     </label>
 
@@ -382,7 +391,7 @@
 
                                     <div class="col-sm-6">
 
-                                        <label class="form-label">
+                                        <label class="form-label" th:text="#{rutina.series}">
                                             Series
                                         </label>
 
@@ -397,7 +406,7 @@
 
                                     <div class="col-sm-6">
 
-                                        <label class="form-label">
+                                        <label class="form-label" th:text="#{rutina.repeticiones}">
                                             Repeticiones
                                         </label>
 
@@ -414,7 +423,7 @@
 
                                 <div>
 
-                                    <label class="form-label">
+                                    <label class="form-label" th:text="#{rutina.indicaciones}">
                                         Indicaciones
                                     </label>
 
@@ -433,12 +442,14 @@
 
                                 <button type="button"
                                         class="btn btn-sm btn-light"
-                                        data-bs-dismiss="modal">
+                                        data-bs-dismiss="modal"
+                                        th:text="#{accion.cerrar}">
                                     Cerrar
                                 </button>
 
                                 <button type="submit"
-                                        class="btn btn-sm btn-purple px-3">
+                                        class="btn btn-sm btn-purple px-3"
+                                        th:text="#{accion.guardarCambios}">
                                     Guardar cambios
                                 </button>
 
@@ -465,9 +476,9 @@
                               fs-1 text-purple mb-3">
                     </i>
 
-                    <h4>No tienes una rutina activa</h4>
+                    <h4 th:text="#{rutina.sinRutina}">No tienes una rutina activa</h4>
 
-                    <p class="text-muted mb-0">
+                    <p class="text-muted mb-0" th:text="#{rutina.sinRutinaDetalle}">
                         Tu entrenador podrá asignarte una rutina próximamente.
                     </p>
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -14,11 +14,11 @@
 
         <div class="mb-4">
 
-            <h3 class="mb-1">
+            <h3 class="mb-1" th:text="#{dashboard.admin.titulo}">
                 Panel administrativo
             </h3>
 
-            <p class="text-muted">
+            <p class="text-muted" th:text="#{dashboard.admin.descripcion}">
                 Resumen general de la actividad del gimnasio.
             </p>
 
@@ -33,7 +33,7 @@
                     <div class="d-flex justify-content-between">
 
                         <div>
-                            <h6 class="text-muted">Clientes activos</h6>
+                            <h6 class="text-muted" th:text="#{dashboard.admin.clientesActivos}">Clientes activos</h6>
                             <h3 th:text="${clientesActivos}">0</h3>
                         </div>
 
@@ -52,7 +52,7 @@
                     <div class="d-flex justify-content-between">
 
                         <div>
-                            <h6 class="text-muted">Entrenadores</h6>
+                            <h6 class="text-muted" th:text="#{dashboard.admin.entrenadores}">Entrenadores</h6>
                             <h3 th:text="${entrenadoresActivos}">0</h3>
                         </div>
 
@@ -71,7 +71,7 @@
                     <div class="d-flex justify-content-between">
 
                         <div>
-                            <h6 class="text-muted">Ingresos del mes</h6>
+                            <h6 class="text-muted" th:text="#{dashboard.admin.ingresosMes}">Ingresos del mes</h6>
                             <h3 th:text="${ingresosMes}">0</h3>
                         </div>
 
@@ -90,7 +90,7 @@
                     <div class="d-flex justify-content-between">
 
                         <div>
-                            <h6 class="text-muted">Pagos pendientes</h6>
+                            <h6 class="text-muted" th:text="#{dashboard.admin.pagosPendientes}">Pagos pendientes</h6>
                             <h3 th:text="${pagosPendientes}">0</h3>
                         </div>
 
@@ -116,11 +116,11 @@
 
         <div class="mb-4">
 
-            <h3 class="mb-1">
+            <h3 class="mb-1" th:text="#{dashboard.entrenador.titulo}">
                 Panel del entrenador
             </h3>
 
-            <p class="text-muted">
+            <p class="text-muted" th:text="#{dashboard.entrenador.descripcion}">
                 Consulta la información relacionada con tus clientes.
             </p>
 
@@ -140,7 +140,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block mb-2">
+                                <small class="text-muted d-block mb-2" th:text="#{dashboard.admin.clientesActivos}">
                                     Clientes activos
                                 </small>
 
@@ -174,7 +174,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block mb-2">
+                                <small class="text-muted d-block mb-2" th:text="#{dashboard.entrenador.rutinasActivas}">
                                     Rutinas activas
                                 </small>
 
@@ -208,7 +208,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block mb-2">
+                                <small class="text-muted d-block mb-2" th:text="#{dashboard.entrenador.ejerciciosAsignados}">
                                     Ejercicios asignados
                                 </small>
 
@@ -242,7 +242,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block mb-2">
+                                <small class="text-muted d-block mb-2" th:text="#{dashboard.entrenador.disponiblesRutina}">
                                     Disponibles para rutina
                                 </small>
 
@@ -279,11 +279,11 @@
 
         <div class="mb-4">
 
-            <h3 class="mb-1">
+            <h3 class="mb-1" th:text="#{dashboard.cliente.titulo}">
                 Mi resumen
             </h3>
 
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-0" th:text="#{dashboard.cliente.descripcion}">
                 Consulta tu membresía, rutina y actividad reciente.
             </p>
 
@@ -303,7 +303,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block mb-2">
+                                <small class="text-muted d-block mb-2" th:text="#{dashboard.cliente.planActual}">
                                     Plan actual
                                 </small>
 
@@ -315,8 +315,8 @@
                                     Plan Fit
                                 </h4>
 
-                                <h4 class="text-muted mb-2"
-                                    th:if="${membresia == null}">
+                                <h4 class="text-muted mb-2" th:if="${membresia == null}"
+                                    th:text="#{dashboard.cliente.sinMembresia}">
                                     Sin membresía
                                 </h4>
 
@@ -326,7 +326,7 @@
                                                        and membresia.estado.name() == 'ACTIVA'}
                                                        ? ' text-bg-success'
                                                        : ' text-bg-secondary'"
-                                      th:text="${membresia.estado}">
+                                      th:text="#{__${'estado.' + #strings.toLowerCase(membresia.estado.name())}__}">
                                     ACTIVA
                                 </span>
 
@@ -355,7 +355,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block mb-2">
+                                <small class="text-muted d-block mb-2" th:text="#{membresia.proximoPago}">
                                     Próximo pago o vencimiento
                                 </small>
 
@@ -369,8 +369,8 @@
                                 </h4>
 
                                 <h4 class="text-muted mb-2"
-                                    th:unless="${membresia != null
-                                                and membresia.fechaVencimiento != null}">
+                                    th:unless="${membresia != null and membresia.fechaVencimiento != null}"
+                                    th:text="#{dashboard.cliente.sinFecha}">
                                     Sin fecha registrada
                                 </h4>
 
@@ -416,7 +416,7 @@
 
                             <div>
 
-                                <small class="text-muted d-block mb-2">
+                                <small class="text-muted d-block mb-2" th:text="#{dashboard.cliente.visitasMes}">
                                     Visitas este mes
                                 </small>
 

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Gestiona el catálogo de planes disponibles y sus validaciones de edición.
 @Service
 public class PlanMembresiaService {
 

@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 import lombok.Data;
 
+// Relaciona un patrón de URL con el rol necesario para acceder a él.
 @Data
 @Entity
 @Table(name = "ruta")

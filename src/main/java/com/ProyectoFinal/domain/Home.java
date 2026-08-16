@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+// Contiene la información configurable que se muestra en la página pública de inicio.
 @Getter
 @Setter
 @Entity

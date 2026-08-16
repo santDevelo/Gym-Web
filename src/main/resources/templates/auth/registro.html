@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{general/fragmentos :: head}">
     <title>Registro - FitSystem</title>
 </head>
 
 <body class="login-bg">
+
+<div class="position-fixed top-0 end-0 m-3">
+    <div th:replace="~{general/fragmentos :: idiomas}"></div>
+</div>
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
 
@@ -15,11 +19,11 @@
 
             <i class="fa-solid fa-user-plus fa-3x text-purple mb-3"></i>
 
-            <h2 class="fw-bold text-purple">
+            <h2 class="fw-bold text-purple" th:text="#{auth.crearCuenta}">
                 Crear una cuenta
             </h2>
 
-            <p class="text-muted">
+            <p class="text-muted" th:text="#{auth.completarInformacion}">
                 Completa la siguiente información
             </p>
 
@@ -29,7 +33,7 @@
 
             <div class="mb-3">
 
-                <label class="form-label">
+                <label class="form-label" th:text="#{auth.nombre}">
                     Nombre
                 </label>
 
@@ -43,7 +47,7 @@
 
             <div class="mb-3">
 
-                <label class="form-label">
+                <label class="form-label" th:text="#{auth.apellidos}">
                     Apellidos
                 </label>
 
@@ -57,7 +61,7 @@
 
             <div class="mb-3">
 
-                <label class="form-label">
+                <label class="form-label" th:text="#{auth.correo}">
                     Correo electrónico
                 </label>
 
@@ -71,7 +75,7 @@
 
             <div class="mb-3">
 
-                <label class="form-label">
+                <label class="form-label" th:text="#{auth.telefono}">
                     Teléfono
                 </label>
 
@@ -85,7 +89,7 @@
 
             <div class="mb-3">
 
-                <label class="form-label">
+                <label class="form-label" th:text="#{auth.usuario}">
                     Usuario
                 </label>
 
@@ -99,7 +103,7 @@
 
             <div class="mb-3">
 
-                <label class="form-label">
+                <label class="form-label" th:text="#{auth.contrasena}">
                     Contraseña
                 </label>
 
@@ -111,9 +115,7 @@
 
             </div>
 
-            <button
-                type="submit"
-                class="btn btn-purple w-100">
+            <button type="submit" class="btn btn-purple w-100" th:text="#{auth.crearCuenta}">
 
                 Crear cuenta
 
@@ -125,7 +127,7 @@
 
         <div class="text-center">
 
-            <a th:href="@{/login}" class="text-decoration-none">
+            <a th:href="@{/login}" class="text-decoration-none" th:text="#{auth.yaTengoCuenta}">
                 Ya tengo una cuenta
             </a>
 
@@ -133,8 +135,8 @@
 
         <div class="text-center mt-2">
 
-            <a th:href="@{/acceso}" class="text-decoration-none">
-                ← Volver
+            <a th:href="@{/acceso}" class="text-decoration-none" th:text="#{accion.volver}">
+                Volver
             </a>
 
         </div>

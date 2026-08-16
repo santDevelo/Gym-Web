@@ -15,6 +15,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Administra la membresía actual de cada cliente y sus reglas de vigencia.
+// También proporciona los indicadores de membresías usados por el dashboard.
 @Service
 public class MembresiaService {
 
@@ -109,6 +111,7 @@ public class MembresiaService {
         return plan;
     }
 
+    // Copia en la entidad el plan, las fechas y el estado seleccionados por administración.
     private void actualizarMembresia(
             Membresia membresia,
             Usuario cliente,
@@ -122,7 +125,7 @@ public class MembresiaService {
         membresia.setFechaVencimiento(fechaVencimiento);
         membresia.setEstado(estado);
 
-        // Se mantienen sincronizadas las columnas heredadas mientras sigan en la base de datos.
+        // Estas columnas heredadas siguen siendo leídas por consultas y datos existentes.
         membresia.setPlan(plan.getNombre());
         membresia.setMonto(plan.getPrecio());
         membresia.setFechaPago(fechaInicio);

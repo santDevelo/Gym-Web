@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -22,7 +22,7 @@
                     FIT <span>SYSTEM</span>
                 </h2>
 
-                <small class="text-secondary">
+                <small class="text-secondary" th:text="#{app.descripcion}">
                     Tu gimnasio, tu mejor versión
                 </small>
 
@@ -30,7 +30,7 @@
 
             <!-- Navegación -->
             <nav class="nav flex-column mt-4"
-                 aria-label="Menú principal">
+           th:aria-label="#{nav.menuPrincipal}">
 
                 <!-- Dashboard -->
                 <a th:href="@{/dashboard}"
@@ -41,7 +41,7 @@
                                     : ''">
 
                     <i class="fa-solid fa-house me-2"></i>
-                    Dashboard
+                    <span th:text="#{nav.dashboard}">Dashboard</span>
 
                 </a>
 
@@ -59,7 +59,7 @@
                                        : ''">
 
                         <i class="fa-solid fa-users me-2"></i>
-                        Usuarios
+                        <span th:text="#{nav.usuarios}">Usuarios</span>
 
                     </a>
 
@@ -69,7 +69,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-user-group me-2"></i>
-                        Clientes
+                        <span th:text="#{nav.clientes}">Clientes</span>
                     </a>
 
                     <a th:href="@{/usuario/listado(rol='ENTRENADOR')}"
@@ -78,7 +78,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-user-tie me-2"></i>
-                        Empleados
+                        <span th:text="#{nav.empleados}">Empleados</span>
                     </a>
 
                     <a th:href="@{/admin/membresias}"
@@ -87,7 +87,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-credit-card me-2"></i>
-                        Membresías
+                        <span th:text="#{nav.membresias}">Membresías</span>
                     </a>
 
                     <a th:href="@{/admin/pagos}"
@@ -96,7 +96,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-money-bill me-2"></i>
-                        Pagos
+                        <span th:text="#{nav.pagos}">Pagos</span>
                     </a>
 
                 </div>
@@ -113,7 +113,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-users me-2"></i>
-                        Clientes
+                        <span th:text="#{nav.clientes}">Clientes</span>
                     </a>
 
                     <a th:href="@{/entrenador/rutinas}"
@@ -122,7 +122,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-dumbbell me-2"></i>
-                        Rutinas
+                        <span th:text="#{nav.rutinas}">Rutinas</span>
                     </a>
 
                     <a th:href="@{/entrenador/progreso}"
@@ -131,7 +131,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-chart-line me-2"></i>
-                        Progreso
+                        <span th:text="#{nav.progreso}">Progreso</span>
                     </a>
 
                 </div>
@@ -150,7 +150,7 @@
                        : ''">
 
                         <i class="fa-solid fa-credit-card me-2"></i>
-                        Mi membresía
+                        <span th:text="#{nav.miMembresia}">Mi membresía</span>
 
                     </a>
 
@@ -160,7 +160,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-dumbbell me-2"></i>
-                        Mi rutina
+                        <span th:text="#{nav.miRutina}">Mi rutina</span>
                     </a>
 
                     <a th:href="@{/cliente/asistencia}"
@@ -169,7 +169,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-clipboard-check me-2"></i>
-                        Mi asistencia
+                        <span th:text="#{nav.miAsistencia}">Mi asistencia</span>
                     </a>
 
                     <a th:href="@{/cliente/perfil}"
@@ -178,7 +178,7 @@
                                        ? ' active'
                                        : ''">
                         <i class="fa-solid fa-user me-2"></i>
-                        Mi perfil
+                        <span th:text="#{nav.miPerfil}">Mi perfil</span>
                     </a>
 
                 </div>
@@ -196,7 +196,7 @@
                            bg-transparent w-100 text-start">
 
                 <i class="fa-solid fa-right-from-bracket me-2"></i>
-                Cerrar sesión
+                <span th:text="#{nav.cerrarSesion}">Cerrar sesión</span>
 
             </button>
 
@@ -216,7 +216,7 @@
 
             <h4 class="mb-0">
 
-                ¡Hola,
+                <span th:text="#{encabezado.hola}">¡Hola,</span>
 
                 <span class="text-purple"
                       th:text="${usuario != null
@@ -227,7 +227,7 @@
 
             </h4>
 
-            <small class="text-muted">
+            <small class="text-muted" th:text="#{encabezado.bienvenida}">
                 Bienvenido de nuevo a FitSystem
             </small>
 
@@ -235,12 +235,14 @@
 
         <div class="d-flex align-items-center gap-2">
 
+            <div th:replace="~{general/fragmentos :: idiomas}"></div>
+
             <!-- Imagen registrada -->
             <img th:if="${usuario != null
                          and usuario.rutaImagen != null
                          and !#strings.isEmpty(usuario.rutaImagen)}"
                  th:src="${usuario.rutaImagen}"
-                 alt="Imagen del usuario"
+                     th:alt="#{usuario.imagen}"
                  class="rounded-circle"
                  style="width: 42px;
                         height: 42px;
@@ -271,17 +273,17 @@
 
                 <!-- Rol actual -->
                 <small class="d-block text-muted"
-                       sec:authorize="hasRole('ADMINISTRADOR')">
+                       sec:authorize="hasRole('ADMINISTRADOR')" th:text="#{rol.administrador}">
                     Administrador
                 </small>
 
                 <small class="d-block text-muted"
-                       sec:authorize="hasRole('ENTRENADOR')">
+                       sec:authorize="hasRole('ENTRENADOR')" th:text="#{rol.entrenador}">
                     Entrenador
                 </small>
 
                 <small class="d-block text-muted"
-                       sec:authorize="hasRole('CLIENTE')">
+                       sec:authorize="hasRole('CLIENTE')" th:text="#{rol.cliente}">
                     Cliente
                 </small>
 

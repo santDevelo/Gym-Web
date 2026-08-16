@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Gestiona las vistas y acciones de rutinas para clientes y entrenadores.
+// La autorización por rol se comprueba antes de delegar cada operación al servicio.
 @Controller
 public class RutinaController {
 
@@ -249,6 +251,7 @@ public class RutinaController {
         return REDIRECT_RUTINA_CLIENTE;
     }
 
+    // Convierte la lista de clientes en los identificadores que utiliza la vista.
     private List<Integer> obtenerIds(List<Usuario> usuarios) {
         return usuarios.stream().map(Usuario::getIdUsuario).toList();
     }
@@ -259,6 +262,7 @@ public class RutinaController {
                         "El usuario autenticado no existe."));
     }
 
+    // Centraliza la creación de mensajes temporales después de una operación.
     private void ejecutarAccion(
             Runnable accion,
             RedirectAttributes atributos,

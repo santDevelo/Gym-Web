@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
 
+// Representa una cuenta de FitSystem y los roles que determinan sus permisos.
 @Data
 @Entity
 @Table(name = "usuario")
@@ -58,19 +59,23 @@ public class Usuario implements Serializable {
 
     private boolean activo;
 
+    //atributo muchos a muchos, usa una tabla intermedia para que los usuarios puedan tener varios roles
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_rol",
             joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_rol"))
+            inverseJoinColumns = @JoinColumn(name  = "id_rol"))
     private Set<Rol> roles = new HashSet<>();
+    
 
+    // Permite consultar roles desde Thymeleaf y desde código que recibe texto.
     @Transient
     public boolean tieneRol(String nombreRol) {
         return nombreRol != null
                 && roles.stream().anyMatch(rol -> nombreRol.equalsIgnoreCase(rol.getRol()));
     }
 
+    // Variante segura para el código Java, evitando cadenas de rol escritas manualmente.
     @Transient
     public boolean tieneRol(NombreRol nombreRol) {
         return nombreRol != null && tieneRol(nombreRol.name());

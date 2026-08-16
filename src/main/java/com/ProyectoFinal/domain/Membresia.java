@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
+// Relaciona un cliente con su plan y conserva las fechas que determinan su vigencia.
 @Data
 @Entity
 @Table(name = "membresia")
@@ -36,7 +37,7 @@ public class Membresia implements Serializable {
     @JoinColumn(name = "id_plan")
     private PlanMembresia planMembresia;
 
-    // Se conservan mientras la base de datos mantenga las columnas heredadas.
+    // Estos campos se conservan por compatibilidad con los registros creados antes del catálogo.
     private String plan;
 
     private BigDecimal monto;

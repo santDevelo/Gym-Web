@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="es"
+<html th:lang="${#locale.language}"
       xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{general/fragmentos :: head}">
 </head>
 
 <body class="bg-light">
+
+<div class="position-fixed top-0 end-0 m-3">
+    <div th:replace="~{general/fragmentos :: idiomas}"></div>
+</div>
 
 <div class="container min-vh-100 d-flex
             justify-content-center align-items-center">
@@ -15,15 +19,15 @@
         <i class="fa-solid fa-lock fa-4x
                   text-danger mb-4"></i>
 
-        <h1>Acceso denegado</h1>
+        <h1 th:text="#{auth.accesoDenegado}">Acceso denegado</h1>
 
-        <p>
+        <p th:text="#{auth.sinAutorizacion}">
             No tienes autorización para acceder
             a esta funcionalidad.
         </p>
 
-        <a th:href="@{/dashboard}"
-           class="btn btn-purple">
+        <a th:href="@{/dashboard}" class="btn btn-purple"
+           th:text="#{auth.regresarDashboard}">
             Regresar al dashboard
         </a>
 

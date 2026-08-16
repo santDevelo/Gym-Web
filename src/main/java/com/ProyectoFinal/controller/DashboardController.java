@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// Controlador único de los paneles del sistema.
+// Mantiene una ruta de entrada común y carga información distinta según el rol autenticado.
 @Controller
 public class DashboardController {
 
@@ -247,6 +249,7 @@ public class DashboardController {
         return REDIRECT_PAGOS;
     }
 
+    // Agrega al modelo los indicadores exclusivos del administrador.
     private void cargarResumenAdministrador(Model model) {
         model.addAttribute(
                 "clientesActivos", usuarioService.contarPorRolActivo(NombreRol.CLIENTE));
@@ -257,6 +260,7 @@ public class DashboardController {
                 "pagosPendientes", membresiaService.contarPorEstado(EstadoMembresia.PENDIENTE));
     }
 
+    // Calcula el resumen de clientes, rutinas y ejercicios del entrenador.
     private void cargarResumenEntrenador(Model model) {
         var rutinasActivas = rutinaService.listarActivas();
         int totalEjercicios = rutinasActivas.stream()
@@ -272,6 +276,7 @@ public class DashboardController {
                 "clientesDisponiblesRutina", rutinaService.listarClientesDisponibles().size());
     }
 
+    // Agrega el estado de membresía y la asistencia mensual del cliente.
     private void cargarResumenCliente(Model model, Usuario cliente) {
         Integer idCliente = cliente.getIdUsuario();
         model.addAttribute(
@@ -280,6 +285,8 @@ public class DashboardController {
                 "totalAsistenciasMes", asistenciaService.contarAsistenciasDelMes(idCliente));
     }
 
+    // Agrupa por cliente los datos usados en la vista de progreso.
+    // Los mapas permiten que Thymeleaf consulte cada valor mediante el identificador del cliente.
     private void cargarProgresoClientes(Model model, List<Usuario> clientes) {
         Map<Integer, Long> asistenciasMes = new LinkedHashMap<>();
         Map<Integer, Asistencia> ultimasAsistencias = new LinkedHashMap<>();
@@ -327,6 +334,7 @@ public class DashboardController {
         return membresias;
     }
 
+    // Centraliza los mensajes de éxito y error de las acciones administrativas.
     private void ejecutarAccion(
             Runnable accion,
             RedirectAttributes atributos,

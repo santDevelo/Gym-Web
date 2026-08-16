@@ -15,6 +15,7 @@ import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
 
+// Representa una visita del cliente al gimnasio con su fecha y horas registradas.
 @Getter
 @Setter
 @Entity
