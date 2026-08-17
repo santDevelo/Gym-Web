@@ -1,143 +1,224 @@
+# FitSystem — Sistema web de gestión de gimnasios
 
-# FitSystem — Sistema Web de Gestión de Gimnasios
+FitSystem es una aplicación web transaccional para administrar usuarios, membresías,
+pagos, rutinas de entrenamiento y asistencias de un gimnasio. Utiliza un único
+dashboard cuyo contenido cambia según el rol autenticado: administrador, entrenador
+o cliente. La interfaz está disponible en español, inglés y francés.
 
-Sistema web transaccional para la administración integral de un gimnasio: usuarios,
-membresías, pagos, rutinas de entrenamiento y control de asistencia, con acceso
-diferenciado por rol (Administrador, Entrenador, Cliente) e interfaz disponible en
-español, inglés y francés.
+Proyecto final del curso SC-403 Desarrollo de Aplicaciones Web y Patrones,
+Universidad Fidélitas, sede San Pedro.
 
-Proyecto final — SC-403 Desarrollo de Aplicaciones Web y Patrones, Universidad
-Fidélitas, Sede San Pedro.
-
-## Integrantes del equipo
+## Integrantes
 
 - Berrocal Siles Santiago Caleb
-- Bourrouet Obregon Neytan Andry
-- Fung Ramirez Sebastian
-- Solis Mendez Gabriel Gerardo
+- Bourrouet Obregón Neytan Andry
+- Fung Ramírez Sebastián
+- Solís Méndez Gabriel Gerardo
 
-## Stack tecnológico
+## Tecnologías
 
-- **Backend:** Java 17, Spring Boot 4.1, Spring MVC, Spring Security, Spring Data JPA
-  (Hibernate)
-- **Vistas:** Thymeleaf + `thymeleaf-extras-springsecurity6`
-- **Base de datos:** MySQL 8
-- **Interfaz:** Bootstrap 5.3.7 + Font Awesome 7 (vía WebJars)
-- **Almacenamiento de imágenes:** Firebase Storage (Google Cloud Storage)
-- **Internacionalización:** `spring.messages` + `messages_es/en/fr.properties`
-- **Build:** Maven
+- Java 17
+- Spring Boot 4.1
+- Spring MVC, Spring Security y Spring Data JPA
+- Thymeleaf
+- MySQL 8
+- Bootstrap 5.3.7 y Font Awesome 7 mediante WebJars
+- Firebase Storage para imágenes
+- Maven
+- Docker
 
-## Módulos principales
+## Módulos
 
-| Módulo | Descripción |
+| Módulo | Función |
 |---|---|
-| **Portada pública** | Landing con los 3 planes de membresía (Básico, Fit, Completo). |
-| **Autenticación** | Login único con `Spring Security`, registro público de clientes, cierre de sesión, control de acceso dinámico por rol (tabla `ruta`), selector de idioma es/en/fr persistente en sesión. |
-| **Dashboard** | Un panel único (`/dashboard`) cuyo contenido cambia según el rol autenticado — sin controladores duplicados por rol. |
-| **Administración de usuarios** | Alta, edición, activar/desactivar usuarios (admin, entrenador o cliente), con foto de perfil vía Firebase Storage. |
-| **Membresías** | Catálogo de planes editable y asignación de plan/vigencia/estado por cliente; el cliente puede cancelar la propia. |
-| **Pagos** | Historial manual de pagos; registrar un pago actualiza automáticamente la vigencia de la membresía (módulo transaccional). |
-| **Rutinas** | El entrenador crea rutinas y administra ejercicios; el cliente consulta y también puede agregar ejercicios a su rutina activa. |
-| **Asistencia** | El cliente registra su propia entrada/salida; se usa para los indicadores de los tres roles. |
+| Portada pública | Presenta FitSystem y los planes Básico, Fit y Completo. |
+| Autenticación | Inicio de sesión, registro de clientes, cierre de sesión y permisos por rol. |
+| Dashboard | Panel único que muestra información y opciones según el rol autenticado. |
+| Usuarios | Permite al administrador crear, modificar, activar y desactivar usuarios. |
+| Membresías | Administra los planes y la membresía asignada a cada cliente. |
+| Pagos | Registra manualmente el historial de pagos y actualiza la vigencia de la membresía. |
+| Rutinas | Permite administrar rutinas y varios ejercicios por día. |
+| Asistencias | Registra las entradas y salidas de los clientes. |
+| Idiomas | Permite cambiar la interfaz entre español, inglés y francés. |
 
-## Instalación y ejecución local
+## Requisitos
 
-### Requisitos
+- JDK 17
+- Maven 3.9 o superior
+- MySQL 8
+- Git
+- Docker, solamente si se desea ejecutar el proyecto en un contenedor
 
-- JDK 17 o superior
-- Maven 3.9+
-- MySQL 8 (servidor corriendo en `localhost:3306`, o accesible por red)
+## Instalación local
 
-### 1. Clonar el repositorio
+### 1. Clonar la versión final
+
+La versión integrada del proyecto se encuentra en la rama `master`:
 
 ```bash
-git clone https://github.com/santDevelo/Gym-Web.git
+git clone --branch master --single-branch https://github.com/santDevelo/Gym-Web.git
 cd Gym-Web
 ```
 
-### 2. Crear y poblar la base de datos
+### 2. Crear la base de datos
 
-Ejecuta uno de los dos scripts equivalentes de la carpeta `sql/` con un cliente MySQL
-(Workbench, `mysql` CLI, etc.):
+Ejecuta el archivo `sql/replicar_base_datos_fitsystem.sql` completo desde MySQL
+Workbench. El script crea la base `proyecto_final`, sus relaciones y los datos de
+prueba.
 
-- `sql/base_datos_fitsystem.sql` — crea también un usuario MySQL local `admin`/`fitsystem`.
-- `sql/replicar_base_datos_fitsystem.sql` — no crea usuarios (para MySQL administrado /
-  Aiven); usa las credenciales que ya tengas configuradas.
-
-Ambos crean la base `proyecto_final`, sus 11 tablas y los datos base necesarios
-(roles, rutas protegidas, planes de membresía y usuarios de prueba).
+También puede ejecutarse desde una terminal que tenga disponible el cliente MySQL:
 
 ```bash
 mysql -u root -p < sql/replicar_base_datos_fitsystem.sql
 ```
 
-### 3. Configurar la conexión
+El script crea estas 11 tablas:
 
-La app lee la configuración de `src/main/resources/application.properties`, con
-valores por defecto sobreescribibles por variables de entorno:
-
-```properties
-spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/proyecto_final}
-spring.datasource.username=${DB_USERNAME:root}
-spring.datasource.password=${DB_PASSWORD:<tu-contraseña>}
-server.port=${PORT:96}
+```text
+rol
+usuario
+usuario_rol
+ruta
+home
+plan_membresia
+membresia
+pago
+rutina
+ejercicio_rutina
+asistencia
 ```
 
-Para producción (por ejemplo Render + una base MySQL administrada), define
-`DB_URL`, `DB_USERNAME`, `DB_PASSWORD` y `PORT` como variables de entorno en vez de
-tocar el archivo.
+### 3. Configurar MySQL
 
-### 4. Ejecutar
+La aplicación obtiene la conexión desde variables de entorno:
+
+| Variable | Ejemplo local |
+|---|---|
+| `DB_URL` | `jdbc:mysql://localhost:3306/proyecto_final` |
+| `DB_USERNAME` | `root` |
+| `DB_PASSWORD` | Contraseña del usuario de MySQL |
+| `PORT` | `96` |
+
+Ejemplo temporal en PowerShell:
+
+```powershell
+$env:DB_URL="jdbc:mysql://localhost:3306/proyecto_final"
+$env:DB_USERNAME="root"
+$env:DB_PASSWORD="tu_contraseña_mysql"
+$env:PORT="96"
+```
+
+Si se ejecuta desde NetBeans, define estas variables en Windows y reinicia NetBeans
+para que el proceso de Java pueda leerlas. No escribas contraseñas reales en
+`application.properties`.
+
+### 4. Configurar Firebase Storage
+
+Firebase es opcional para iniciar el sistema, pero es necesario para subir imágenes.
+Nunca guardes el archivo JSON de la cuenta de servicio dentro del repositorio.
+
+Para desarrollo local, guarda el JSON fuera de la carpeta del proyecto y define:
+
+```powershell
+$env:FIREBASE_ENABLED="true"
+$env:FIREBASE_BUCKET_NAME="fitsystem-c876c.firebasestorage.app"
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:\ruta-segura\firebase-service-account.json"
+```
+
+Si no vas a probar la carga de imágenes, utiliza:
+
+```powershell
+$env:FIREBASE_ENABLED="false"
+```
+
+### 5. Ejecutar
 
 ```bash
 mvn spring-boot:run
 ```
 
-La aplicación queda disponible en **http://localhost:96** (o el puerto indicado por
-la variable `PORT`).
+Abre `http://localhost:96` en el navegador.
+
+### 6. Ejecutar las pruebas
+
+Las pruebas requieren acceso a la base `proyecto_final` configurada en las variables
+de entorno anteriores:
+
+```bash
+mvn test
+```
+
+## Usuarios de prueba
+
+Las contraseñas están almacenadas con BCrypt. Estas tres cuentas utilizan la
+contraseña `1234`:
+
+| Usuario | Rol | Contraseña |
+|---|---|---|
+| `amora` | Administrador | `1234` |
+| `cruiz` | Entrenador | `1234` |
+| `sebastian` | Cliente | `1234` |
 
 ## Rutas principales
 
 | Ruta | Acceso |
 |---|---|
-| `/`, `/home` | Pública |
-| `/login`, `/registro`, `/acceso` | Pública |
-| `/dashboard` | Cualquier rol autenticado (contenido según el rol) |
-| `/usuario/**`, `/admin/**` | ADMINISTRADOR |
-| `/entrenador/**` | ENTRENADOR |
-| `/cliente/**` | CLIENTE |
-| `?lang=es` \| `?lang=en` \| `?lang=fr` | Cambia el idioma en cualquier ruta |
+| `/` y `/home` | Público |
+| `/login`, `/registro` y `/acceso` | Público |
+| `/dashboard` | Cualquier usuario autenticado |
+| `/usuario/**` y `/admin/**` | Administrador |
+| `/entrenador/**` | Entrenador |
+| `/cliente/**` | Cliente |
 
-## Usuarios de prueba
+El idioma puede cambiarse agregando `?lang=es`, `?lang=en` o `?lang=fr` a una ruta.
 
-Todas las cuentas de prueba creadas por el script SQL usan la misma contraseña:
-**`1234`**.
+## Configuración en Render y Aiven
 
-| Usuario | Rol | Contraseña |
-|---|---|---|
-| `amora` | ADMINISTRADOR | `1234` |
-| `cruiz` | ENTRENADOR | `1234` |
-| `sebastian` | CLIENTE | `1234` |
+En Render configura las siguientes variables sin escribir sus valores en Git:
 
-## Control de versiones por ramas
+```text
+DB_URL
+DB_USERNAME
+DB_PASSWORD
+FIREBASE_ENABLED
+FIREBASE_BUCKET_NAME
+FIREBASE_CREDENTIALS_BASE64
+```
 
-- **main** — versión estable del sistema.
-- **develop** — rama de integración de trabajo en curso.
-- **feature-auth** — autenticación, roles y control de acceso.
-- **feature-clientes** — gestión de clientes.
-- **feature-membresias** — planes y membresías.
+`PORT` es proporcionado automáticamente por Render. `DB_URL` debe contener la URL
+JDBC completa entregada para la base MySQL de Aiven.
 
-## Documentación y anexos
+Para convertir la nueva cuenta de servicio de Firebase a Base64 desde PowerShell:
 
-- **Artículo científico (IEEE):** `FitSystem_Articulo_Cientifico_EA25.docx`
-- **Prototipo en Figma:** https://www.figma.com/design/5frjIYrVXWQgQzg436DiJO/Desarrollo-web
-- **Video de resumen de la propuesta:** https://youtu.be/JPHgVUjIohM
-- **Aplicación desplegada:** https://gym-web-mlet.onrender.com 
+```powershell
+[Convert]::ToBase64String(
+    [IO.File]::ReadAllBytes("C:\ruta-segura\firebase-service-account.json")
+)
+```
 
-## Estado del proyecto
+Copia el resultado únicamente en la variable `FIREBASE_CREDENTIALS_BASE64` de
+Render. No lo publiques ni lo agregues al código.
 
-Funcional: autenticación con roles y control dinámico de acceso, internacionalización
-(es/en/fr), dashboard único por rol, gestión de usuarios/clientes/empleados,
-membresías, historial de pagos, rutinas de entrenamiento y control de asistencia.
-Fuera de alcance en esta versión: reportes gerenciales y reservación de citas con
-entrenadores (retirados explícitamente durante el desarrollo).
+## Ejecución con Docker
+
+```bash
+docker build -t fitsystem .
+docker run --rm -p 96:96 \
+  -e PORT=96 \
+  -e DB_URL="jdbc:mysql://host:3306/proyecto_final" \
+  -e DB_USERNAME="usuario" \
+  -e DB_PASSWORD="contraseña" \
+  fitsystem
+```
+
+## Recursos
+
+- Prototipo en Figma: <https://www.figma.com/design/5frjIYrVXWQgQzg436DiJO/Desarrollo-web>
+- Video de la propuesta: <https://youtu.be/JPHgVUjIohM>
+- Aplicación desplegada: <https://gym-web-mlet.onrender.com>
+
+## Alcance actual
+
+El sistema incluye autenticación, control de acceso, internacionalización, dashboard
+por rol, usuarios, membresías, pagos, rutinas y asistencias. Los reportes gerenciales
+y la reservación de citas no forman parte de esta versión.
