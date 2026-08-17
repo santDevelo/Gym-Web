@@ -132,8 +132,7 @@ Todas las cuentas de prueba creadas por el script SQL usan la misma contraseña:
 - **Artículo científico (IEEE):** `FitSystem_Articulo_Cientifico_EA25.docx`
 - **Prototipo en Figma:** https://www.figma.com/design/5frjIYrVXWQgQzg436DiJO/Desarrollo-web
 - **Video de resumen de la propuesta:** https://youtu.be/JPHgVUjIohM
-- **Aplicación desplegada:** https://gym-web-mlet.onrender.com *(verificar que esté
-  activa y con la versión de código actual antes de la entrega)*
+- **Aplicación desplegada:** https://gym-web-mlet.onrender.com 
 
 ## Estado del proyecto
 
