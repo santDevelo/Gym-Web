@@ -47,69 +47,10 @@
 
                 </ul>
 
-                <button class="navbar-toggler border-0"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#menuLobby"
-                        aria-controls="menuLobby">
-
-                    <span class="navbar-toggler-icon"></span>
-
-                </button>
-
             </div>
 
         </div>
     </nav>
-
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="menuLobby" aria-labelledby="menuLobbyLabel">
-
-        <div class="offcanvas-header">
-
-            <h5 class="offcanvas-title fw-bold fs-3" id="menuLobbyLabel">
-                <span class="text-dark">Fit</span><span class="text-purple">System</span>
-            </h5>
-
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                    th:attr="aria-label=#{accion.cerrar}"></button>
-
-        </div>
-
-        <div class="offcanvas-body">
-
-            <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-4"
-               th:text="#{inicio.inscribirse}">
-                ¡Inscríbete ya!
-            </a>
-
-            <ul class="list-unstyled">
-
-                <li class="mb-3">
-                    <a th:href="@{/login}" class="text-dark text-decoration-none fw-semibold"
-                       th:text="#{inicio.iniciarSesion}">
-                        Iniciar Sesión
-                    </a>
-                </li>
-
-                <li class="mb-3">
-                    <a th:href="@{/registro}" class="text-dark text-decoration-none fw-semibold"
-                       th:text="#{inicio.registrarse}">
-                        Registrarse
-                    </a>
-                </li>
-
-                <li class="mb-3">
-                    <a th:href="@{/login}" class="text-dark text-decoration-none fw-semibold"
-                       th:text="#{rol.administrador}">
-                        Administrador
-                    </a>
-                </li>
-
-            </ul>
-
-        </div>
-
-    </div>
 
 </header>
 
@@ -234,7 +175,7 @@
                             </p>
 
                             <p class="fw-bold" th:text="#{inicio.precioBasico}">
-                                ₡12,000 / mes + IVA
+                                ₡15,000 / mes + IVA
                             </p>
 
                             <a th:href="@{/acceso}" class="btn btn-purple w-100 mb-3"
