@@ -1,23 +1,14 @@
--- ============================================================
 -- FitSystem - creación completa desde cero
--- Compatible con MySQL 8 y Aiven for MySQL
---
 -- Crea la base, sus tablas, relaciones y datos iniciales.
--- No crea usuarios MySQL: en Aiven se usan las credenciales
--- administradas desde el panel del servicio.
--- ============================================================
-CREATE DATABASE IF NOT EXISTS proyecto_final
+CREATE DATABASE IF NOT EXISTS proyecto_final2
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-USE proyecto_final;
+USE proyecto_final2;
 
 SET NAMES utf8mb4;
 
--- ============================================================
 -- TABLAS PRINCIPALES
--- ============================================================
-
 CREATE TABLE IF NOT EXISTS rol (
     id_rol INT NOT NULL AUTO_INCREMENT,
     rol VARCHAR(20) NOT NULL,
@@ -180,9 +171,7 @@ CREATE TABLE IF NOT EXISTS asistencia (
     INDEX idx_asistencia_fecha (fecha)
 ) ENGINE = InnoDB;
 
--- ============================================================
 -- DATOS NECESARIOS PARA EL FUNCIONAMIENTO
--- ============================================================
 
 INSERT INTO rol (id_rol, rol)
 VALUES
@@ -421,9 +410,7 @@ ON DUPLICATE KEY UPDATE
     hora_entrada = VALUES(hora_entrada),
     hora_salida = VALUES(hora_salida);
 
--- ============================================================
 -- COMPROBACIÓN FINAL
--- ============================================================
 
 SELECT 'Base de datos FitSystem instalada correctamente.' AS resultado;
 SELECT id_rol, rol FROM rol ORDER BY id_rol;
